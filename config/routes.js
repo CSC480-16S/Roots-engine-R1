@@ -32,10 +32,10 @@ module.exports.routes = {
   *                                                                          *
   ***************************************************************************/
 
-  '/': {
-    view: 'static/index'
-  },
-  '/login': 'UserController.create'
+  '/': 'UserController.homePage',
+  '/createUser': 'UserController.createUser',
+  '/userLogin': 'UserController.userLogin',
+  '/treeViewer': 'TreeController.viewTree'
 
   /***************************************************************************
   *                                                                          *
