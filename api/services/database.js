@@ -80,6 +80,20 @@ module.exports = {
         this.read(Login, sqlGetCredentials, function(response, result) {
             next(response, result);
         });
+    },
+
+    insertProfile: function(email, next) {
+        var sqlInsertProfile = 'INSERT INTO Individual (notes) VALUES (\'' + email + '\');';
+        this.insert(Individual, sqlInsertProfile, function(response, result) {
+            next(response, result);
+        });
+    },
+
+    updateProfile: function(userData, next) {
+        var sqlUpdateProfile = 'UPDATE Individual SET first_name=\'' + userData.firstName + '\', middle_name=\'' + userData.middleName + '\', last_name=\'' + userData.lastName + '\', date_of_birth=\'' + userData.dateOfBirth + '\', place_of_birth=\'' + userData.placeOfBirth + '\', date_of_death=\'' + userData.dateOfDeath + '\', place_of_death=\'' + userData.placeOfDeath + '\', gender=\'' + userData.gender + '\', bio=\'' + userData.bio + '\' WHERE notes=\'' + userData.notes + '\';';
+        this.update(Individual, sqlUpdateProfile, function(response, result) {
+            next(response, result);
+        });
     }
 
 };

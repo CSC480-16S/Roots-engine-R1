@@ -36,7 +36,8 @@ module.exports.routes = {
   '/createUser': 'LoginController.createUser',
   '/userLogin': 'LoginController.userLogin',
   '/treeViewer': 'TreeController.viewTree',
-  '/profile': 'ProfileController.openProfile'
+  '/profile': 'ProfileController.openProfile',
+  '/updateProfile': 'ProfileController.updateProfile'
 
   /***************************************************************************
   *                                                                          *

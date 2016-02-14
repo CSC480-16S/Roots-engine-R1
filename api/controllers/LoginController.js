@@ -42,7 +42,9 @@ module.exports = {
                         });
                         break;
                     case 'success':
-                        res.redirect('/treeViewer');
+                        currentUser.setEmail(username, function(){
+                            res.redirect('/profile');
+                        });
                         break;
                     default:
                         res.redirect('/error?location=LOGIN_CONTROLLER/USER_LOGIN&response=' + response + '&result=' + result);
@@ -80,8 +82,17 @@ module.exports = {
                             res.send(html);
                         });
                         break;
+                    case 'profile failed':
+                        send.error = 'Unable to establish a user profile.';
+                        send.username = username;
+                        render.page(send, 'login', function(html) {
+                            res.send(html);
+                        });
+                        break;
                     case 'success':
-                        res.redirect('/treeViewer');
+                        currentUser.setEmail(username, function(){
+                            res.redirect('/profile');
+                        });
                         break;
                     default:
                         res.redirect('/error?location=LOGIN_CONTROLLER/CREATE_USER&response=' + response + '&result=' + result);

@@ -5,12 +5,19 @@ module.exports = {
         // other checks as necessary
         database.getLoginCredentials(email, function (responseExistingLogin, resultExistingLogin) {
             if (responseExistingLogin === 'empty') {
-                database.insertLoginCredentials(email, password, function(response, result){
-                    if (response === 'success') {
-                        next (response, result);
+                database.insertLoginCredentials(email, password, function(responseInsertCredentials, resultInsertCredentials){
+                    if (responseInsertCredentials === 'success') {
+                        database.insertProfile(email, function(response, result){
+                            if (response === 'success') {
+                                next(response, result);
+                            }
+                            else {
+                                next('profile failed', result);
+                            }
+                        });
                     }
                     else {
-                        next('insert failed', result);
+                        next('insert failed', resultInsertCredentials);
                     }
                 });
             }
@@ -32,6 +39,18 @@ module.exports = {
             }
             else {
                 next('incorrect username', result);
+            }
+        });
+    },
+
+    updateProfile: function(data, next) {
+        //perform checks against data
+        database.updateProfile(data, function(response, result){
+            if (response === 'success') {
+                next(response, result);
+            }
+            else {
+                next('update failed', result);
             }
         });
     }
