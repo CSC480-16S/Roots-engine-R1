@@ -36,6 +36,7 @@
   "author": "anonymous node/sails user",
   "license": "",
   "devDependencies": {
+    "consolidate": "^0.14.0",
     "mustache": "^2.2.1"
   }
 }

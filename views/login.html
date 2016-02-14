@@ -19,7 +19,7 @@
 
     <div class="tab-content">
         <div id="signup">
-            <h1>Sign Up for Free</h1>
+            <h1>Sign Up for Free {{error}}</h1>
 
             <form action="/createUser" method="post">
 
@@ -43,7 +43,7 @@
                     <label>
                         Email Address<span class="req">*</span>
                     </label>
-                    <input name='email' type="email" required autocomplete="off"/>
+                    <input name='email' type="email" value="{{username}}" required autocomplete="off"/>
                 </div>
 
                 <div class="field-wrap">
