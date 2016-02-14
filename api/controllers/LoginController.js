@@ -45,8 +45,7 @@ module.exports = {
                         res.redirect('/treeViewer');
                         break;
                     default:
-                        console.log('LOGIN CONTROLLER/USER LOGIN/USER LOGIN\n\nresponse: ' + response + '\n\nresult: ' + result);
-                        res.redirect('/error');
+                        res.redirect('/error?location=LOGIN_CONTROLLER/USER_LOGIN&response=' + response + '&result=' + result);
                         break;
                 }
           });
@@ -85,8 +84,7 @@ module.exports = {
                         res.redirect('/treeViewer');
                         break;
                     default:
-                        console.log('LOGIN CONTROLLER/CREATE USER/USER SIGNUP\n\nresponse: ' + response + '\n\nresult: ' + result);
-                        res.redirect('/error');
+                        res.redirect('/error?location=LOGIN_CONTROLLER/CREATE_USER&response=' + response + '&result=' + result);
                         break;
                 }
           });
