@@ -31,7 +31,7 @@ module.exports.routes = {
   * `assets` directory)                                                      *
   *                                                                          *
   ***************************************************************************/
-  '/error': 'ErrorController.errorPage',
+  '/error*': 'ErrorController.errorPage',
   '/': 'LoginController.homepage',
   '/createUser': 'LoginController.createUser',
   '/userLogin': 'LoginController.userLogin',
