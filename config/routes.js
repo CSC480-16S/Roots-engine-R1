@@ -31,10 +31,10 @@ module.exports.routes = {
   * `assets` directory)                                                      *
   *                                                                          *
   ***************************************************************************/
-
-  '/': 'UserController.homePage',
-  '/createUser': 'UserController.createUser',
-  '/userLogin': 'UserController.userLogin',
+  '/error': 'ErrorController.errorPage',
+  '/': 'LoginController.homepage',
+  '/createUser': 'LoginController.createUser',
+  '/userLogin': 'LoginController.userLogin',
   '/treeViewer': 'TreeController.viewTree'
 
   /***************************************************************************
