@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<form action="/updateProfile" method="post">
+  <label>
+    Last Name<span class="req">*</span>
+  </label>
+  <input name='lastName' value='{{lastName}}' type="text" required autocomplete="off"/>
+  <label>
+    First name<span class="req">*</span>
+  </label>
+  <input name='firstName' value='{{firstName}}' type="text" required autocomplete="off"/>
+  <label>
+    Middle Name
+  </label>
+  <input name='middleName' value='{{middleName}}' type="text" required autocomplete="off"/>
+  <label>
+    Date Of Birth
+  </label>
+  <input name='dateOfBirth' value='{{dateOfBirth}}' type="date" required autocomplete="off"/>
+  <label>
+    Date Of Birth
+  </label>
+  <label>
+    Gender
+  </label>
+  <input name='gender' value='{{gender}}' type="text" required autocomplete="off"/>
+  <label>
+    Bio
+  </label>
+  <input name='bio' value='{{bio}}' type="text" required autocomplete="off"/>
+  <label>
+    Notes
+  </label>
+  <input name='notes' value='{{notes}}' type="text" readonly required autocomplete="off"/>
+  <button type="submit" />
+  Set Profile</button>
+</form>
+</body>
+</html>
