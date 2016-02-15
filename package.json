@@ -35,7 +35,7 @@
     "grunt-contrib-uglify": "^0.4.1",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-contrib-yuidoc": "^0.5.2",
-    "grunt-sails-linker": "~0.10.1",
+    "grunt-sails-linker": "^0.10.1",
     "grunt-sync": "0.2.4",
     "include-all": "^0.1.6",
     "mustache": "^2.2.1",
