@@ -43,7 +43,7 @@ module.exports = {
                         break;
                     case 'success':
                         currentUser.setEmail(username, function(){
-                            res.redirect('/profile');
+                            res.redirect('/treeViewer');
                         });
                         break;
                     default:
@@ -57,9 +57,11 @@ module.exports = {
           var params = req.params.all(),
               username = params.email,
               password = params.password,
+              firstName = params.firstName,
+              lastName = params.lastName,
               send = {'login': false};
 
-          user.signup(username, password, function (response, result) {
+          user.signup(username, password, firstName, lastName, function (response, result) {
                 switch(response) {
                     case 'user exists':
                         send.error = 'This username is already in use.';
@@ -84,6 +86,13 @@ module.exports = {
                         break;
                     case 'profile failed':
                         send.error = 'Unable to establish a user profile.';
+                        send.username = username;
+                        render.page(send, 'login', function(html) {
+                            res.send(html);
+                        });
+                        break;
+                    case 'individual reference failed':
+                        send.error = 'Unable to establish a user reference.';
                         send.username = username;
                         render.page(send, 'login', function(html) {
                             res.send(html);
