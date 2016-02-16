@@ -16,7 +16,7 @@ module.exports = {
         var params = req.params.all(),
             username = params.email,
             password = params.password,
-            send = {};
+            send = {'login': true};
 
           user.login(username, password, function (response, result) {
                 switch(response) {
@@ -57,7 +57,7 @@ module.exports = {
           var params = req.params.all(),
               username = params.email,
               password = params.password,
-              send = {};
+              send = {'login': false};
 
           user.signup(username, password, function (response, result) {
                 switch(response) {
