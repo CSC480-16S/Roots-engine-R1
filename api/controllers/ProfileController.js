@@ -3,7 +3,7 @@
       var send = {};
       currentUser.getEmail(function(email){
           send.notes = email;
-          render.page(send, 'profile', function(html) {
+          render.page(send, 'personal_profile', function(html) {
             res.send(html);
           });
       });
