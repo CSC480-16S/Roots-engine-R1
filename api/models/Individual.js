@@ -9,7 +9,6 @@ module.exports = {
 
   attributes: {
     id: {
-
       type: 'integer',
       autoIncrement: true,
       primaryKey: true,
@@ -18,64 +17,57 @@ module.exports = {
     date_of_birth: {
       type: 'date'
     },
-    /* this will be a separate table with updated schema*/
-    first_name: {
-      type: 'text'
-    },
-    middle_name: {
-      type: 'text'
-    },
-    last_name: {
-      type: 'text'
-    },
-    /*for use with updated schema */
-    /*country_of_birth: {
-      type: 'text'
+    country_of_birth: {
+      type: 'string',
+      size: 64
     },
     state_of_birth: {
-      type: 'text'
-    },
-    county_of_birth: {
-      type: 'text'
+      type: 'string',
+      size: 64
     },
     municipality_of_birth: {
-      type: 'text'
-    },*/
+      type: 'string',
+      size: 64
+    },
     date_of_death: {
       type: 'date'
     },
-    /*for use with updated schema*/
-    /*country_of_death: {
-      type: 'text'
+    country_of_death: {
+      type: 'string',
+      size: 64
     },
     state_of_death: {
-      type: 'text'
-    },
-    county_of_death: {
-      type: 'text'
+      type: 'string',
+      size: 64
     },
     municipality_of_death: {
-      type: 'text'
-    },*/
+      type: 'string',
+      size: 64
+    },
     gender: {
-      type: 'text'
+      type: 'string',
+      size: 64
     },
 
     bio: {
-      type: 'text'
+      type: 'string',
+      size: 256
     },
-    /*for use with updated schema*/
-    /*economic_status: {
-      type: 'text'
+    economic_status: {
+      type: 'string',
+      size: 64
     },
     immigration_history: {
-      type: 'text'
+      type: 'string',
+      size: 64
     },
     accomplishments: {
-      type: 'text'
-    },*/
+      type: 'string',
+      size: 256
+    },
     notes: {
-      type: 'text'
+      type: 'string',
+      size: 256
     }
   }
 };
