@@ -24,7 +24,7 @@ module.exports = {
       type: 'boolean'
     },
     individual_id: {
-      model: 'Individual'
+      type: 'integer'
     }
 
 

@@ -23,7 +23,7 @@ module.exports = {
       size: 32
     },
     profile_complete: {
-      type: 'boolean'
+      type: 'integer'
     },
     self: {
       model: 'Individual'

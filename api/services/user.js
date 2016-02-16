@@ -11,12 +11,19 @@ module.exports = {
                             if (responseName === 'success'){
                                 database.initializeProfile(function(responseProfile, resultProfile){
                                     if (responseProfile === 'success') {
-                                        database.insertIndividualReference(User, resultProfile.id, function(response, result){
-                                            if (responseProfile === 'success') {
-                                                next(response, result);
+                                        database.getLastIndividualId(function(responseId, resultId){
+                                            if (responseId === 'success') {
+                                                database.insertIndividualReferenceUser(email, resultId[0].id, function(response, result){
+                                                    if (response === 'success') {
+                                                        next(response, result);
+                                                    }
+                                                    else {
+                                                        next('individual reference failed', result);
+                                                    }
+                                                });
                                             }
                                             else {
-                                                next('individual reference failed', result);
+                                                next('get id failed', resultId);
                                             }
                                         });
                                     }
@@ -26,12 +33,12 @@ module.exports = {
                                 });
                             }
                             else {
-                                next('insert failed', resultName);
+                                next('name insert failed', resultName);
                             }
-                        })
+                        });
                     }
                     else {
-                        next('insert failed', resultInsertCredentials);
+                        next('credentials insert failed', resultInsertCredentials);
                     }
                 });
             }

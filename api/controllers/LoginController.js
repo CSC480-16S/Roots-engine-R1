@@ -77,8 +77,15 @@ module.exports = {
                             res.send(html);
                         });
                         break;
-                    case 'insert failed':
-                        send.error = 'Unable to create this user.';
+                    case 'name insert failed':
+                        send.error = 'Unable to insert name.';
+                        send.username = username;
+                        render.page(send, 'login', function(html) {
+                            res.send(html);
+                        });
+                        break;
+                    case 'credentials insert failed':
+                        send.error = 'Unable to make credentials.';
                         send.username = username;
                         render.page(send, 'login', function(html) {
                             res.send(html);
@@ -86,6 +93,13 @@ module.exports = {
                         break;
                     case 'profile failed':
                         send.error = 'Unable to establish a user profile.';
+                        send.username = username;
+                        render.page(send, 'login', function(html) {
+                            res.send(html);
+                        });
+                        break;
+                    case 'get id failed':
+                        send.error = 'Unable to get individual id.';
                         send.username = username;
                         render.page(send, 'login', function(html) {
                             res.send(html);
