@@ -41,15 +41,15 @@ module.exports = {
                             res.send(html);
                         });
                         break;
+					case 'email not verified':
+						res.redirect('/emailResent?email=' + username);
+						break;
                     case 'success':
                         currentUser.setEmail(username, function(){
                             res.redirect('/treeViewer');
                         });
                         break;
-					case 'email not verified':
-						res.redirect('/resentEmail?email=' + username);
-						break;
-                    default:
+					default:
                         res.redirect('/error?location=LOGIN_CONTROLLER/USER_LOGIN&response=' + response + '&result=' + result);
                         break;
                 }
@@ -117,7 +117,7 @@ module.exports = {
                         break;
                     case 'success':
 						var nodemailer = require('nodemailer');
-						var transporter = nodemailer.createTransport('smtps://rootsspammer%40gmail.com:csc480@smtp.gmail.com');
+						var transporter = nodemailer.createTransport('smtps://rootsspammer%40gmail.com:roots480@smtp.gmail.com');
 						var mailOptions = {
     						from: 'Roots Team <rootsspammer@gmail.com>', // sender address 
     						to: username, // list of receivers 
