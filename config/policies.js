@@ -26,7 +26,17 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  // '*': true,
+  '*': "sessionAuth",
+  Login: {
+    'userLogin': true,
+    'createUser': true,
+    '*': "sessionAuth"
+  },
+  EmailConfirm: {
+    'confirmEmail': true,
+    'resendEmail': true,
+    '*': "sessionAuth"
+  }
 
   /***************************************************************************
   *                                                                          *

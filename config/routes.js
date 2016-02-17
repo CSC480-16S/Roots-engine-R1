@@ -41,7 +41,8 @@ module.exports.routes = {
   '/emailConfirm': 'EmailConfirmController.confirmEmail',
   '/emailResent': 'EmailResentController.resendEmail',
   '/checkYourInbox': 'CheckYourInboxController.checkYourInboxPage',
-  '/sendReset': 'SendResetController.sendReset'
+  '/sendReset': 'SendResetController.sendReset',
+  '/logout': 'LoginController.logout'
 
   /***************************************************************************
   *                                                                          *

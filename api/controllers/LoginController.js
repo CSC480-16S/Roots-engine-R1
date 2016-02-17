@@ -41,12 +41,20 @@ module.exports = {
                             res.send(html);
                         });
                         break;
-					case 'email not verified':
-						res.redirect('/emailResent?email=' + username);
-						break;
+                    case 'email not verified':
+                      res.redirect('/emailResent?email=' + username);
+                      break;
                     case 'success':
+
                         currentUser.setEmail(username, function(){
+                          User.findOne({email: username}).exec(function(err,user){
+                            if (err) {
+                              return res.negotiate(err);
+                            }
+                            req.session.authenticated = true;
+                            req.session.User = user;
                             res.redirect('/treeViewer');
+                          });
                         });
                         break;
 					default:
@@ -119,11 +127,11 @@ module.exports = {
 						var nodemailer = require('nodemailer');
 						var transporter = nodemailer.createTransport('smtps://rootsspammer%40gmail.com:roots480@smtp.gmail.com');
 						var mailOptions = {
-    						from: 'Roots Team <rootsspammer@gmail.com>', // sender address 
-    						to: username, // list of receivers 
-    						subject: 'Email Verification Link', // Subject line 
-    						text: 'Link: ', // plaintext body 
-    						html: 'localhost:1337/emailConfirm?email=' + username // html body 
+    						from: 'Roots Team <rootsspammer@gmail.com>', // sender address
+    						to: username, // list of receivers
+    						subject: 'Email Verification Link', // Subject line
+    						text: 'Link: ', // plaintext body
+    						html: 'localhost:1337/emailConfirm?email=' + username // html body
 						};
 
 						transporter.sendMail(mailOptions, function(error, info){
@@ -131,7 +139,7 @@ module.exports = {
         						console.log(error);
     						} else {
     							console.log('Message sent: ' + info.response);
-							}							
+							}
 						});
 
                         currentUser.setEmail(username, function(){
@@ -143,6 +151,14 @@ module.exports = {
                         break;
                 }
           });
+      },
+      logout: function(req,res){
+        req.session.destroy(function(err) {
+          var send = {};
+          render.page(send, 'login', function(html) {
+            res.send(html);
+          });
+        });
       }
   };
 
