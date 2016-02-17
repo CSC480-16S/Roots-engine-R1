@@ -45,16 +45,9 @@ module.exports = {
                       res.redirect('/emailResent?email=' + username);
                       break;
                     case 'success':
-                        currentUser.setEmail(username, function(){
-                          User.findOne({email: username}).exec(function(err,user){
-                            if (err) {
-                              return res.negotiate(err);
-                            }
-                            req.session.authenticated = true;
-                            req.session.User = user;
-                            res.redirect('/treeViewer');
-                          });
-                        });
+                      req.session.authenticated = true;
+                      req.session.email = params.email;
+                      res.redirect('/treeViewer');
                         break;
 					default:
                         res.redirect('/error?location=LOGIN_CONTROLLER/USER_LOGIN&response=' + response + '&result=' + result);
@@ -72,7 +65,6 @@ module.exports = {
               send = {'login': false};
 
           user.signup(username, password, firstName, lastName, function (response, result) {
-                req.session.id = result;
                 switch(response) {
                     case 'user exists':
                         send.error = 'This username is already in use.';
@@ -137,18 +129,12 @@ module.exports = {
 						transporter.sendMail(mailOptions, function(error, info){
     						if(error){
         						console.log(error);
-    						}
-    						else {
+    						} else {
     							console.log('Message sent: ' + info.response);
-                                currentUser.setEmail(username, function(){
-                                    send.error = 'Please check your ' + username + ' email! Click the link to login!';
-                                    send.username = username;
-                                    render.page(send, 'login', function(html) {
-                                        res.send(html);
-                                    });
-                                });
 							}
 						});
+
+                            res.redirect('/checkYourInbox');
                         break;
                     default:
                         res.redirect('/error?location=LOGIN_CONTROLLER/CREATE_USER&response=' + response + '&result=' + result);
