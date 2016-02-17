@@ -81,11 +81,11 @@ module.exports.session = {
   * 'mongodb://user:pass@host:port/database/collection',                     *
   *                                                                          *
   ***************************************************************************/
-
   // username: '',
   // password: '',
   // auto_reconnect: false,
   // ssl: false,
   // stringify: true
 
+    id:''
 };

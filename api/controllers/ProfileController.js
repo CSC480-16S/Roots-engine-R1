@@ -3,7 +3,7 @@
       var send = {};
       currentUser.getEmail(function(email){
           send.notes = email;
-          render.page(send, 'personal_profile', function(html) {
+          render.page(send, 'profile', function(html) {
             res.send(html);
           });
       });
@@ -12,16 +12,21 @@
     updateProfile: function(req, res) {
         var params = req.params.all(),
             userData = {
-                firstName: (params.firstName) ? params.firstName : null,
-                middleName: (params.middleName) ? params.middleName : null,
-                lastName: (params.lastName) ? params.lastName : null,
+//                firstName: (params.firstName) ? params.firstName : null,
+//                middleName: (params.middleName) ? params.middleName : null,
+//                lastName: (params.lastName) ? params.lastName : null,
                 dateOfBirth: (params.dateOfBirth) ? params.dateOfBirth : null,
-                placeOfBirth: (params.birthCountry) ? params.birthCountry : null,
+                birthCity: (params.birthCity) ? params.birthCity : null,
+                birthCountry: (params.birthCountry) ? params.birthCountry : null,
+                birthState: (params.birthState) ? params.birthState : null,
                 dateOfDeath: (params.dateOfDeath) ? params.dateOfDeath : null,
-                placeOfDeath: (params.placeOfDeath) ? params.placeOfDeath : null,
+                economicStatus: (params.economicStatus) ? params.economicStatus : null,
+                immigrationHistory: (params.immigrationHistory) ? params.immigrationHistory : null,
+                accomplishments: (params.accomplishments) ? params.accomplishments : null,
                 gender: (params.gender) ? params.gender : null,
                 bio: (params.personalBio) ? params.personalBio : null,
-                notes: (params.notes) ? params.notes : null
+                notes: (params.notes) ? params.notes : null,
+                id: (req.session.id) ? req.session.id : null
             },
             send = {};
           // perform checks for email/username in notes field

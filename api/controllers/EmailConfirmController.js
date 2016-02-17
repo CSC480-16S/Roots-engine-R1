@@ -4,16 +4,17 @@ module.exports = {
 	var email = req.param('email');
 	database.getLoginCredentials(email, function(loginResponse, loginResult) {
 			if(loginResponse === 'success') {
-				send.confirmation = 'Email confirmed, please log in.';
+			    send.login = true;
+				send.error = 'Email confirmed, please log in.';
 				database.updateEmailVerified(email, function(insertResponse, insertResult) {
-
+                    render.page(send, 'login', function(html) {
+                        res.send(html);
+                    });
 				});
-				render.page(send, 'emailConfirm', function(html) {
-					res.send(html);
-				});
-			} else {
+			}
+			else {
 				send.confirmation = 'You have not signed up yet or there was an error.';
-				render.page(send, 'emailConfirm', function(html) {
+				render.page(send, '/', function(html) {
 					res.send(html);
 				});
 			}

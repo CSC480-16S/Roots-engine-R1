@@ -45,7 +45,6 @@ module.exports = {
                       res.redirect('/emailResent?email=' + username);
                       break;
                     case 'success':
-
                         currentUser.setEmail(username, function(){
                           User.findOne({email: username}).exec(function(err,user){
                             if (err) {
@@ -73,6 +72,7 @@ module.exports = {
               send = {'login': false};
 
           user.signup(username, password, firstName, lastName, function (response, result) {
+                req.session.id = result;
                 switch(response) {
                     case 'user exists':
                         send.error = 'This username is already in use.';
@@ -137,14 +137,18 @@ module.exports = {
 						transporter.sendMail(mailOptions, function(error, info){
     						if(error){
         						console.log(error);
-    						} else {
+    						}
+    						else {
     							console.log('Message sent: ' + info.response);
+                                currentUser.setEmail(username, function(){
+                                    send.error = 'Please check your ' + username + ' email! Click the link to login!';
+                                    send.username = username;
+                                    render.page(send, 'login', function(html) {
+                                        res.send(html);
+                                    });
+                                });
 							}
 						});
-
-                        currentUser.setEmail(username, function(){
-                            res.redirect('/checkYourInbox');
-                        });
                         break;
                     default:
                         res.redirect('/error?location=LOGIN_CONTROLLER/CREATE_USER&response=' + response + '&result=' + result);
