@@ -122,5 +122,13 @@ module.exports = {
 		this.update(User, sqlUpdateEmailVerified, function(response, result) {
 			next(response, result);
 		});
+	},
+	updatePassword: function(email, password, next) {
+		console.log('hi from query');
+		var sqlUpdatePassword = 'Update User SET password=\'' + password + '\' WHERE email=\'' + email + '\';';
+		this.update(User, sqlUpdatePassword, function(response, result) {
+			console.log('database');
+			next(response, result);
+		});
 	}
 };

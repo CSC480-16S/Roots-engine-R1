@@ -37,6 +37,22 @@ module.exports.policies = {
     'confirmEmail': true,
     'resendEmail': true,
     '*': "sessionAuth"
+  },
+  SendReset: {
+	'sendReset': true,
+	'*': "sessionAuth"
+  },
+  ResetEmailSent: {
+	'sendEmail': true,
+	'*': "sessionAuth"
+  },
+  EnterNewPassword: {
+	'enterNewPassword': true,
+	'*': "sessionAuth"
+  },
+  NewPasswordConfirm: {
+	'submitNewPassword': true,
+	'*': "sessionAuth"
   }
 
   /***************************************************************************

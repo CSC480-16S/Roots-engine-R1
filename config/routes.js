@@ -42,7 +42,10 @@ module.exports.routes = {
   '/emailResent': 'EmailResentController.resendEmail',
   '/checkYourInbox': 'CheckYourInboxController.checkYourInboxPage',
   '/sendReset': 'SendResetController.sendReset',
-  '/logout': 'LoginController.logout'
+  '/logout': 'LoginController.logout',
+  '/resetEmailSent': 'ResetEmailSentController.sendEmail',
+  '/enterNewPassword': 'EnterNewPasswordController.enterNewPassword',
+  '/newPasswordConfirm': 'NewPasswordConfirmController.submitNewPassword'
 
   /***************************************************************************
   *                                                                          *
