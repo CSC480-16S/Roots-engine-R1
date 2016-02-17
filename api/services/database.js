@@ -69,28 +69,49 @@ module.exports = {
     },
 
     insertLoginCredentials: function(email, password, next) {
-        var sqlInsertCredentials = 'INSERT INTO Login (email, password) VALUES (\'' + email + '\', \'' + password + '\');';
-        this.insert(Login, sqlInsertCredentials, function (response, result){
+        var sqlInsertCredentials = 'INSERT INTO User (email, password, email_verified) VALUES (\'' + email + '\', \'' + password + '\', \'' + 0 + '\');';
+        this.insert(User, sqlInsertCredentials, function (response, result){
+            next(response, result);
+        });
+    },
+
+    insertIndividualReferenceUser: function(email, id, next) {
+        var sqlInsertIndividualReference = 'UPDATE User SET individual_id=\'' + id + '\' WHERE email=\'' + email + '\';';
+        this.update(User, sqlInsertIndividualReference, function (response, result){
+            next(response, result);
+        });
+    },
+
+    initializeName: function(firstName, lastName, next) {
+        var sqlInitializeName = 'INSERT INTO Name (first_name, last_name) VALUES (\'' + firstName + '\', \'' + lastName + '\');';
+        this.insert(Name, sqlInitializeName, function (response, result){
             next(response, result);
         });
     },
 
     getLoginCredentials: function(email, next) {
-        var sqlGetCredentials = 'SELECT * FROM Login WHERE email=\'' + email + '\';';
-        this.read(Login, sqlGetCredentials, function(response, result) {
+        var sqlGetCredentials = 'SELECT * FROM User WHERE email=\'' + email + '\';';
+        this.read(User, sqlGetCredentials, function(response, result) {
             next(response, result);
         });
     },
 
-    insertProfile: function(email, next) {
-        var sqlInsertProfile = 'INSERT INTO Individual (notes) VALUES (\'' + email + '\');';
+    getLastIndividualId: function(next) {
+        var sqlLastIndividualId = 'SELECT * FROM Individual ORDER BY id DESC LIMIT 1;';
+        this.read(Individual, sqlLastIndividualId, function(response, result) {
+            next(response, result);
+        });
+    },
+
+    initializeProfile: function(next) {
+        var sqlInsertProfile = 'INSERT INTO Individual () VALUES ();';
         this.insert(Individual, sqlInsertProfile, function(response, result) {
             next(response, result);
         });
     },
 
     updateProfile: function(userData, next) {
-        var sqlUpdateProfile = 'UPDATE Individual SET first_name=\'' + userData.firstName + '\', middle_name=\'' + userData.middleName + '\', last_name=\'' + userData.lastName + '\', date_of_birth=\'' + userData.dateOfBirth + '\', place_of_birth=\'' + userData.placeOfBirth + '\', date_of_death=\'' + userData.dateOfDeath + '\', place_of_death=\'' + userData.placeOfDeath + '\', gender=\'' + userData.gender + '\', bio=\'' + userData.bio + '\' WHERE notes=\'' + userData.notes + '\';';
+        var sqlUpdateProfile = 'UPDATE Individual SET date_of_birth=\'' + userData.dateOfBirth + '\', municipality_of_birth=\'' + userData.birthCity + '\', state_of_birth=\'' + userData.birthState + '\', country_of_birth=\'' + userData.birthCountry + '\', gender=\'' + userData.gender + '\', bio=\'' + userData.bio + '\', economic_status=\'' + userData.economicStatus + '\', immigration_history=\'' + userData.immigrationHistory + '\', bio=\'' + userData.accomplishments + '\', notes=\'' + userData.notes + '\' WHERE id=\'' + userData.id + '\';';
         this.update(Individual, sqlUpdateProfile, function(response, result) {
             next(response, result);
         });

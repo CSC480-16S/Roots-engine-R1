@@ -3,7 +3,7 @@
       var send = {};
       currentUser.getEmail(function(email){
           send.notes = email;
-          render.page(send, 'profile', function(html) {
+          render.page(send, 'personal_profile', function(html) {
             res.send(html);
           });
       });
@@ -16,11 +16,11 @@
                 middleName: (params.middleName) ? params.middleName : null,
                 lastName: (params.lastName) ? params.lastName : null,
                 dateOfBirth: (params.dateOfBirth) ? params.dateOfBirth : null,
-                placeOfBirth: (params.placeOfBirth) ? params.placeOfBirth : null,
+                placeOfBirth: (params.birthCountry) ? params.birthCountry : null,
                 dateOfDeath: (params.dateOfDeath) ? params.dateOfDeath : null,
                 placeOfDeath: (params.placeOfDeath) ? params.placeOfDeath : null,
                 gender: (params.gender) ? params.gender : null,
-                bio: (params.bio) ? params.bio : null,
+                bio: (params.personalBio) ? params.personalBio : null,
                 notes: (params.notes) ? params.notes : null
             },
             send = {};
@@ -43,7 +43,7 @@
                         break;
                     case 'success':
                         send = userData;
-                        render.page(send, 'profile', function(html) {
+                        render.page(send, 'treeViewer', function(html) {
                             res.send(html);
                         });
                         break;

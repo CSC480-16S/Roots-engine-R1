@@ -16,7 +16,7 @@ module.exports = {
         var params = req.params.all(),
             username = params.email,
             password = params.password,
-            send = {};
+            send = {'login': true};
 
           user.login(username, password, function (response, result) {
                 switch(response) {
@@ -43,7 +43,7 @@ module.exports = {
                         break;
                     case 'success':
                         currentUser.setEmail(username, function(){
-                            res.redirect('/profile');
+                            res.redirect('/treeViewer');
                         });
                         break;
 					case 'email not verified':
@@ -60,9 +60,11 @@ module.exports = {
           var params = req.params.all(),
               username = params.email,
               password = params.password,
-              send = {};
+              firstName = params.firstName,
+              lastName = params.lastName,
+              send = {'login': false};
 
-          user.signup(username, password, function (response, result) {
+          user.signup(username, password, firstName, lastName, function (response, result) {
                 switch(response) {
                     case 'user exists':
                         send.error = 'This username is already in use.';
@@ -78,8 +80,15 @@ module.exports = {
                             res.send(html);
                         });
                         break;
-                    case 'insert failed':
-                        send.error = 'Unable to create this user.';
+                    case 'name insert failed':
+                        send.error = 'Unable to insert name.';
+                        send.username = username;
+                        render.page(send, 'login', function(html) {
+                            res.send(html);
+                        });
+                        break;
+                    case 'credentials insert failed':
+                        send.error = 'Unable to make credentials.';
                         send.username = username;
                         render.page(send, 'login', function(html) {
                             res.send(html);
@@ -87,6 +96,20 @@ module.exports = {
                         break;
                     case 'profile failed':
                         send.error = 'Unable to establish a user profile.';
+                        send.username = username;
+                        render.page(send, 'login', function(html) {
+                            res.send(html);
+                        });
+                        break;
+                    case 'get id failed':
+                        send.error = 'Unable to get individual id.';
+                        send.username = username;
+                        render.page(send, 'login', function(html) {
+                            res.send(html);
+                        });
+                        break;
+                    case 'individual reference failed':
+                        send.error = 'Unable to establish a user reference.';
                         send.username = username;
                         render.page(send, 'login', function(html) {
                             res.send(html);
