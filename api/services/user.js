@@ -15,7 +15,7 @@ module.exports = {
                                             if (responseId === 'success') {
                                                 database.insertIndividualReferenceUser(email, resultId[0].id, function(response, result){
                                                     if (response === 'success') {
-                                                        next(response, result);
+                                                        next(response, resultId[0].id);
                                                     }
                                                     else {
                                                         next('individual reference failed', result);

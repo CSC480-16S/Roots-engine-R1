@@ -38,7 +38,7 @@ module.exports.routes = {
   '/treeViewer': 'TreeController.viewTree',
   '/profile': 'ProfileController.openProfile',
   '/updateProfile': 'ProfileController.updateProfile',
-  '/emailConfirm': 'EmailConfirmController.confirmEmail',
+  '/emailConfirm*': 'EmailConfirmController.confirmEmail',
   '/emailResent': 'EmailResentController.resendEmail',
   '/checkYourInbox': 'CheckYourInboxController.checkYourInboxPage',
   '/sendReset': 'SendResetController.sendReset',

@@ -28,6 +28,7 @@ module.exports.policies = {
 
   '*': "sessionAuth",
   Login: {
+    'homepage': true,
     'userLogin': true,
     'createUser': true,
     '*': "sessionAuth"
