@@ -40,7 +40,8 @@ module.exports.routes = {
   '/updateProfile': 'ProfileController.updateProfile',
   '/emailConfirm': 'EmailConfirmController.confirmEmail',
   '/emailResent': 'EmailResentController.resendEmail',
-  '/checkYourInbox': 'CheckYourInboxController.checkYourInboxPage'
+  '/checkYourInbox': 'CheckYourInboxController.checkYourInboxPage',
+  '/sendReset': 'SendResetController.sendReset'
 
   /***************************************************************************
   *                                                                          *
