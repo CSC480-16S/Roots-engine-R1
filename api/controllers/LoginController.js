@@ -46,6 +46,9 @@ module.exports = {
                             res.redirect('/treeViewer');
                         });
                         break;
+					case 'email not verified':
+						res.redirect('/resentEmail?email=' + username);
+						break;
                     default:
                         res.redirect('/error?location=LOGIN_CONTROLLER/USER_LOGIN&response=' + response + '&result=' + result);
                         break;
@@ -113,8 +116,26 @@ module.exports = {
                         });
                         break;
                     case 'success':
+						var nodemailer = require('nodemailer');
+						var transporter = nodemailer.createTransport('smtps://rootsspammer%40gmail.com:csc480@smtp.gmail.com');
+						var mailOptions = {
+    						from: 'Roots Team <rootsspammer@gmail.com>', // sender address 
+    						to: username, // list of receivers 
+    						subject: 'Email Verification Link', // Subject line 
+    						text: 'Link: ', // plaintext body 
+    						html: 'localhost:1337/emailConfirm?email=' + username // html body 
+						};
+
+						transporter.sendMail(mailOptions, function(error, info){
+    						if(error){
+        						console.log(error);
+    						} else {
+    							console.log('Message sent: ' + info.response);
+							}							
+						});
+
                         currentUser.setEmail(username, function(){
-                            res.redirect('/profile');
+                            res.redirect('/checkYourInbox');
                         });
                         break;
                     default:
