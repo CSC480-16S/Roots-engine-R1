@@ -115,6 +115,12 @@ module.exports = {
         this.update(Individual, sqlUpdateProfile, function(response, result) {
             next(response, result);
         });
-    }
+    },
 
+	updateEmailVerified: function(email, next) {
+		var sqlUpdateEmailVerified = 'Update User SET email_verified=1 WHERE email=\'' + email + '\';';
+		this.update(User, sqlUpdateEmailVerified, function(response, result) {
+			next(response, result);
+		});
+	}
 };
