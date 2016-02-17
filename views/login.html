@@ -56,11 +56,40 @@
                     </label>
                     <input name='password' type="password" required autocomplete="off"/>
                 </div>
-
+                    <div class="field-wrap">
+                        <label>
+                            Confirm Password<span class="req">*</span>
+                        </label>
+                        <input type="password" name="passwordconfirm" required autocomplete="off" />
+                    </div>
                 <button type="submit" class="button button-block"/>
                 Get Started</button>
 
             </form>
+                <!--Script for verifying the password boxes match and are equal, and that a password exists-->
+                <script type="text/javascript">
+                    function checksignup(){
+                        var signupform = document.forms["signup"];
+                        var pwregex =  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,128}$/;
+                        if(signupform.password.value != signupform.passwordconfirm.value){
+                            alert('Password dont match');
+                            signupform.password.value = "";
+                            signupform.passwordconfirm.value = "";
+                            signupform.password.focus();
+                            return false;
+                        }else if(signupform.firstname.value.length>32 || signupform.lastname.value.length>32){
+                            alert('name is too long');
+                            return false;
+
+
+                        }else if(signupform.password.value.search(pwregex)){
+                            alert('Password must be between 8 and 128 characters, with one each of a lower and upper case character, a special character and a number.');
+                            return false;
+                        }else{
+                            return true;
+                        }
+                    }
+                </script>
 
         </div>
 
