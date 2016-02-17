@@ -37,7 +37,10 @@ module.exports.routes = {
   '/userLogin': 'LoginController.userLogin',
   '/treeViewer': 'TreeController.viewTree',
   '/profile': 'ProfileController.openProfile',
-  '/updateProfile': 'ProfileController.updateProfile'
+  '/updateProfile': 'ProfileController.updateProfile',
+  '/emailConfirm': 'EmailConfirmController.confirmEmail',
+  '/emailResent': 'EmailResentController.resendEmail',
+  '/checkYourInbox': 'CheckYourInboxController.checkYourInboxPage'
 
   /***************************************************************************
   *                                                                          *
