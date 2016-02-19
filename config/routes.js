@@ -31,21 +31,27 @@ module.exports.routes = {
   * `assets` directory)                                                      *
   *                                                                          *
   ***************************************************************************/
+  // error page
   '/error*': 'ErrorController.errorPage',
+
+  // login controller
   '/': 'LoginController.homepage',
-  '/createUser': 'LoginController.createUser',
+  '/userSignup': 'LoginController.userSignup',
   '/userLogin': 'LoginController.userLogin',
+  '/emailConfirm*': 'LoginController.confirmEmail',
+  '/emailResent*': 'LoginController.resendEmail',
+  '/sendReset': 'LoginController.sendReset',
+  '/enterNewPassword*': 'LoginController.enterNewPassword',
+  '/newPasswordConfirm': 'LoginController.submitNewPassword',
+  '/resetEmailSent': 'LoginController.sendResetPasswordEmail'
+  '/logout': 'LoginController.logout',
+
+  // tree controller
   '/treeViewer': 'TreeController.viewTree',
+
+  // profile controller
   '/profile': 'ProfileController.openProfile',
   '/updateProfile': 'ProfileController.updateProfile',
-  '/emailConfirm*': 'EmailConfirmController.confirmEmail',
-  '/emailResent': 'EmailResentController.resendEmail',
-  '/checkYourInbox': 'CheckYourInboxController.checkYourInboxPage',
-  '/sendReset': 'SendResetController.sendReset',
-  '/logout': 'LoginController.logout',
-  '/resetEmailSent': 'ResetEmailSentController.sendEmail',
-  '/enterNewPassword': 'EnterNewPasswordController.enterNewPassword',
-  '/newPasswordConfirm': 'NewPasswordConfirmController.submitNewPassword'
 
   /***************************************************************************
   *                                                                          *
