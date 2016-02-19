@@ -124,10 +124,8 @@ module.exports = {
 		});
 	},
 	updatePassword: function(email, password, next) {
-		console.log('hi from query');
-		var sqlUpdatePassword = 'Update User SET password=\'' + password + '\' WHERE email=\'' + email + '\';';
+		var sqlUpdatePassword = 'UPDATE User SET password=\'' + password + '\' WHERE email=\'' + email + '\';';
 		this.update(User, sqlUpdatePassword, function(response, result) {
-			console.log('database');
 			next(response, result);
 		});
 	}

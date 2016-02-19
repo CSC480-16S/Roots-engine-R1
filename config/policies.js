@@ -30,29 +30,15 @@ module.exports.policies = {
   Login: {
     'homepage': true,
     'userLogin': true,
-    'createUser': true,
-    '*': "sessionAuth"
-  },
-  EmailConfirm: {
+    'userSignup': true,
     'confirmEmail': true,
     'resendEmail': true,
-    '*': "sessionAuth"
-  },
-  SendReset: {
-	'sendReset': true,
-	'*': "sessionAuth"
-  },
-  ResetEmailSent: {
-	'sendEmail': true,
-	'*': "sessionAuth"
-  },
-  EnterNewPassword: {
+    'sendReset': true,
+    'sendResetPasswordEmail': true,
+    'submitNewPassword': true,
 	'enterNewPassword': true,
-	'*': "sessionAuth"
-  },
-  NewPasswordConfirm: {
-	'submitNewPassword': true,
-	'*': "sessionAuth"
+	'logout': true,
+    '*': "sessionAuth"
   }
 
   /***************************************************************************
