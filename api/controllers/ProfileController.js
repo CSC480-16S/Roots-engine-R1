@@ -1,4 +1,7 @@
   module.exports = {
+    /*input:null
+    output:notes-contains the email of the user for the current session, page-renders the profile page
+     */
     openProfile: function(req, res) {
       var send = {};
         send.notes = req.session.email;
@@ -7,6 +10,19 @@
         });
     },
 
+    /*input:firstName-string to enter into the user's first name field,
+    middleName-string to enter into the user's middle name field,
+    lastName-string to enter into the user's last name field,
+    dateOfBirth-date to enter into the  user's date of birth field,
+    placeOfBirth-string to enter into the user's place of birth field,
+    dateOfDeath-date to enter into the user's data of death field,
+    placeOfDeath-string to enter into the user's place of death field,
+    gender-string to enter into the user's gender field,
+    bio-string to enter into the user's bio field,
+    notes-string to enter into the user's notes field
+    output: error-message explaining any issue in fields entered, username-username of user caning their profile,
+    page-renders the tree viewer page
+     */
     updateProfile: function(req, res) {
         var params = req.params.all(),
             userData = {

@@ -43,7 +43,7 @@ module.exports.routes = {
   '/sendReset': 'LoginController.sendReset',
   '/enterNewPassword*': 'LoginController.enterNewPassword',
   '/newPasswordConfirm': 'LoginController.submitNewPassword',
-  '/resetEmailSent': 'LoginController.sendResetPasswordEmail'
+  '/resetEmailSent': 'LoginController.sendResetPasswordEmail',
   '/logout': 'LoginController.logout',
 
   // tree controller
@@ -51,7 +51,7 @@ module.exports.routes = {
 
   // profile controller
   '/profile': 'ProfileController.openProfile',
-  '/updateProfile': 'ProfileController.updateProfile',
+  '/updateProfile': 'ProfileController.updateProfile'
 
   /***************************************************************************
   *                                                                          *

@@ -6,20 +6,27 @@
  */
 
 module.exports = {
+    /*inputs: null
+    outputs:page-login home page
+     */
     homepage: function(req, res) {
         render.page({}, 'login', function(html) {
             res.send(html);
         });
     },
-
+  /*inputs:null
+   outputs: page-renders the page for a user to enter their email for reset
+   */
     sendReset: function(req, res) {
     	var send = {};
-    	//var email = req.param('email');
     	render.page(send, 'sendReset', function(html) {
     		res.send(html);
     	});
     },
-
+    /*inputs: email-query string from url specifying the user to confirm
+     outputs: error-message for a successful email confirmation, or unsuccessful, pages-renders login page,
+     login-flag that will be used by gui to determine which tab of their login box to use
+      */
     confirmEmail: function(req, res) {
         var send = {},
             email = req.param('email');
@@ -41,7 +48,9 @@ module.exports = {
             }
         });
     },
-
+    /*inputs: email-query string from url specifying the user to confirm
+    outputs: email- users email whose password is being reset, page-renders the page to enter a new password
+     */
     enterNewPassword: function(req, res) {
     	var send = {};
     	    email = req.query.email;
@@ -51,6 +60,9 @@ module.exports = {
         });
     },
 
+    /*inputs: newPassword-the password the was entered by the user, email-email of user whose password is changing
+    outputs: error-message claiming success of failure of password reset, page-renders the login page
+     */
     submitNewPassword: function(req, res) {
     	var send = {},
     	    params = req.params.all(),
@@ -79,12 +91,16 @@ module.exports = {
         });
     },
 
+    /*inputs: email-query string from url specifying the user to send to
+    outputs: email-email sent to user with the link to user for password reset,
+    error-message claiming success of failure of password reset email being sent,
+    page-renders the login page
+     */
     sendResetPasswordEmail: function(req, res) {
     		var send = {},
     		    email = req.param('email');
     		database.getLoginCredentials(email, function(loginResponse, loginResult) {
     			if(loginResponse === 'success') {
-    				send.confirmation = 'Plese check your email for a password reset link.';
     				var nodemailer = require('nodemailer'),
     				    transporter = nodemailer.createTransport('smtps://rootsspammer%40gmail.com:roots480@smtp.gmail.com'),
     				    mailOptions = {
@@ -115,7 +131,11 @@ module.exports = {
     			}
     		});
     	},
-
+    /*input:email-query string from url specifying the user to send to
+    outputs:email-email sent to user with the link to user for password reset,
+     error-message telling the user that a confirmation email was resent,
+     page-renders the login page
+     */
     resendEmail: function(req, res) {
         var send = {},
             email = req.param('email'),
@@ -135,7 +155,6 @@ module.exports = {
             }
             else {
                 console.log('Message sent: ' + info.response);
-                send.address = email;
                 send.error = 'Email address not yet confirmed. Another message was sent to ' + email + '. Please check the spelling of your address and your spam folder. If you did not spell your email correctly, you will have to make a new account.';
                 render.page(send, 'login', function(html) {
                     res.send(html);
@@ -144,6 +163,11 @@ module.exports = {
         });
     },
 
+    /*inputs:username-username entered by user, password-password entered by user
+    outputs:error-message explaining why login was unsuccessful, username-username used to login with,
+    login-flag for gui to use to decide which tab of their login box to use, session.authentication-value to set
+    session authentication so the user has access to restricted pages, page-renders the tree viewer page
+     */
     userLogin: function(req, res) {
         var params = req.params.all(),
             username = params.email,
@@ -187,7 +211,12 @@ module.exports = {
                 }
           });
     },
-
+    /*input:username-username entered by user, password-password entered by user, firstName-name to enter in the
+    database for the user's first name, lastName-name to enter in the database for the user's last name
+    output:login-flag for gui to use to decide which tab of their login box to use,
+    error- message to inform the user of a failed sign up, username-username used for the sign up attempt,
+    page-renders a page telling the user to check thier inbox
+     */
     userSignup: function(req, res) {
           var params = req.params.all(),
               username = params.email,
@@ -275,6 +304,10 @@ module.exports = {
           });
       },
 
+      /*input:session-the session associated with the user's browser
+      output-session.authentication-this value should now be false so the user can no longer access restricted pages,
+      page-renders the login page
+       */
       logout: function(req,res){
         req.session.destroy(function(err) {
           var send = {};
