@@ -4,8 +4,9 @@
  * @description :: Server-side logic for managing Logins
  * @help        :: See http://sailsjs.org/#!/documentation/concepts/Controllers
  */
-
+const crypto = require('crypto');
 module.exports = {
+
     /*inputs: null
     outputs:page-login home page
      */
@@ -68,9 +69,12 @@ module.exports = {
     	    params = req.params.all(),
     	    nPassword = params.newPassword,
     	    email = params.email;
+      var cipher = crypto.createCipher('aes192', 'a password');
+      var encryptedPassword = cipher.update(nPassword, 'utf8', 'hex');
+      encryptedPassword += cipher.final('hex');
     	database.getLoginCredentials(email, function(loginResponse, loginResult) {
             if(loginResponse === 'success') {
-                database.updatePassword(email, nPassword, function(updateResponse, result) {
+                database.updatePassword(email, encryptedPassword, function(updateResponse, result) {
                     if(updateResponse === 'success') {
                         send.error = 'Your password has changed, please log in.';
                         render.page(send, 'login', function(html) {
@@ -173,8 +177,11 @@ module.exports = {
             username = params.email,
             password = params.password,
             send = {'login': true};
+        var cipher = crypto.createCipher('aes192', 'a password');
+        var encryptedPassword = cipher.update(password, 'utf8', 'hex');
+        encryptedPassword += cipher.final('hex');
 
-          user.login(username, password, function (response, result) {
+          user.login(username, encryptedPassword, function (response, result) {
                 switch(response) {
                     case 'incorrect username':
                         send.error = 'This username does not exist';
@@ -224,8 +231,10 @@ module.exports = {
               firstName = params.firstName,
               lastName = params.lastName,
               send = {'login': false};
-
-          user.signup(username, password, firstName, lastName, function (response, result) {
+          var cipher = crypto.createCipher('aes192', 'a password');
+          var encryptedPassword = cipher.update(password, 'utf8', 'hex');
+          encryptedPassword += cipher.final('hex');
+          user.signup(username, encryptedPassword, firstName, lastName, function (response, result) {
                 switch(response) {
                     case 'user exists':
                         send.error = 'This username is already in use.';
