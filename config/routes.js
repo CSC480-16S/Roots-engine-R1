@@ -51,11 +51,7 @@ module.exports.routes = {
 
   // profile controller
   '/profile': 'ProfileController.openProfile',
-  '/updateProfile': 'ProfileController.updateProfile',
-  '/emailConfirm': 'EmailConfirmController.confirmEmail',
-  '/emailResent': 'EmailResentController.resendEmail',
-  '/checkYourInbox': 'CheckYourInboxController.checkYourInboxPage',
-  '/logout': 'LoginController.logout'
+  '/updateProfile': 'ProfileController.updateProfile'
 
   /***************************************************************************
   *                                                                          *
