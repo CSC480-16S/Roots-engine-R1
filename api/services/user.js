@@ -51,11 +51,11 @@ module.exports = {
     login: function(email, password, next) {
         database.getLoginCredentials(email, function(response, result){
             if (response === 'success') {
-				if(result[0].password === password && result[0].email_verified === 0) {
-					next('email not verified', true);
-				}
-                else if (result[0].email === email && result[0].password === password) {
+				if(result[0].password === password && result[0].email_verified === null) {
                     next(response, true);
+				}
+                else if (result[0].password === password) {
+					next('email not verified', true);
                 }
                 else {
                     next('incorrect password', false);

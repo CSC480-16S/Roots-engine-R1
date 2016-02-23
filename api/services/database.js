@@ -123,6 +123,7 @@ module.exports = {
 			next(response, result);
 		});
 	},
+
 	updatePassword: function(email, password, next) {
 		var sqlUpdatePassword = 'UPDATE User SET password=\'' + password + '\' WHERE email=\'' + email + '\';';
 		this.update(User, sqlUpdatePassword, function(response, result) {

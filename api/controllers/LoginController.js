@@ -68,10 +68,10 @@ module.exports = {
     	var send = {},
     	    params = req.params.all(),
     	    nPassword = params.newPassword,
-    	    email = params.email;
-      var cipher = crypto.createCipher('aes192', 'a password');
-      var encryptedPassword = cipher.update(nPassword, 'utf8', 'hex');
-      encryptedPassword += cipher.final('hex');
+    	    email = params.email,
+            cipher = crypto.createCipher('aes192', 'a password'),
+            encryptedPassword = cipher.update(nPassword, 'utf8', 'hex');
+        encryptedPassword += cipher.final('hex');
     	database.getLoginCredentials(email, function(loginResponse, loginResult) {
             if(loginResponse === 'success') {
                 database.updatePassword(email, encryptedPassword, function(updateResponse, result) {
@@ -176,9 +176,9 @@ module.exports = {
         var params = req.params.all(),
             username = params.email,
             password = params.password,
-            send = {'login': true};
-        var cipher = crypto.createCipher('aes192', 'a password');
-        var encryptedPassword = cipher.update(password, 'utf8', 'hex');
+            send = {'login': true},
+            cipher = crypto.createCipher('aes192', 'a password'),
+            encryptedPassword = cipher.update(password, 'utf8', 'hex');
         encryptedPassword += cipher.final('hex');
 
           user.login(username, encryptedPassword, function (response, result) {
@@ -222,78 +222,86 @@ module.exports = {
     database for the user's first name, lastName-name to enter in the database for the user's last name
     output:login-flag for gui to use to decide which tab of their login box to use,
     error- message to inform the user of a failed sign up, username-username used for the sign up attempt,
-    page-renders a page telling the user to check thier inbox
+    page-renders a page telling the user to check their inbox
      */
     userSignup: function(req, res) {
           var params = req.params.all(),
-              username = params.email,
+              email = params.email,
               password = params.password,
               firstName = params.firstName,
               lastName = params.lastName,
-              send = {'login': false};
-          var cipher = crypto.createCipher('aes192', 'a password');
-          var encryptedPassword = cipher.update(password, 'utf8', 'hex');
+              send = {},
+              cipher = crypto.createCipher('aes192', 'a password'),
+              encryptedPassword = cipher.update(password, 'utf8', 'hex');
           encryptedPassword += cipher.final('hex');
-          user.signup(username, encryptedPassword, firstName, lastName, function (response, result) {
+          user.signup(email, encryptedPassword, firstName, lastName, function (response, result) {
                 switch(response) {
                     case 'user exists':
                         send.error = 'This username is already in use.';
-                        send.username = username;
+                        send.username = email;
+                        send.login = false;
                         render.page(send, 'login', function(html) {
                             res.send(html);
                         });
                         break;
                     case 'fields too long?':
                         send.error = 'Your username and password must be less than 32 characters?';
-                        send.username = username;
+                        send.username = email;
+                        send.login = false;
                         render.page(send, 'login', function(html) {
                             res.send(html);
                         });
                         break;
                     case 'name insert failed':
                         send.error = 'Unable to insert name.';
-                        send.username = username;
+                        send.login = false;
+                        send.username = email;
                         render.page(send, 'login', function(html) {
                             res.send(html);
                         });
                         break;
                     case 'credentials insert failed':
                         send.error = 'Unable to make credentials.';
-                        send.username = username;
+                        send.username = email;
+                        send.login = false;
                         render.page(send, 'login', function(html) {
                             res.send(html);
                         });
                         break;
                     case 'profile failed':
                         send.error = 'Unable to establish a user profile.';
-                        send.username = username;
+                        send.username = email;
+                        send.login = false;
                         render.page(send, 'login', function(html) {
                             res.send(html);
                         });
                         break;
                     case 'get id failed':
                         send.error = 'Unable to get individual id.';
-                        send.username = username;
+                        send.username = email;
+                        send.login = false;
                         render.page(send, 'login', function(html) {
                             res.send(html);
                         });
                         break;
                     case 'individual reference failed':
                         send.error = 'Unable to establish a user reference.';
-                        send.username = username;
+                        send.username = email;
+                        send.login = false;
                         render.page(send, 'login', function(html) {
                             res.send(html);
                         });
                         break;
                     case 'success':
+                        send.login = false;
 						var nodemailer = require('nodemailer');
 						var transporter = nodemailer.createTransport('smtps://rootsspammer%40gmail.com:roots480@smtp.gmail.com');
 						var mailOptions = {
     						from: 'Roots Team <rootsspammer@gmail.com>', // sender address
-    						to: username, // list of receivers
+    						to: email, // list of receivers
     						subject: 'Email Verification Link', // Subject line
     						text: 'Link: ', // plaintext body
-    						html: 'localhost:1337/emailConfirm?email=' + username // html body
+    						html: 'localhost:1337/emailConfirm?email=' + email // html body
 						};
 
 						transporter.sendMail(mailOptions, function(error, info){
@@ -301,10 +309,13 @@ module.exports = {
         						console.log(error);
     						} else {
     							console.log('Message sent: ' + info.response);
+    							send.error = 'Please confirm your email at ' + email + ' to login.';
+                                render.page(send, 'login', function(html) {
+                                    res.send(html);
+                                });
 							}
 						});
 
-                            res.redirect('/checkYourInbox');
                         break;
                     default:
                         res.redirect('/error?location=LOGIN_CONTROLLER/CREATE_USER&response=' + response + '&result=' + result);
