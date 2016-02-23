@@ -7,8 +7,14 @@ html {
 }
 
 body {
-    background: #c1bdba;
+    /*background: #f4f1cc;*/
     font-family: 'Titillium Web', sans-serif;
+    color: #403324;
+    background-image: url("Tree.jpg");
+    background-size: 100%;
+    background-repeat: no-repeat;
+    
+    
 }
 
 a {
@@ -23,12 +29,15 @@ a:hover {
 }
 
 .form {
-    background: rgba(19, 35, 47, 0.9);
+    background: #f4f1cc;
     padding: 40px;
-    max-width: 600px;
-    margin: 50px auto;
+    max-width: 500px;
+    min-width: 400px;
+    margin: 75px;
+    margin-left: 10%;
     border-radius: 4px;
     box-shadow: 0 4px 10px 4px rgba(19, 35, 47, 0.3);
+    
 }
 
 .tab-group {
@@ -74,17 +83,31 @@ a:hover {
 
 h1 {
     text-align: center;
-    color: #ffffff;
     font-weight: 300;
     margin: 0 0 40px;
 }
+
+.header-logo {
+    text-align: left;
+  /*  float:left;  */
+    padding-left: 60px;
+    padding-top: 30px;
+    font-size: 3.5em;
+}
+
+/*.header-signIn {
+    text-align: right;
+    padding-top: 20px;
+    padding-right: 40px;
+    font-size: 2em;
+}*/
 
 label {
     position: absolute;
     -webkit-transform: translateY(6px);
     transform: translateY(6px);
     left: 13px;
-    color: rgba(255, 255, 255, 0.5);
+    color: #403324;
     -webkit-transition: all 0.25s ease;
     transition: all 0.25s ease;
     -webkit-backface-visibility: hidden;
@@ -94,7 +117,7 @@ label {
 
 label .req {
     margin: 2px;
-    color: #1ab188;
+    color: #f16345;
 }
 
 label.active {
@@ -112,7 +135,7 @@ label.highlight {
     color: #ffffff;
 }
 
-input, textarea {
+input, textarea, select {
     font-size: 22px;
     display: block;
     width: 100%;
@@ -121,7 +144,7 @@ input, textarea {
     background: none;
     background-image: none;
     border: 1px solid #a0b3b0;
-    color: #ffffff;
+    color: #403324;
     border-radius: 0;
     -webkit-transition: border-color .25s ease, box-shadow .25s ease;
     transition: border-color .25s ease, box-shadow .25s ease;
@@ -167,7 +190,7 @@ textarea {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: .1em;
-    background: #1ab188;
+    background: #8ac08f;
     color: #ffffff;
     -webkit-transition: all 0.5s ease;
     transition: all 0.5s ease;
@@ -190,7 +213,6 @@ textarea {
 
 h2 {
 /*    text-align: center;*/
-    color: #ffffff;
     font-weight: 300;
     margin: 0 0 0px;
 }
@@ -200,7 +222,7 @@ h2 {
 }
 
 .profile-page-form {
-    background: rgba(19, 35, 47, 0.9);
+    background: #f4f1cc;
     padding: 40px;
     max-width: 50%;
     margin: 50px auto;
@@ -216,4 +238,11 @@ h2 {
 
 .profile-top-row > div:last-child {
     margin: 0;
+}
+
+.password-help {
+    padding: 40px;
+    background-color: #f4f1cc ;
+    max-width: 500px;
+    margin: 0 auto;
 }
