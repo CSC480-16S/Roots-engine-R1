@@ -77,6 +77,42 @@ module.exports = {
                 next('update failed', result);
             }
         });
+    },
+
+    confirmEmail: function(email, next) {
+        database.getLoginCredentials(email, function(loginResponse, loginResult) {
+            if(loginResponse === 'success') {
+                database.updateEmailVerified(email, function(insertResponse, insertResult) {
+                    if (insertResponse === 'success') {
+                        next(insertResponse, insertResult);
+                    }
+                    else {
+                        next('Email verification update failed', insertResult);
+                    }
+                });
+            }
+            else {
+                next('Email does not exist');
+            }
+        });
+    },
+
+    changePassword: function(email, encryptedPassword, next) {
+        database.getLoginCredentials(email, function(loginResponse, loginResult) {
+            if(loginResponse === 'success') {
+                database.updatePassword(email, encryptedPassword, function(updateResponse, result) {
+                    if(updateResponse === 'success') {
+                        next(updateResponse, result);
+                    }
+                    else {
+                        next('Update password failed', result);
+                    }
+                });
+            }
+            else {
+                next('Email does not exist', loginResult);
+            }
+        });
     }
 
 };

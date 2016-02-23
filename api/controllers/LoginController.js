@@ -18,7 +18,7 @@ module.exports = {
   /*inputs:null
    outputs: page-renders the page for a user to enter their email for reset
    */
-    sendReset: function(req, res) {
+    renderPasswordReset: function(req, res) {
     	var send = {};
     	render.page(send, 'sendReset', function(html) {
     		res.send(html);
@@ -31,21 +31,32 @@ module.exports = {
     confirmEmail: function(req, res) {
         var send = {},
             email = req.param('email');
-        database.getLoginCredentials(email, function(loginResponse, loginResult) {
-            if(loginResponse === 'success') {
-                send.error = 'Email confirmed, please log in.';
-                database.updateEmailVerified(email, function(insertResponse, insertResult) {
+        user.confirmEmail (email, function (response, result) {
+            switch (response) {
+                case 'Email does not exist':
+                    send.error = 'You have not signed up yet';
+                    send.login = false;
                     render.page(send, 'login', function(html) {
                         res.send(html);
                     });
-                });
-            }
-            else {
-                send.login = true;
-                send.confirmation = 'You have not signed up yet or there was an error.';
-                render.page(send, 'login', function(html) {
-                    res.send(html);
-                });
+                    break;
+                case 'Email verification update failed':
+                    send.error = 'Unable to verify your email. Please attempt to login to receive a new verification email.';
+                    send.login = true;
+                    render.page(send, 'login', function(html) {
+                        res.send(html);
+                    });
+                    break;
+                case 'success':
+                    send.error = 'Email confirmed, please log in.';
+                    send.login = true;
+                    render.page(send, 'login', function(html) {
+                        res.send(html);
+                    });
+                    break;
+                default:
+                    res.redirect('/error?location=LOGIN_CONTROLLER/CONFIRM_EMAIL&response=' + response + '&result=' + result);
+                    break;
             }
         });
     },
@@ -56,7 +67,7 @@ module.exports = {
     	var send = {};
     	    email = req.query.email;
     	send.email = email;
-    	render.page(send, 'enterNewPassword', function(html) {
+    	render.page(send, 'password_reset', function(html) {
     		res.send(html);
         });
     },
@@ -64,35 +75,50 @@ module.exports = {
     /*inputs: newPassword-the password the was entered by the user, email-email of user whose password is changing
     outputs: error-message claiming success of failure of password reset, page-renders the login page
      */
-    submitNewPassword: function(req, res) {
+    changePassword: function(req, res) {
     	var send = {},
     	    params = req.params.all(),
     	    nPassword = params.newPassword,
+    	    nPassword2 = params.newPassword2,
     	    email = params.email,
             cipher = crypto.createCipher('aes192', 'a password'),
-            encryptedPassword = cipher.update(nPassword, 'utf8', 'hex');
-        encryptedPassword += cipher.final('hex');
-    	database.getLoginCredentials(email, function(loginResponse, loginResult) {
-            if(loginResponse === 'success') {
-                database.updatePassword(email, encryptedPassword, function(updateResponse, result) {
-                    if(updateResponse === 'success') {
-                        send.error = 'Your password has changed, please log in.';
+            encryptedPassword = cipher.update(nPassword, 'utf8', 'hex') + cipher.final('hex');
+        if (nPassword !== nPassword2) {
+            send.error = 'Passwords are different';
+            render.page(send, 'password_reset', function(html) {
+                res.send(html);
+            });
+        }
+        else {
+            user.changePassword(email, encryptedPassword, function(response, result) {
+                switch (response) {
+                    case 'Email does not exist':
+                        send.error = 'You have not signed up yet';
+                        send.login = false;
                         render.page(send, 'login', function(html) {
                             res.send(html);
                         });
-                    }
-                    else {
-            		    res.redirect('/error?location=LOGIN_CONTROLLER/SUBMIT_NEW_PASSWORD&response=' + updateResponse + '&result=' + result);
-                    }
-                });
-            }
-            else {
-                send.error = 'There was an error, please change your password again.';
-                render.page(send, 'login', function(html) {
-                    res.send(html);
-                });
-            }
-        });
+                        break;
+                    case 'Update password failed':
+                        send.error = 'Unable to update your password. Please use forget password again.';
+                        send.login = true;
+                        render.page(send, 'login', function(html) {
+                            res.send(html);
+                        });
+                        break;
+                    case 'success':
+                        send.error = 'Your password has changed, please log in.';
+                        send.login = true;
+                        render.page(send, 'login', function(html) {
+                            res.send(html);
+                        });
+                        break;
+                    default:
+                        res.redirect('/error?location=LOGIN_CONTROLLER/CHANGE_PASSWORD&response=' + response + '&result=' + result);
+                        break;
+                }
+            });
+        }
     },
 
     /*inputs: email-query string from url specifying the user to send to
@@ -178,8 +204,7 @@ module.exports = {
             password = params.password,
             send = {'login': true},
             cipher = crypto.createCipher('aes192', 'a password'),
-            encryptedPassword = cipher.update(password, 'utf8', 'hex');
-        encryptedPassword += cipher.final('hex');
+            encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
 
           user.login(username, encryptedPassword, function (response, result) {
                 switch(response) {
@@ -232,8 +257,7 @@ module.exports = {
               lastName = params.lastName,
               send = {},
               cipher = crypto.createCipher('aes192', 'a password'),
-              encryptedPassword = cipher.update(password, 'utf8', 'hex');
-          encryptedPassword += cipher.final('hex');
+              encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
           user.signup(email, encryptedPassword, firstName, lastName, function (response, result) {
                 switch(response) {
                     case 'user exists':

@@ -33,10 +33,11 @@ module.exports.policies = {
     'userSignup': true,
     'confirmEmail': true,
     'resendEmail': true,
-    'sendReset': true,
     'sendResetPasswordEmail': true,
     'submitNewPassword': true,
 	'enterNewPassword': true,
+	'renderPasswordReset': true,
+	'changePassword': true,
 	'logout': true,
     '*': "sessionAuth"
   }
