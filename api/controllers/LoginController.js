@@ -130,10 +130,20 @@ module.exports = {
     		var send = {},
     		    email = req.param('email');
     		database.getLoginCredentials(email, function(loginResponse, loginResult) {
-    			if(loginResponse === 'success') {
-    				var nodemailer = require('nodemailer'),
-    				    transporter = nodemailer.createTransport('smtps://rootsspammer%40gmail.com:roots480@smtp.gmail.com'),
-    				    mailOptions = {
+    		    if(loginResponse === 'success') {
+			mailer.send(email, 'subject', 'text', 'html', function(error, info) {
+			    if(error) {
+				res.redirect('/error?location=LOGIN_CONTROLLER/SEND_RESET_PASSWORD_EMAIL&response=' + error + '&result=' + info);
+			    } else {
+				send.error = 'Reset Password Email Sent';
+				render.page(send, 'login', function(html) {
+				    res.send(html);
+				});
+			    }
+			});
+    			    /*var nodemailer = require('nodemailer'),
+    				transporter = nodemailer.createTransport('smtps://rootsspammer%40gmail.com:roots480@smtp.gmail.com'),
+    				mailOptions = {
                             from: 'Roots Team <rootsspammer@gmail.com>', // sender address
                             to: email, // list of receivers
                             subject: 'Password Reset Link', // Subject line
@@ -151,9 +161,9 @@ module.exports = {
                                 res.send(html);
                             });
     					}
-    				});
-    			}
-    			else {
+    				});*/
+    		    }
+    		    else {
     				send.error = 'You have not signed up yet or there was an error.';
                     render.page(send, 'login', function(html) {
                         res.send(html);
