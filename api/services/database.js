@@ -69,7 +69,7 @@ module.exports = {
     },
 
     insertLoginCredentials: function(email, password, next) {
-        var sqlInsertCredentials = 'INSERT INTO User (email, password, email_verified) VALUES (\'' + email + '\', \'' + password + '\', \'' + 0 + '\');';
+        var sqlInsertCredentials = 'INSERT INTO User (email, password, email_confirm) VALUES (\'' + email + '\', \'' + password + '\', \'' + 0 + '\');';
         this.insert(User, sqlInsertCredentials, function (response, result){
             next(response, result);
         });
@@ -82,10 +82,10 @@ module.exports = {
         });
     },
 
-    initializeName: function(firstName, lastName, next) {
-        var sqlInitializeName = 'INSERT INTO Name (first_name, last_name) VALUES (\'' + firstName + '\', \'' + lastName + '\');';
+    initializeName: function(firstName, lastName, individualId, next) {
+        var sqlInitializeName = 'INSERT INTO Name (first_name, last_name, individual_id) VALUES (\'' + firstName + '\', \'' + lastName + '\', ' + individualId + ');';
         this.insert(Name, sqlInitializeName, function (response, result){
-            next(response, result);
+            next(response, individualId);
         });
     },
 
@@ -111,14 +111,14 @@ module.exports = {
     },
 
     updateProfile: function(userData, next) {
-        var sqlUpdateProfile = 'UPDATE Individual SET date_of_birth=\'' + userData.dateOfBirth + '\', municipality_of_birth=\'' + userData.birthCity + '\', state_of_birth=\'' + userData.birthState + '\', country_of_birth=\'' + userData.birthCountry + '\', gender=\'' + userData.gender + '\', bio=\'' + userData.bio + '\', economic_status=\'' + userData.economicStatus + '\', immigration_history=\'' + userData.immigrationHistory + '\', bio=\'' + userData.accomplishments + '\', notes=\'' + userData.notes + '\' WHERE id=\'' + userData.id + '\';';
+        var sqlUpdateProfile = 'UPDATE Individual SET date_of_birth=\'' + userData.dateOfBirth + '\', municipality_of_birth=\'' + userData.birthCity + '\', state_of_birth=\'' + userData.birthState + '\', country_of_birth=\'' + userData.birthCountry + '\', gender=\'' + userData.gender + '\', bio=\'' + userData.bio + '\' WHERE id=\'' + userData.id + '\';';
         this.update(Individual, sqlUpdateProfile, function(response, result) {
             next(response, result);
         });
     },
 
 	updateEmailVerified: function(email, next) {
-		var sqlUpdateEmailVerified = 'Update User SET email_verified=1 WHERE email=\'' + email + '\';';
+		var sqlUpdateEmailVerified = 'Update User SET email_confirm=NULL WHERE email=\'' + email + '\';';
 		this.update(User, sqlUpdateEmailVerified, function(response, result) {
 			next(response, result);
 		});

@@ -245,6 +245,7 @@ module.exports = {
                     case 'success':
                       req.session.authenticated = true;
                       req.session.email = params.email;
+                      req.session.individualId = result;
                       res.redirect('/treeViewer');
                         break;
 					default:
