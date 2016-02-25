@@ -7,35 +7,35 @@ module.exports = {
             if (responseExistingLogin === 'empty') {
                 database.insertLoginCredentials(email, password, function(responseInsertCredentials, resultInsertCredentials){
                     if (responseInsertCredentials === 'success') {
-                        database.initializeName(firstName, lastName, function(responseName, resultName) {
-                            if (responseName === 'success'){
-                                database.initializeProfile(function(responseProfile, resultProfile){
-                                    if (responseProfile === 'success') {
-                                        database.getLastIndividualId(function(responseId, resultId){
-                                            if (responseId === 'success') {
-                                                database.insertIndividualReferenceUser(email, resultId[0].id, function(response, result){
-                                                    if (response === 'success') {
-                                                        next(response, resultId[0].id);
-                                                    }
-                                                    else {
-                                                        next('individual reference failed', result);
-                                                    }
-                                                });
-                                            }
-                                            else {
-                                                next('get id failed', resultId);
-                                            }
-                                        });
+                      database.initializeProfile(function(responseProfile, resultProfile){
+                        if (responseProfile === 'success') {
+                          database.getLastIndividualId(function(responseId, resultId){
+                            if (responseId === 'success') {
+                              database.insertIndividualReferenceUser(email, resultId[0].id, function(response, result){
+                                if (response === 'success') {
+                                  database.initializeName(firstName, lastName, resultId[0].id, function(responseName, resultName) {
+                                    if (responseName === 'success'){
+                                      next(response, resultName);
                                     }
                                     else {
-                                        next('profile failed', resultProfile);
+                                      next('profile failed', resultProfile);
                                     }
-                                });
+                                  });
+                                }
+                                else {
+                                  next('individual reference failed', result);
+                                }
+                              });
                             }
                             else {
-                                next('name insert failed', resultName);
+                              next('get id failed', resultId);
                             }
-                        });
+                          });
+                        }
+                        else {
+                          next('name insert failed', resultName);
+                        }
+                      });
                     }
                     else {
                         next('credentials insert failed', resultInsertCredentials);
@@ -51,18 +51,18 @@ module.exports = {
     login: function(email, password, next) {
         database.getLoginCredentials(email, function(response, result){
             if (response === 'success') {
-				if(result[0].password === password && result[0].email_verified === null) {
-                    next(response, true);
-				}
-                else if (result[0].password === password) {
+				if(result[0].password === password && !(result[0].email_confirm === null)) {
 					next('email not verified', true);
+				}
+                else if (result[0].email === email && result[0].password === password) {
+                    next(response, result[0].individual_id);
                 }
                 else {
                     next('incorrect password', false);
                 }
             }
             else {
-                next('incorrect username', result);
+                next('incorrect username', false);
             }
         });
     },

@@ -35,7 +35,8 @@
                 placeOfDeath: (params.placeOfDeath) ? params.placeOfDeath : null,
                 gender: (params.gender) ? params.gender : null,
                 bio: (params.personalBio) ? params.personalBio : null,
-                notes: (params.notes) ? params.notes : null
+                notes: (params.notes) ? params.notes : null,
+                id: req.session.individualId
             },
             send = {};
           // perform checks for email/username in notes field
