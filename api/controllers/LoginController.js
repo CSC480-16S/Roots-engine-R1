@@ -129,9 +129,14 @@ module.exports = {
     sendResetPasswordEmail: function(req, res) {
     		var send = {},
     		    email = req.param('email');
-    		database.getLoginCredentials(email, function(loginResponse, loginResult) {
-    		    if(loginResponse === 'success') {
-			mailer.send(email, 'subject', 'text', 'html', function(error, info) {
+    	database.getLoginCredentials(email, function(loginResponse, loginResult) {
+    	    if(loginResponse === 'success') {
+			var sub = 'Roots Password Reset Link';
+			var txt = 'Link: localhost:1337/enterNewPassword?=' + email;
+			//Can't get email HTML to work
+			var htm = 'link: localhost:1337/enterNewPassword?=' + email;
+			//var htm = '<div dir="ltr"><a href="localhost:1337/enterNewPassword?email=' + email + '">Click Here</a><br></div>';
+			mailer.send(email, sub, txt, htm, function(error, info) {
 			    if(error) {
 				res.redirect('/error?location=LOGIN_CONTROLLER/SEND_RESET_PASSWORD_EMAIL&response=' + error + '&result=' + info);
 			    } else {
@@ -141,27 +146,6 @@ module.exports = {
 				});
 			    }
 			});
-    			    /*var nodemailer = require('nodemailer'),
-    				transporter = nodemailer.createTransport('smtps://rootsspammer%40gmail.com:roots480@smtp.gmail.com'),
-    				mailOptions = {
-                            from: 'Roots Team <rootsspammer@gmail.com>', // sender address
-                            to: email, // list of receivers
-                            subject: 'Password Reset Link', // Subject line
-                            text: 'Link: ', // plaintext body
-                            html: 'localhost:1337/enterNewPassword?email=' + email // html body
-    				    };
-
-    				transporter.sendMail(mailOptions, function(error, info){
-        				if(error){
-            				res.redirect('/error?location=LOGIN_CONTROLLER/SEND_RESET_PASSWORD_EMAIL&response=' + error + '&result=' + info);
-        				}
-        				else {
-        					send.error = 'Reset Password Email Sent';
-                            render.page(send, 'login', function(html) {
-                                res.send(html);
-                            });
-    					}
-    				});*/
     		    }
     		    else {
     				send.error = 'You have not signed up yet or there was an error.';
@@ -245,7 +229,6 @@ module.exports = {
                     case 'success':
                       req.session.authenticated = true;
                       req.session.email = params.email;
-                      req.session.individualId = result;
                       res.redirect('/treeViewer');
                         break;
 					default:
