@@ -3,7 +3,7 @@ module.exports = {
     send: function(address, sub, txt, htm, next) {
         var nodemailer = require('nodemailer'),
             // manually put in password below to get functional
-            transporter = nodemailer.createTransport('smtps://rootsspammer%40gmail.com:PASSWORD@smtp.gmail.com'),
+            transporter = nodemailer.createTransport('smtps://rootsspammer%40gmail.com:roots480@smtp.gmail.com'),
             mailOptions = {
                 from: 'Roots Team <rootsspammer@gmail.com>',
                 to: address,
