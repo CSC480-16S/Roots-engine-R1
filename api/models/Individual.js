@@ -48,26 +48,9 @@ module.exports = {
       type: 'string',
       size: 64
     },
-
     bio: {
       type: 'string',
-      size: 256
-    },
-    economic_status: {
-      type: 'string',
-      size: 64
-    },
-    immigration_history: {
-      type: 'string',
-      size: 64
-    },
-    accomplishments: {
-      type: 'string',
-      size: 256
-    },
-    notes: {
-      type: 'string',
-      size: 256
+      size: 5000
     }
   }
 };

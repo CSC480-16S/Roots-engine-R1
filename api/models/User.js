@@ -20,14 +20,17 @@ module.exports = {
       size: 32,
       required: true
     },
-    email_verified: {
-      type: 'boolean'
+    email_confirm: {
+      type: 'string',
+      size: 32
     },
     individual_id: {
       type: 'integer'
+    },
+    password_reset: {
+      type: 'string',
+      size: 32
     }
-
-
   }
 };
 

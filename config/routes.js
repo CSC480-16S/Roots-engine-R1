@@ -40,10 +40,10 @@ module.exports.routes = {
   '/userLogin': 'LoginController.userLogin',
   '/emailConfirm*': 'LoginController.confirmEmail',
   '/emailResent*': 'LoginController.resendEmail',
-  '/sendReset': 'LoginController.sendReset',
   '/enterNewPassword*': 'LoginController.enterNewPassword',
-  '/newPasswordConfirm': 'LoginController.submitNewPassword',
+  '/changePassword': 'LoginController.changePassword',
   '/resetEmailSent': 'LoginController.sendResetPasswordEmail',
+  '/renderPasswordReset': 'LoginController.renderPasswordReset',
   '/logout': 'LoginController.logout',
 
   // tree controller
