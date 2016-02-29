@@ -10,8 +10,8 @@ body {
     /*background: #f4f1cc;*/
     font-family: 'Titillium Web', sans-serif;
     color: #403324;
-    background-image: url("Tree.jpg");
-    background-size: 100%;
+    background-image: url("../images/Tree.jpg");
+    background-size: cover;
     background-repeat: no-repeat;
     
     
@@ -19,7 +19,7 @@ body {
 
 a {
     text-decoration: none;
-    color: #1ab188;
+    color: #31f0bc;
     -webkit-transition: .5s ease;
     transition: .5s ease;
 }
@@ -93,14 +93,25 @@ h1 {
     padding-left: 60px;
     padding-top: 30px;
     font-size: 3.5em;
+
 }
 
-/*.header-signIn {
-    text-align: right;
-    padding-top: 20px;
-    padding-right: 40px;
-    font-size: 2em;
-}*/
+header {
+
+    /*background:#f4f1cc;*/
+    background: rgba(244, 241, 204, 0.3);
+    /*border-bottom: 2px solid #00cc00;*/
+    padding: 25px 0;
+    width: 100%;
+    font-family: 'Lato', sans-serif;
+}
+
+footer{
+    background: rgba(244, 241, 204, 0.3);
+    padding: 25px 0;
+    width: 100%;
+    font-family: 'Lato', sans-serif;
+}
 
 label {
     position: absolute;
@@ -119,6 +130,7 @@ label .req {
     margin: 2px;
     color: #f16345;
 }
+
 
 label.active {
     -webkit-transform: translateY(50px);
@@ -181,6 +193,17 @@ textarea {
     margin: 0;
 }
 
+
+.search{
+    float: right;
+    padding-top: 10px;
+    padding-right: 10px;
+    box-shadow:10px 10px 5px #aaaaaa;;
+
+
+}
+
+
 .button {
     border: 0;
     outline: none;
@@ -217,10 +240,6 @@ h2 {
     margin: 0 0 0px;
 }
 
-.profile-page {
-    
-}
-
 .profile-page-form {
     background: #f4f1cc;
     padding: 40px;
@@ -246,3 +265,32 @@ h2 {
     max-width: 500px;
     margin: 0 auto;
 }
+
+nav {
+    float: right;
+    text-align: right;
+    margin-right: 2%;
+
+}
+
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding-top: 8px;
+}
+
+
+nav li {
+    display: inline-block;
+    padding: 0 8px;
+    text-transform: uppercase;
+    font-size: 20px;
+    letter-spacing: 2px;
+}
+
+
+nav a {
+    padding: 15px 10px;
+}
+
