@@ -68,16 +68,9 @@ module.exports = {
         });
     },
 
-    insertLoginCredentials: function(email, password, next) {
-        var sqlInsertCredentials = 'INSERT INTO User (email, password, email_confirm) VALUES (\'' + email + '\', \'' + password + '\', \'' + 0 + '\');';
+    insertLoginCredentials: function(email, password, id, next) {
+        var sqlInsertCredentials = 'INSERT INTO User (individual_id, email, password, email_confirm) VALUES (\'' + id + '\', \'' + email + '\', \'' + password + '\', \'' + 0 + '\');';
         this.insert(User, sqlInsertCredentials, function (response, result){
-            next(response, result);
-        });
-    },
-
-    insertIndividualReferenceUser: function(email, id, next) {
-        var sqlInsertIndividualReference = 'UPDATE User SET individual_id=\'' + id + '\' WHERE email=\'' + email + '\';';
-        this.update(User, sqlInsertIndividualReference, function (response, result){
             next(response, result);
         });
     },
@@ -96,17 +89,19 @@ module.exports = {
         });
     },
 
-    getLastIndividualId: function(next) {
-        var sqlLastIndividualId = 'SELECT * FROM Individual ORDER BY id DESC LIMIT 1;';
-        this.read(Individual, sqlLastIndividualId, function(response, result) {
-            next(response, result);
-        });
-    },
-
     initializeProfile: function(next) {
-        var sqlInsertProfile = 'INSERT INTO Individual () VALUES ();';
+        var _this = this,
+            sqlInsertProfile = 'INSERT INTO Individual () VALUES ();',
+            sqlLastIndividualId = 'SELECT * FROM Individual ORDER BY id DESC LIMIT 1;';
         this.insert(Individual, sqlInsertProfile, function(response, result) {
-            next(response, result);
+            if (response === 'success') {
+                _this.read(Individual, sqlLastIndividualId, function(responseId, resultId) {
+                    next(responseId, resultId);
+                });
+            }
+            else {
+                next(response, result);
+            }
         });
     },
 

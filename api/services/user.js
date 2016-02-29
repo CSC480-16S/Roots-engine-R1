@@ -3,42 +3,30 @@ module.exports = {
     signup: function(email, password, firstName, lastName, next) {
         // check email/password length
         // other checks as necessary
+        var id;
         database.getLoginCredentials(email, function (responseExistingLogin, resultExistingLogin) {
             if (responseExistingLogin === 'empty') {
-                database.insertLoginCredentials(email, password, function(responseInsertCredentials, resultInsertCredentials){
-                    if (responseInsertCredentials === 'success') {
-                      database.initializeProfile(function(responseProfile, resultProfile){
-                        if (responseProfile === 'success') {
-                          database.getLastIndividualId(function(responseId, resultId){
-                            if (responseId === 'success') {
-                              database.insertIndividualReferenceUser(email, resultId[0].id, function(response, result){
-                                if (response === 'success') {
-                                  database.initializeName(firstName, lastName, resultId[0].id, function(responseName, resultName) {
+                database.initializeProfile(function(responseId, resultId){
+                    if (responseId === 'success') {
+                        id = resultId[0].id;
+                        database.insertLoginCredentials(email, password, id, function(responseInsertCredentials, resultInsertCredentials){
+                            if (responseInsertCredentials === 'success') {
+                                database.initializeName(firstName, lastName, id, function(responseName, resultName) {
                                     if (responseName === 'success'){
-                                      next(response, resultName);
+                                        next('success', true);
                                     }
                                     else {
-                                      next('profile failed', resultProfile);
+                                        next('name insert failed', resultName);
                                     }
-                                  });
-                                }
-                                else {
-                                  next('individual reference failed', result);
-                                }
-                              });
+                                });
                             }
                             else {
-                              next('get id failed', resultId);
+                                next('credentials insert failed', resultInsertCredentials);
                             }
-                          });
-                        }
-                        else {
-                          next('name insert failed', resultName);
-                        }
-                      });
+                        });
                     }
                     else {
-                        next('credentials insert failed', resultInsertCredentials);
+                        next('get id failed', resultId);
                     }
                 });
             }

@@ -190,7 +190,7 @@ module.exports = {
         var params = req.params.all(),
             email = params.email,
             password = params.password,
-            send = {'login': true},
+            send = {},
             cipher = crypto.createCipher('aes192', 'a password'),
             encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
 
@@ -198,6 +198,7 @@ module.exports = {
             switch(response) {
                 case 'incorrect username':
                     send.error = 'This username does not exist';
+                    send.login = true;
                     send.username = email;
                     render.page(send, 'login', function(html) {
                         res.send(html);
@@ -205,6 +206,7 @@ module.exports = {
                     break;
                 case 'incorrect password':
                     send.error = 'Wrong password';
+                    send.login = true;
                     send.username = email;
                     render.page(send, 'login', function(html) {
                         res.send(html);
@@ -212,17 +214,20 @@ module.exports = {
                     break;
                 case 'fields too long?':
                     send.error = 'Your username and password must be less than 32 characters?';
+                    send.login = true;
                     send.username = email;
                     render.page(send, 'login', function(html) {
                         res.send(html);
                     });
                     break;
                 case 'email not verified':
+                    send.login = true;
                     res.redirect('/emailResent?email=' + username);
                     break;
                 case 'success':
                     req.session.authenticated = true;
                     req.session.email = email;
+                    req.session.individualId = result;
                     res.redirect('/treeViewer');
                     break;
                 default:
@@ -284,24 +289,8 @@ module.exports = {
                             res.send(html);
                         });
                         break;
-                    case 'profile failed':
-                        send.error = 'Unable to establish a user profile.';
-                        send.username = email;
-                        send.login = false;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
-                        break;
                     case 'get id failed':
                         send.error = 'Unable to get individual id.';
-                        send.username = email;
-                        send.login = false;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
-                        break;
-                    case 'individual reference failed':
-                        send.error = 'Unable to establish a user reference.';
                         send.username = email;
                         send.login = false;
                         render.page(send, 'login', function(html) {
