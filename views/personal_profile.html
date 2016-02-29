@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <title>Personal Profile</title>
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="../assets/css/normalize.css">
-    <link rel="stylesheet" href="../assets/css/style.css"> </head>
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/style.css"> </head>
 
 <body>
 
@@ -29,12 +29,12 @@
     <div class="form">
         <div id="Profile Info">
             <h1>Complete Your Profile</h1>
-            <form action="treeViewer.html" method="post">
+            <form action="{{action}}" method="post">
 
                 <div class="top-row">
                     <h2>Date of Birth <span class="req" style="color: #f16345">*</span></h2>
                     <div class="field-wrap">
-                        <input name='dateOfBirth' type="date" placeholder="mm/dd/yyyy" required autocomplete="off" />
+                        <input name='dateOfBirth' value="{{dateOfBirth}}" type="date" placeholder="mm/dd/yyyy" required autocomplete="off" />
                     </div>
 
                     <div class="field-wrap">
@@ -53,22 +53,22 @@
 
                 <div class="field-wrap">
                     <label>City of Birth<span class="req">*</span></label>
-                    <input name='birthCity' type="text" maxlength="64"  required autocomplete="off" />
+                    <input name='birthCity' type="text" value="{{birthCity}}" maxlength="64"  required autocomplete="off" />
                 </div>
 
                 <div class="field-wrap">
                     <label>State of Birth<span class="req">*</span></label>
-                    <input name='birthState' type="text" maxlength="64" required autocomplete="off" />
+                    <input name='birthState' type="text" value="{{birthState}}" maxlength="64" required autocomplete="off" />
                 </div>
 
                 <div class="field-wrap">
                     <label>Country of Birth<span class="req">*</span> </label>
-                    <input name='birthCountry' type="text" maxlength="128"  required autocomplete="off" />
+                    <input name='birthCountry' type="text" value="{{birthCountry}}" maxlength="128"  required autocomplete="off" />
                 </div>
 
                 <h2>Short Personal Biography</h2>
                 <div class="field-wrap">
-                    <textarea id="personalbio" onkeyup="counter(this, this.maxLength)" maxlength="5000" class="textareaclass" rows="4"></textarea>
+                    <textarea id="personalbio" name="personalbio" value="{{personalbio}}" onkeyup="counter(this, this.maxLength)" maxlength="5000" class="textareaclass" rows="4"></textarea>
                     <div align="right" id="num">5000 characters remaining</div>
                 </div>
 
@@ -107,7 +107,7 @@
     </div>
 <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
 <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-<script src="../assets/js/login.js"></script>
+<script src="js/login.js"></script>
 </body>
 
 <footer>

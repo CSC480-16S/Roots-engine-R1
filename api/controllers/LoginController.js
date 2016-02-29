@@ -11,7 +11,10 @@ module.exports = {
     outputs:page-login home page
      */
     homepage: function(req, res) {
-        render.page({}, 'login', function(html) {
+        var send = {};
+        send.action = '/userSignup';
+        send.action2 = '/userLogin';
+        render.page(send, 'login', function(html) {
             res.send(html);
         });
     },
@@ -33,6 +36,8 @@ module.exports = {
     confirmEmail: function(req, res) {
         var send = {},
             email = req.param('email');
+        send.action = '/userSignup';
+        send.action2 = '/userLogin';
         user.confirmEmail (email, function (response, result) {
             switch (response) {
                 case 'Email does not exist':
@@ -79,13 +84,15 @@ module.exports = {
     outputs: error-message claiming success of failure of password reset, page-renders the login page
      */
     changePassword: function(req, res) {
-    	var send = {},
-    	    params = req.params.all(),
-    	    nPassword = params.newPassword,
-    	    nPassword2 = params.newPassword2,
-    	    email = params.email,
+        var send = {},
+            params = req.params.all(),
+            nPassword = params.newPassword,
+            nPassword2 = params.newPassword2,
+            email = params.email,
             cipher = crypto.createCipher('aes192', 'a password'),
             encryptedPassword = cipher.update(nPassword, 'utf8', 'hex') + cipher.final('hex');
+        send.action = '/userSignup';
+        send.action2 = '/userLogin';
         if (nPassword !== nPassword2) {
             send.error = 'Passwords are different';
             render.page(send, 'password_reset', function(html) {
@@ -135,6 +142,8 @@ module.exports = {
             subject = 'Roots Password Reset Link',
             txt = 'Link: ',
             htm = 'link: localhost:1337/enterNewPassword?email=' + email;
+        send.action = '/userSignup';
+        send.action2 = '/userLogin';
         user.login(email, '', function(response, result) {
             if(response === 'incorrect password') {
                 mailer.send(email, subject, txt, htm, function(mailResponse, mailResult){
@@ -168,6 +177,8 @@ module.exports = {
             subject = 'Email Verification Link',
             txt = 'Link: ',
             htm = 'localhost:1337/emailConfirm?email=' + email;
+        send.action = '/userSignup';
+        send.action2 = '/userLogin';
         mailer.send(email, subject, txt, htm, function(response, result){
             if(response === 'success'){
                 send.error = 'Email address not yet confirmed. Another message was sent to ' + email + '. Please check the spelling of your address and your spam folder. If you did not spell your email correctly, you will have to make a new account.';
@@ -193,7 +204,8 @@ module.exports = {
             send = {},
             cipher = crypto.createCipher('aes192', 'a password'),
             encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
-
+        send.action = '/userSignup';
+        send.action2 = '/userLogin';
         user.login(email, encryptedPassword, function (response, result) {
             switch(response) {
                 case 'incorrect username':
@@ -255,6 +267,8 @@ module.exports = {
               subject = 'Email Verification Link',
               txt = 'Link: ',
               htm = 'localhost:1337/emailConfirm?email=' + email;
+          send.action = '/userSignup';
+          send.action2 = '/userLogin';
           user.signup(email, encryptedPassword, firstName, lastName, function (response, result) {
                 switch(response) {
                     case 'user exists':
@@ -323,12 +337,14 @@ module.exports = {
       page-renders the login page
        */
       logout: function(req,res){
-        req.session.destroy(function(err) {
-          var send = {};
-          render.page(send, 'login', function(html) {
-            res.send(html);
+          req.session.destroy(function(err) {
+              var send = {};
+              send.action = '/userSignup';
+              send.action2 = '/userLogin';
+              render.page(send, 'login', function(html) {
+                  res.send(html);
+              });
           });
-        });
       }
   };
 
