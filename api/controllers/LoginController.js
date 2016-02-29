@@ -15,6 +15,7 @@ module.exports = {
             res.send(html);
         });
     },
+
   /*inputs:null
    outputs: page-renders the page for a user to enter their email for reset
    */
@@ -24,6 +25,7 @@ module.exports = {
     		res.send(html);
     	});
     },
+
     /*inputs: email-query string from url specifying the user to confirm
      outputs: error-message for a successful email confirmation, or unsuccessful, pages-renders login page,
      login-flag that will be used by gui to determine which tab of their login box to use
@@ -60,6 +62,7 @@ module.exports = {
             }
         });
     },
+
     /*inputs: email-query string from url specifying the user to confirm
     outputs: email- users email whose password is being reset, page-renders the page to enter a new password
      */
@@ -127,34 +130,33 @@ module.exports = {
     page-renders the login page
      */
     sendResetPasswordEmail: function(req, res) {
-    		var send = {},
-    		    email = req.param('email');
-    	database.getLoginCredentials(email, function(loginResponse, loginResult) {
-    	    if(loginResponse === 'success') {
-			var sub = 'Roots Password Reset Link';
-			var txt = 'Link: localhost:1337/enterNewPassword?=' + email;
-			//Can't get email HTML to work
-			var htm = 'link: localhost:1337/enterNewPassword?=' + email;
-			//var htm = '<div dir="ltr"><a href="localhost:1337/enterNewPassword?email=' + email + '">Click Here</a><br></div>';
-			mailer.send(email, sub, txt, htm, function(error, info) {
-			    if(error) {
-				res.redirect('/error?location=LOGIN_CONTROLLER/SEND_RESET_PASSWORD_EMAIL&response=' + error + '&result=' + info);
-			    } else {
-				send.error = 'Reset Password Email Sent';
-				render.page(send, 'login', function(html) {
-				    res.send(html);
-				});
-			    }
-			});
-    		    }
-    		    else {
-    				send.error = 'You have not signed up yet or there was an error.';
-                    render.page(send, 'login', function(html) {
-                        res.send(html);
-                    });
-    			}
-    		});
-    	},
+        var send = {},
+            email = req.param('email'),
+            subject = 'Roots Password Reset Link',
+            txt = 'Link: ',
+            htm = 'link: localhost:1337/enterNewPassword?email=' + email;
+        user.login(email, '', function(response, result) {
+            if(response === 'incorrect password') {
+                mailer.send(email, subject, txt, htm, function(mailResponse, mailResult){
+                    if(mailResponse === 'success'){
+                        send.error = 'Reset Password Email Sent';
+                        render.page(send, 'login', function(html) {
+                            res.send(html);
+                        });
+                    }
+                    else {
+                        res.redirect('/error?location=LOGIN_CONTROLLER/SEND_RESET_PASSWORD_EMAIL&response=' + mailResponse + '&result=' + mailResult);
+                    }
+                });
+            }
+            else {
+                send.error = 'You have not signed up yet.';
+                render.page(send, 'login', function(html) {
+                    res.send(html);
+                });
+            }
+        });
+    },
     /*input:email-query string from url specifying the user to send to
     outputs:email-email sent to user with the link to user for password reset,
      error-message telling the user that a confirmation email was resent,
@@ -163,26 +165,18 @@ module.exports = {
     resendEmail: function(req, res) {
         var send = {},
             email = req.param('email'),
-            nodemailer = require('nodemailer'),
-            transporter = nodemailer.createTransport('smtps://rootsspammer%40gmail.com:roots480@smtp.gmail.com'),
-            mailOptions = {
-                from: 'Roots Team <rootsspammer@gmail.com>', // sender address
-                to: email, // list of receivers
-                subject: 'Email Verification Link', // Subject line
-                text: 'Link: ', // plaintext body
-                html: 'localhost:1337/emailConfirm?email=' + email // html body
-            };
-
-        transporter.sendMail(mailOptions, function(error, info){
-            if(error){
-                res.redirect('/error?location=LOGIN_CONTROLLER/RESEND_EMAIL&response=' + error + '&result=' + info);
-            }
-            else {
-                console.log('Message sent: ' + info.response);
+            subject = 'Email Verification Link',
+            txt = 'Link: ',
+            htm = 'localhost:1337/emailConfirm?email=' + email;
+        mailer.send(email, subject, txt, htm, function(response, result){
+            if(response === 'success'){
                 send.error = 'Email address not yet confirmed. Another message was sent to ' + email + '. Please check the spelling of your address and your spam folder. If you did not spell your email correctly, you will have to make a new account.';
                 render.page(send, 'login', function(html) {
                     res.send(html);
                 });
+            }
+            else {
+                res.redirect('/error?location=LOGIN_CONTROLLER/RESEND_EMAIL&response=' + response + '&result=' + result);
             }
         });
     },
@@ -194,49 +188,50 @@ module.exports = {
      */
     userLogin: function(req, res) {
         var params = req.params.all(),
-            username = params.email,
+            email = params.email,
             password = params.password,
             send = {'login': true},
             cipher = crypto.createCipher('aes192', 'a password'),
             encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
 
-          user.login(username, encryptedPassword, function (response, result) {
-                switch(response) {
-                    case 'incorrect username':
-                        send.error = 'This username does not exist';
-                        send.username = username;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
-                        break;
-                    case 'incorrect password':
-                        send.error = 'Wrong password';
-                        send.username = username;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
-                        break;
-                    case 'fields too long?':
-                        send.error = 'Your username and password must be less than 32 characters?';
-                        send.username = username;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
-                        break;
-                    case 'email not verified':
-                      res.redirect('/emailResent?email=' + username);
-                      break;
-                    case 'success':
-                      req.session.authenticated = true;
-                      req.session.email = params.email;
-                      res.redirect('/treeViewer');
-                        break;
-					default:
-                        res.redirect('/error?location=LOGIN_CONTROLLER/USER_LOGIN&response=' + response + '&result=' + result);
-                        break;
-                }
-          });
+        user.login(email, encryptedPassword, function (response, result) {
+            switch(response) {
+                case 'incorrect username':
+                    send.error = 'This username does not exist';
+                    send.username = email;
+                    render.page(send, 'login', function(html) {
+                        res.send(html);
+                    });
+                    break;
+                case 'incorrect password':
+                    send.error = 'Wrong password';
+                    send.username = email;
+                    render.page(send, 'login', function(html) {
+                        res.send(html);
+                    });
+                    break;
+                case 'fields too long?':
+                    send.error = 'Your username and password must be less than 32 characters?';
+                    send.username = email;
+                    render.page(send, 'login', function(html) {
+                        res.send(html);
+                    });
+                    break;
+                case 'email not verified':
+                    res.redirect('/emailResent?email=' + username);
+                    break;
+                case 'success':
+                    req.session.authenticated = true;
+                    req.session.email = email;
+                    res.redirect('/treeViewer');
+                    break;
+                default:
+                    res.redirect('/error?location=LOGIN_CONTROLLER/USER_LOGIN&response=' + response + '&result=' + result);
+                    break;
+            }
+        });
     },
+
     /*input:username-username entered by user, password-password entered by user, firstName-name to enter in the
     database for the user's first name, lastName-name to enter in the database for the user's last name
     output:login-flag for gui to use to decide which tab of their login box to use,
@@ -251,7 +246,10 @@ module.exports = {
               lastName = params.lastName,
               send = {},
               cipher = crypto.createCipher('aes192', 'a password'),
-              encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
+              encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex'),
+              subject = 'Email Verification Link',
+              txt = 'Link: ',
+              htm = 'localhost:1337/emailConfirm?email=' + email;
           user.signup(email, encryptedPassword, firstName, lastName, function (response, result) {
                 switch(response) {
                     case 'user exists':
@@ -312,31 +310,20 @@ module.exports = {
                         break;
                     case 'success':
                         send.login = false;
-						var nodemailer = require('nodemailer');
-						var transporter = nodemailer.createTransport('smtps://rootsspammer%40gmail.com:roots480@smtp.gmail.com');
-						var mailOptions = {
-    						from: 'Roots Team <rootsspammer@gmail.com>', // sender address
-    						to: email, // list of receivers
-    						subject: 'Email Verification Link', // Subject line
-    						text: 'Link: ', // plaintext body
-    						html: 'localhost:1337/emailConfirm?email=' + email // html body
-						};
-
-						transporter.sendMail(mailOptions, function(error, info){
-    						if(error){
-        						console.log(error);
-    						} else {
-    							console.log('Message sent: ' + info.response);
-    							send.error = 'Please confirm your email at ' + email + ' to login.';
+                        mailer.send(email, subject, txt, htm, function(mailResponse, mailResult){
+                            if(mailResponse === 'success'){
+                                send.error = 'Please confirm your email at ' + email + ' to login.';
                                 render.page(send, 'login', function(html) {
                                     res.send(html);
                                 });
-							}
-						});
-
+                            }
+                            else {
+                                res.redirect('/error?location=LOGIN_CONTROLLER/USER_SIGNUP_EMAIL&response=' + mailResponse + '&result=' + mailResult);
+                            }
+                        });
                         break;
                     default:
-                        res.redirect('/error?location=LOGIN_CONTROLLER/CREATE_USER&response=' + response + '&result=' + result);
+                        res.redirect('/error?location=LOGIN_CONTROLLER/USER_SIGNUP&response=' + response + '&result=' + result);
                         break;
                 }
           });
