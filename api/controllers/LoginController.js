@@ -267,7 +267,7 @@ module.exports = {
               subject = 'Email Verification Link',
               txt = 'Link: ',
               htm = 'localhost:1337/emailConfirm?email=' + email;
-
+ 
           send.action = '/userSignup';
           send.action2 = '/userLogin';
           user.signup(email, encryptedPassword, firstName, lastName, function (response, result) {
