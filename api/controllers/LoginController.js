@@ -24,7 +24,7 @@ module.exports = {
    */
     renderPasswordReset: function(req, res) {
     	var send = {};
-    	render.page(send, 'sendReset', function(html) {
+    	render.page(send, 'login_help', function(html) {
     		res.send(html);
     	});
     },
