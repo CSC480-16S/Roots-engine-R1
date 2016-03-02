@@ -16,7 +16,7 @@
         </a>
         <div class="search">
             <form>
-                <input type="search" name="treeSearch" placeholder="Search..." value={{treeSearch}}>
+                <input type="search" name="treeSearch" placeholder="Search..." value="{{treeSearch}}">
             </form>
         </div>
 
@@ -33,41 +33,41 @@
     <div class="form">
         <div id="Profile Info">
             <h1>Account Info</h1>
-            <form action="/updateProfile" method="post">
+            <form action="{{action}}" method="post">
 
                 <div class="top-row">
                     <h2>Date of Birth</h2>
                     <div class="field-wrap">
                         <label><span class="req"></span></label>
-                        <input name='dateOfBirth' placeholder="mm/dd/yyyy" type="date" value={{dateOfBirth}} required autocomplete="off"/>
+                        <input name='dateOfBirth' placeholder="mm/dd/yyyy" type="date" value='{{dateOfBirth}}' required autocomplete="off"/>
                     </div>
 
                     <div class="field-wrap">
                         <label><span class="req"></span></label>
                         <select name='gender' required>
-                            <option value="{{gender}}" disabled selected>Gender</option>
-                            <option value="male">Male</option>
-                            <option value="female">Female</option>
-                            <option value="trans">Transgender</option>
-                            <option value="none">Prefer No Label</option>
-                            <option value="diffent">Prefer Different Label</option>
-                            <option value="nodisclose">Prefer Not to Disclose</option>
+                            <option value="{{gender}}" disabled selected>{{^gender}}Gender{{/gender}}{{gender}}</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Transgender">Transgender</option>
+                            <option value="Prefer No Label">Prefer No Label</option>
+                            <option value="Prefer Different Label">Prefer Different Label</option>
+                            <option value="Prefer Not to Disclose">Prefer Not to Disclose</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="field-wrap">
-                    <label>{{birthCity}}<span class="req"></span></label>
+                    <label>Birth City<span class="req"></span></label>
                     <input name='birthCity' type="text" maxlength="64" value="{{birthCity}}" required autocomplete="off" />
                 </div>
 
                 <div class="field-wrap">
-                    <label>{{birthState}}<span class="req"></span></label>
+                    <label>Birth State<span class="req"></span></label>
                     <input name='birthState' type="text" maxlength="64" value="{{birthState}}" required autocomplete="off" />
                 </div>
 
                 <div class="field-wrap">
-                    <label>{{birthCountry}}<span class="req"></span> </label>
+                    <label>Birth Country<span class="req"></span> </label>
                     <input name='birthCountry' type="text" maxlength="128" value="{{birthCountry}}" required autocomplete="off" />
                 </div>
 
