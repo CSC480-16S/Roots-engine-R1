@@ -40,6 +40,9 @@ module.exports.policies = {
 	'changePassword': true,
 	'logout': true,
     '*': "sessionAuth"
+  },
+  Settings: {
+    'aboutpage': true
   }
 
   /***************************************************************************
