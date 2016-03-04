@@ -14,9 +14,7 @@ module.exports = {
         var send = {};
         send.action = '/userSignup';
         send.action2 = '/userLogin';
-        render.page(send, 'login', function(html) {
-            res.send(html);
-        });
+        res.view('login', send);
     },
 
   /*inputs:null
@@ -24,9 +22,7 @@ module.exports = {
    */
     renderPasswordReset: function(req, res) {
     	var send = {};
-    	render.page(send, 'login_help', function(html) {
-    		res.send(html);
-    	});
+    	res.view('login_help', send);
     },
 
     /*inputs: email-query string from url specifying the user to confirm
@@ -43,23 +39,17 @@ module.exports = {
                 case 'Email does not exist':
                     send.error = 'You have not signed up yet';
                     send.login = false;
-                    render.page(send, 'login', function(html) {
-                        res.send(html);
-                    });
+                    res.view('login', send);
                     break;
                 case 'Email verification update failed':
                     send.error = 'Unable to verify your email. Please attempt to login to receive a new verification email.';
                     send.login = true;
-                    render.page(send, 'login', function(html) {
-                        res.send(html);
-                    });
+                    res.view('login', send);
                     break;
                 case 'success':
                     send.error = 'Email confirmed, please log in.';
                     send.login = true;
-                    render.page(send, 'login', function(html) {
-                        res.send(html);
-                    });
+                    res.view('login', send);
                     break;
                 default:
                     res.redirect('/error?location=LOGIN_CONTROLLER/CONFIRM_EMAIL&response=' + response + '&result=' + result);
@@ -75,9 +65,7 @@ module.exports = {
     	var send = {};
     	    email = req.query.email;
     	send.email = email;
-    	render.page(send, 'password_reset', function(html) {
-    		res.send(html);
-        });
+    	res.view('password_reset', send);
     },
 
     /*inputs: newPassword-the password the was entered by the user, email-email of user whose password is changing
@@ -86,8 +74,8 @@ module.exports = {
     changePassword: function(req, res) {
         var send = {},
             params = req.params.all(),
-            nPassword = params.newPassword,
-            nPassword2 = params.newPassword2,
+            nPassword = params.password,
+            nPassword2 = params.password2,
             email = params.email,
             cipher = crypto.createCipher('aes192', 'a password'),
             encryptedPassword = cipher.update(nPassword, 'utf8', 'hex') + cipher.final('hex');
@@ -95,9 +83,7 @@ module.exports = {
         send.action2 = '/userLogin';
         if (nPassword !== nPassword2) {
             send.error = 'Passwords are different';
-            render.page(send, 'password_reset', function(html) {
-                res.send(html);
-            });
+            res.view('password_reset', send);
         }
         else {
             user.changePassword(email, encryptedPassword, function(response, result) {
@@ -105,23 +91,17 @@ module.exports = {
                     case 'Email does not exist':
                         send.error = 'You have not signed up yet';
                         send.login = false;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
+                        res.view('login', send);
                         break;
                     case 'Update password failed':
                         send.error = 'Unable to update your password. Please use forget password again.';
                         send.login = true;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
+                        res.view('login', send);
                         break;
                     case 'success':
                         send.error = 'Your password has changed, please log in.';
                         send.login = true;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
+                        res.view('login', send);
                         break;
                     default:
                         res.redirect('/error?location=LOGIN_CONTROLLER/CHANGE_PASSWORD&response=' + response + '&result=' + result);
@@ -149,9 +129,7 @@ module.exports = {
                 mailer.send(email, subject, txt, htm, function(mailResponse, mailResult){
                     if(mailResponse === 'success'){
                         send.error = 'Reset Password Email Sent';
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
+                        res.view('login', send);
                     }
                     else {
                         res.redirect('/error?location=LOGIN_CONTROLLER/SEND_RESET_PASSWORD_EMAIL&response=' + mailResponse + '&result=' + mailResult);
@@ -160,9 +138,7 @@ module.exports = {
             }
             else {
                 send.error = 'You have not signed up yet.';
-                render.page(send, 'login', function(html) {
-                    res.send(html);
-                });
+                res.view('login', send);
             }
         });
     },
@@ -182,9 +158,7 @@ module.exports = {
         mailer.send(email, subject, txt, htm, function(response, result){
             if(response === 'success'){
                 send.error = 'Email address not yet confirmed. Another message was sent to ' + email + '. Please check the spelling of your address and your spam folder. If you did not spell your email correctly, you will have to make a new account.';
-                render.page(send, 'login', function(html) {
-                    res.send(html);
-                });
+                res.view('login', send);
             }
             else {
                 res.redirect('/error?location=LOGIN_CONTROLLER/RESEND_EMAIL&response=' + response + '&result=' + result);
@@ -212,25 +186,19 @@ module.exports = {
                     send.error = 'This username does not exist';
                     send.login = true;
                     send.username = email;
-                    render.page(send, 'login', function(html) {
-                        res.send(html);
-                    });
+                    res.view('login', send);
                     break;
                 case 'incorrect password':
                     send.error = 'Wrong password';
                     send.login = true;
                     send.username = email;
-                    render.page(send, 'login', function(html) {
-                        res.send(html);
-                    });
+                    res.view('login', send);
                     break;
                 case 'fields too long?':
                     send.error = 'Your username and password must be less than 32 characters?';
                     send.login = true;
                     send.username = email;
-                    render.page(send, 'login', function(html) {
-                        res.send(html);
-                    });
+                    res.view('login', send);
                     break;
                 case 'email not verified':
                     send.login = true;
@@ -276,50 +244,38 @@ module.exports = {
                         send.error = 'This username is already in use.';
                         send.username = email;
                         send.login = false;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
+                        res.view('login', send);
                         break;
                     case 'fields too long?':
                         send.error = 'Your username and password must be less than 32 characters?';
                         send.username = email;
                         send.login = false;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
+                        res.view('login', send);
                         break;
                     case 'name insert failed':
                         send.error = 'Unable to insert name.';
                         send.login = false;
                         send.username = email;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
+                        res.view('login', send);
                         break;
                     case 'credentials insert failed':
                         send.error = 'Unable to make credentials.';
                         send.username = email;
                         send.login = false;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
+                        res.view('login', send);
                         break;
                     case 'get id failed':
                         send.error = 'Unable to get individual id.';
                         send.username = email;
                         send.login = false;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
+                        res.view('login', send);
                         break;
                     case 'success':
                         send.login = false;
                         mailer.send(email, subject, txt, htm, function(mailResponse, mailResult){
                             if(mailResponse === 'success'){
                                 send.error = 'Please confirm your email at ' + email + ' to login.';
-                                render.page(send, 'login', function(html) {
-                                    res.send(html);
-                                });
+                                res.view('login', send);
                             }
                             else {
                                 res.redirect('/error?location=LOGIN_CONTROLLER/USER_SIGNUP_EMAIL&response=' + mailResponse + '&result=' + mailResult);
@@ -342,9 +298,7 @@ module.exports = {
               var send = {};
               send.action = '/userSignup';
               send.action2 = '/userLogin';
-              render.page(send, 'login', function(html) {
-                  res.send(html);
-              });
+              res.view('login', send);
           });
       }
   };

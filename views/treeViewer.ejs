@@ -4,21 +4,22 @@
     <meta charset="UTF-8">
     <title>Tree Viewer</title>
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="styles/normalize.css">
-    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="../assets/css/normalize.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 
 </head>
 
 <body>
     <header>
-        <a href="/login" class="header-logo">
+        <a href="login.html" class="header-logo">
             <em>Roots</em>
         </a>
-
+        <link rel="stylesheet" href="styles/normalize.css">
+        <link rel="stylesheet" href="styles/style.css">
         <div class="search">
             <form>
-                <input type="search" name="treeSearch" placeholder="Search..." value={{treeSearch}}>
-                <!--<input type="search" name="treeSearch" value={{treeSearch}} placeholder="Search...">-->
+                <input type="search" name="treeSearch" placeholder="Search..." value="<%= treeSearch %>">
+                <!--<input type="search" name="treeSearch" value="<%= treeSearch %>" placeholder="Search...">-->
                 <!--<input type="text" name="search" placeholder="Search...">-->
             </form>
         </div>
@@ -26,7 +27,7 @@
         <nav>
             <ul>
                 <li><a href="mailto:rootsspammer@gmail.com">Contact</a></li>
-                <li><a href="/about"> About </a></li>
+                <li><a href="about.html"> About </a></li>
             </ul>
         </nav>
     </header>
