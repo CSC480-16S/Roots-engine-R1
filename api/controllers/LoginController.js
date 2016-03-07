@@ -24,6 +24,7 @@ module.exports = {
    */
     renderPasswordReset: function(req, res) {
     	var send = {};
+      send.action = '/resetEmailSent';
     	render.page(send, 'login_help', function(html) {
     		res.send(html);
     	});
