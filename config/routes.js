@@ -51,7 +51,8 @@ module.exports.routes = {
 
   // profile controller
   '/profile': 'ProfileController.openProfile',
-  '/updateProfile': 'ProfileController.updateProfile',
+  '/updateProfile': 'ProfileController.updateProfile', // hdksjdifjdk
+  '/createNewIndividual': 'ProfileController.createNewIndividual', // TODO: Implement this function
 
   //settings controller
   '/about': 'SettingsController.aboutpage'

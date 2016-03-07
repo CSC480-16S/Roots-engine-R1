@@ -5,9 +5,7 @@
     openProfile: function(req, res) {
       var send = {};
         send.action = '/updateProfile';
-        render.page(send, 'personal_profile', function(html) {
-          res.send(html);
-        });
+        res.view('personal_profile', send);
     },
 
     /*input:firstName-string to enter into the user's first name field,
@@ -47,22 +45,16 @@
                     case 'update failed':
                         send.error = 'Update failed';
                         send.username = username;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
+                        res.view('login', send);
                         break;
                     case 'fields too long?':
                         send.error = 'Your username and password must be less than 32 characters?';
                         send.username = username;
-                        render.page(send, 'login', function(html) {
-                            res.send(html);
-                        });
+                        res.view('login', send);
                         break;
                     case 'success':
                         send = userData;
-                        render.page(send, 'treeViewer', function(html) {
-                            res.send(html);
-                        });
+                        res.view('treeViewer', send);
                         break;
                     default:
                         res.redirect('/error?location=PROFILE_CONTROLLER/UPDATE_PROFILE&response=' + response + '&result=' + result);
