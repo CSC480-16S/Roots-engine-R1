@@ -35,27 +35,27 @@ module.exports.routes = {
   '/error*': 'ErrorController.errorPage',
 
   // login controller
-  '/': 'LoginController.homepage',
-  '/userSignup': 'LoginController.userSignup',
-  '/userLogin': 'LoginController.userLogin',
-  '/emailConfirm*': 'LoginController.confirmEmail',
-  '/emailResent*': 'LoginController.resendEmail',
-  '/enterNewPassword*': 'LoginController.enterNewPassword',
-  '/changePassword': 'LoginController.changePassword',
-  '/resetEmailSent': 'LoginController.sendResetPasswordEmail',
-  '/renderPasswordReset': 'LoginController.renderPasswordReset',
-  '/logout': 'LoginController.logout',
+  '/': 'LoginController.homepage', //renders the login page, login.ejs
+  '/userSignup': 'LoginController.userSignup', //used to call user sighup function, returns to login.ejs
+  '/userLogin': 'LoginController.userLogin', //used to call login function, returns to login.ejs on failure and treeViewer.ejs on sucess
+  '/emailConfirm*': 'LoginController.confirmEmail', //process email confirmation and renders the
+  '/emailResent*': 'LoginController.resendEmail', //reseeds confirm email and renders login.ejs
+  '/enterNewPassword*': 'LoginController.enterNewPassword', //renders password_reset.ejs
+  '/changePassword': 'LoginController.changePassword', //used to call change password, returns the user to login.ejs
+  '/resetEmailSent': 'LoginController.sendResetPasswordEmail', //send the email for password rest and returns the user to the login.ejs page
+  '/renderPasswordReset': 'LoginController.renderPasswordReset', //renders the login_help.ejs page
+  '/logout': 'LoginController.logout', //calls the logout function and returns the user to the login.ejs page
 
   // tree controller
-  '/treeViewer': 'TreeController.viewTree',
+  '/treeViewer': 'TreeController.viewTree', //renders the treeViewer.ejs
 
   // profile controller
-  '/profile': 'ProfileController.openProfile',
-  '/updateProfile': 'ProfileController.updateProfile', // hdksjdifjdk
+  '/profile': 'ProfileController.openProfile', //renders the personal_profile.ejs page
+  '/updateProfile': 'ProfileController.updateProfile', // calls the update profile function
   '/createNewIndividual': 'ProfileController.createNewIndividual', // TODO: Implement this function
 
   //settings controller
-  '/about': 'SettingsController.aboutpage'
+  '/about': 'SettingsController.aboutpage' //renders the about page
 
   /***************************************************************************
   *                                                                          *
