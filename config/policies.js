@@ -26,23 +26,13 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  '*': "sessionAuth",
-  Login: {
-    'homepage': true,
-    'userLogin': true,
-    'userSignup': true,
-    'confirmEmail': true,
-    'resendEmail': true,
-    'sendResetPasswordEmail': true,
-    'submitNewPassword': true,
-	'enterNewPassword': true,
-	'renderPasswordReset': true,
-	'changePassword': true,
-	'logout': true,
-    '*': "sessionAuth"
+  '*': true, //all methods are by default accessible
+  Profile: {
+    '*': "sessionAuth" //all Profile methods require authentication
   },
-  Settings: {
-    'aboutpage': true
+
+  Tree: {
+    '*': "sessionAuth" //all Tree methods require authentication
   }
 
   /***************************************************************************

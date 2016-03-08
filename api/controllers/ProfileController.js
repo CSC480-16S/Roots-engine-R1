@@ -1,6 +1,6 @@
   module.exports = {
     /*input:null
-    output:notes-contains the email of the user for the current session, page-renders the profile page
+    output:send.action-contains the action for the page-renders the profile page
      */
     openProfile: function(req, res) {
       var send = {};
@@ -61,6 +61,13 @@
                         break;
                 }
           });
+    },
+    /*input:null
+     output:page-renders the profile page
+     */
+    renderAccountInfo: function(req, res) {
+      var send = {};
+      res.view('accountinfo', send);
     }
   };
 
