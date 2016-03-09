@@ -26,7 +26,14 @@ module.exports.policies = {
   *                                                                          *
   ***************************************************************************/
 
-  // '*': true,
+  '*': true, //all methods are by default accessible
+  Profile: {
+    '*': "sessionAuth" //all Profile methods require authentication
+  },
+
+  Tree: {
+    '*': "sessionAuth" //all Tree methods require authentication
+  }
 
   /***************************************************************************
   *                                                                          *

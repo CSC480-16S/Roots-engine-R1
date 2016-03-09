@@ -82,6 +82,8 @@ module.exports.session = {
   *                                                                          *
   ***************************************************************************/
 
+  email: '',
+  individualId: ''
   // username: '',
   // password: '',
   // auto_reconnect: false,

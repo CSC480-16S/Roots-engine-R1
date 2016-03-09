@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<!--<html lang="en" ng-app="profileTemplate">-->
+<html lang="en" ng-app="">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Personal Profile</title>
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+
+<body>
+<header>
+    <a href="/" class="header-logo">
+        <img id="logo-img" src="images/logo.png">
+    </a>
+    <div class="search">
+        <form>
+            <input type="search" name="treeSearch" placeholder="Search..." value="<%= treeSearch %>">
+        </form>
+    </div>
+
+    <nav>
+        <ul>
+            <li><a href="treeViewer.html">Tree Viewer</a></li>
+        </ul>
+    </nav>
+</header>
+
+<div class="form">
+    <div id="Profile Info">
+        <h1>Enter a new family member!</h1>
+        <form action="/createNewIndividual" method="post">
+
+            <div class="top-row">
+                <div class="field-wrap">
+                    <label>
+                        First Name: <%= firstName %><span class="req">*</span>
+                    </label>
+
+                    <input name='firstName' type="text" required autocomplete="off" ng-model="firstName"/>
+                </div>
+
+                <div class="field-wrap">
+                    <label>
+                        Last Name <%= lastName %><span class="req">*</span>
+                    </label>
+                    <input name='lastName' type="text" required autocomplete="off" ng-model="lastName"/>
+                </div>
+            </div>
+
+            <div class="top-row">
+                <h2>Date of Birth</h2>
+                <div class="field-wrap">
+                    <label><span class="req"></span></label>
+                    <input name='dateOfBirth' placeholder="mm/dd/yyyy" type="date" value=<%= dateOfBirth %> required autocomplete="off"/>
+                </div>
+
+                <div class="field-wrap">
+                    <label><span class="req"></span></label>
+                    <select name='gender' required>
+                        <option value="<%= gender %>" disabled selected>Gender</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                        <option value="trans">Transgender</option>
+                        <option value="none">Prefer No Label</option>
+                        <option value="diffent">Prefer Different Label</option>
+                        <option value="nodisclose">Prefer Not to Disclose</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field-wrap">
+                <label>Birth City<span class="req">*</span></label>
+                <input name='birthCity' type="text" maxlength="64" value="<%= birthCity %>" required autocomplete="off" />
+            </div>
+
+            <div class="field-wrap">
+                <label>Birth State<span class="req">*</span></label>
+                <input name='birthState' type="text" maxlength="64" value="<%= birthState %>" required autocomplete="off" />
+            </div>
+
+            <div class="field-wrap">
+                <label>Birth Country<span class="req">*</span></label>
+                <input name='birthCountry' type="text" maxlength="128" value="<%= birthCountry %>" required autocomplete="off" />
+            </div>
+
+            <div class="field-wrap">
+            <label>Current City<span class="req">*</span></label>
+            <input name='currentCity' type="text" maxlength="64" value="<%= currentCity %>" required autocomplete="off" />
+            </div>
+
+            <div class="field-wrap">
+            <label>Current State<span class="req">*</span></label>
+            <input name='currentState' type="text" maxlength="64" value="<%= currentState %>" required autocomplete="off" />
+            </div>
+
+            <div class="field-wrap">
+            <label>Current Country<span class="req">*</span> </label>
+            <input name='currentCountry' type="text" maxlength="128" value="<%= currentCountry %>" required autocomplete="off" />
+            </div>
+
+            <h2>Short Personal Biography</h2>
+            <div class="field-wrap">
+                <textarea id="personalbio" onkeyup="counter(this, this.maxLength)" maxlength="5000" class="textareaclass" rows="4"><%= personalBio %></textarea>
+                <div align="right" id="num">5000 characters remaining</div>
+            </div>
+            <script>
+                function counter(txtarea, l){
+                    var len = $(txtarea).val().length;
+                    if (len <= l) $('#num').text((l - len) + ' characters remaining');
+                }
+            </script>
+
+            <button type="submit" class="button button-block" />Add Member!</button>
+        </form>
+    </div>
+</div>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src="js/login.js"></script>
+</body>
+
+<footer>
+    <nav>
+        <ul>
+            <li><a href="mailto:rootsspammer@gmail.com">Contact</a></li>
+            <li><a href="/about"> About </a></li>
+
+        </ul>
+    </nav>
+</footer>
+
+</html>

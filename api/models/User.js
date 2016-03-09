@@ -8,19 +8,29 @@
 module.exports = {
 
   attributes: {
-    id: {
-
-      type: 'integer',
-      autoIncrement: true
-    },
-    user_name: {
-      type: 'text'
-    },
+   email: {
+     type: 'string',
+     size: 100,
+     unique: true,
+     primaryKey: true,
+     required: true
+   },
     password: {
-      type: 'text'
+      type: 'string',
+      size: 32,
+      required: true
+    },
+    email_confirm: {
+      type: 'string',
+      size: 32
+    },
+    individual_id: {
+      type: 'integer'
+    },
+    password_reset: {
+      type: 'string',
+      size: 32
     }
-
-
   }
 };
 

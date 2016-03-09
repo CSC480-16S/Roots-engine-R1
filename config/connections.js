@@ -18,7 +18,7 @@
  * For more information on configuration, check out:
  * http://sailsjs.org/#!/documentation/reference/sails.config/sails.config.connections.html
  */
-
+var pw = require("./passwords.json");
 module.exports.connections = {
 
   /***************************************************************************
@@ -42,10 +42,10 @@ module.exports.connections = {
   ***************************************************************************/
   someMysqlServer: {
     adapter: 'sails-mysql',
-    host: 'travishafner.com',
-    user: 'travisha_guest',
-    password: 'csc480',
-    database: 'travisha_fam'
+    host: 'pi.cs.oswego.edu',
+      user: pw.dbUser,
+    password: pw.dbPass,
+    database: 'rootsDB'
   },
 
   /***************************************************************************
