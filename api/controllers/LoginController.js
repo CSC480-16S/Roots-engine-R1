@@ -183,13 +183,13 @@ module.exports = {
         user.login(email, encryptedPassword, function (response, result) {
             switch(response) {
                 case 'incorrect username':
-                    send.error = 'This username does not exist';
+                    send.error = 'Incorrect credentials.';
                     send.login = true;
                     send.username = email;
                     res.view('login', send);
                     break;
                 case 'incorrect password':
-                    send.error = 'Wrong password';
+                    send.error = 'Incorrect credentials.';
                     send.login = true;
                     send.username = email;
                     res.view('login', send);
@@ -227,6 +227,7 @@ module.exports = {
           var params = req.params.all(),
               email = params.email,
               password = params.password,
+              passwordConfirm = params.passwordconfirm,
               firstName = params.firstName,
               lastName = params.lastName,
               send = {},
@@ -236,57 +237,65 @@ module.exports = {
               txt = 'Link: ',
               htm = 'localhost:1337/emailConfirm?email=' + email;
 
-          send.action = '/userSignup';
-          send.action2 = '/userLogin';
-          user.signup(email, encryptedPassword, firstName, lastName, function (response, result) {
-                switch(response) {
-                    case 'user exists':
-                        send.error = 'This username is already in use.';
-                        send.username = email;
-                        send.login = false;
-                        res.view('login', send);
-                        break;
-                    case 'fields too long?':
-                        send.error = 'Your username and password must be less than 32 characters?';
-                        send.username = email;
-                        send.login = false;
-                        res.view('login', send);
-                        break;
-                    case 'name insert failed':
-                        send.error = 'Unable to insert name.';
-                        send.login = false;
-                        send.username = email;
-                        res.view('login', send);
-                        break;
-                    case 'credentials insert failed':
-                        send.error = 'Unable to make credentials.';
-                        send.username = email;
-                        send.login = false;
-                        res.view('login', send);
-                        break;
-                    case 'get id failed':
-                        send.error = 'Unable to get individual id.';
-                        send.username = email;
-                        send.login = false;
-                        res.view('login', send);
-                        break;
-                    case 'success':
-                        send.login = false;
-                        mailer.send(email, subject, txt, htm, function(mailResponse, mailResult){
-                            if(mailResponse === 'success'){
-                                send.error = 'Please confirm your email at ' + email + ' to login.';
-                                res.view('login', send);
-                            }
-                            else {
-                                res.redirect('/error?location=LOGIN_CONTROLLER/USER_SIGNUP_EMAIL&response=' + mailResponse + '&result=' + mailResult);
-                            }
-                        });
-                        break;
-                    default:
-                        res.redirect('/error?location=LOGIN_CONTROLLER/USER_SIGNUP&response=' + response + '&result=' + result);
-                        break;
-                }
-          });
+          if (password === passwordConfirm) {
+              send.action = '/userSignup';
+              send.action2 = '/userLogin';
+              user.signup(email, encryptedPassword, firstName, lastName, function (response, result) {
+                    switch(response) {
+                        case 'user exists':
+                            send.error = 'This username is already in use.';
+                            send.username = email;
+                            send.login = false;
+                            res.view('login', send);
+                            break;
+                        case 'fields too long?':
+                            send.error = 'Your username and password must be less than 32 characters?';
+                            send.username = email;
+                            send.login = false;
+                            res.view('login', send);
+                            break;
+                        case 'name insert failed':
+                            send.error = 'Unable to insert name.';
+                            send.login = false;
+                            send.username = email;
+                            res.view('login', send);
+                            break;
+                        case 'credentials insert failed':
+                            send.error = 'Unable to make credentials.';
+                            send.username = email;
+                            send.login = false;
+                            res.view('login', send);
+                            break;
+                        case 'get id failed':
+                            send.error = 'Unable to get individual id.';
+                            send.username = email;
+                            send.login = false;
+                            res.view('login', send);
+                            break;
+                        case 'success':
+                            send.login = false;
+                            mailer.send(email, subject, txt, htm, function(mailResponse, mailResult){
+                                if(mailResponse === 'success'){
+                                    send.error = 'Please confirm your email at ' + email + ' to login.';
+                                    res.view('login', send);
+                                }
+                                else {
+                                    res.redirect('/error?location=LOGIN_CONTROLLER/USER_SIGNUP_EMAIL&response=' + mailResponse + '&result=' + mailResult);
+                                }
+                            });
+                            break;
+                        default:
+                            res.redirect('/error?location=LOGIN_CONTROLLER/USER_SIGNUP&response=' + response + '&result=' + result);
+                            break;
+                    }
+              });
+          }
+          else {
+              send.error = 'Passwords do not match.';
+              send.username = email;
+              send.login = false;
+              res.view('login', send);
+          }
       },
 
       /*input:session-the session associated with the user's browser
