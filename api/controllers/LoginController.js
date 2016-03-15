@@ -14,6 +14,7 @@ module.exports = {
         var send = {};
         send.action = '/userSignup';
         send.action2 = '/userLogin';
+        send.error = '';
         res.view('login', send);
     },
 
@@ -22,6 +23,7 @@ module.exports = {
    */
     renderPasswordReset: function(req, res) {
     	var send = {};
+      send.error = '';
     	res.view('login_help', send);
     },
 

@@ -34,7 +34,7 @@ module.exports.routes = {
   // error page
   '/error*': 'ErrorController.errorPage',
 
-  // login controller
+  // login controller, accessible by any user
   '/': 'LoginController.homepage', //renders the login page, login.ejs
   '/userSignup': 'LoginController.userSignup', //used to call user sighup function, returns to login.ejs
   '/userLogin': 'LoginController.userLogin', //used to call login function, returns to login.ejs on failure and treeViewer.ejs on sucess
@@ -46,16 +46,16 @@ module.exports.routes = {
   '/renderPasswordReset': 'LoginController.renderPasswordReset', //renders the login_help.ejs page
   '/logout': 'LoginController.logout', //calls the logout function and returns the user to the login.ejs page
 
-  // tree controller
+  // tree controller, accessible only to authenticated users
   '/treeViewer': 'TreeController.viewTree', //renders the treeViewer.ejs
 
-  // profile controller
+  // profile controller, accessible only to authenticated users
   '/profile': 'ProfileController.openProfile', //renders the personal_profile.ejs page
   '/updateProfile': 'ProfileController.updateProfile', // calls the update profile function
   '/createNewIndividual': 'ProfileController.createNewIndividual', // TODO: Implement this function
   '/accountinfo': 'ProfileController.renderAccountInfo', //renders the accountinfo.ejs page
 
-  //settings controller
+  //settings controller, accessible by any user
   '/about': 'SettingsController.aboutpage' //renders the about page
 
   /***************************************************************************

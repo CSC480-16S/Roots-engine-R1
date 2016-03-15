@@ -101,6 +101,9 @@ module.exports = {
                 next('Email does not exist', loginResult);
             }
         });
+    },
+    upload: function(file, next) {
+      file.upload(next);
     }
 
 };
