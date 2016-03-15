@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="treeViewer">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Tree Viewer</title>
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="../assets/css/normalize.css">
     <link rel="stylesheet" href="../assets/css/style.css">
-
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
 </head>
 
 <body>
@@ -19,8 +19,6 @@
         <div class="search">
             <form>
                 <input type="search" name="treeSearch" placeholder="Search..." value="<%= treeSearch %>">
-                <!--<input type="search" name="treeSearch" value="<%= treeSearch %>" placeholder="Search...">-->
-                <!--<input type="text" name="search" placeholder="Search...">-->
             </form>
         </div>
 
@@ -33,9 +31,22 @@
     </header>
 
     <h1>Tree Goes here</h1>
-
-    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
-    <script src="js/login.js"></script>
-
+<div ng-app="treeViewer" ng-controller="nodeProfileController">
+  <p ng-include="'/populateTree'"></p>
+      <ul>
+        <li ng-repeat="x in node">
+          Here is the information:
+          {{x.first_name + ", " +  x.last_name}} and {{x.last_name}}
+        </li>
+      </ul>
+</div>
+<script>
+ var app = angular.module('treeViewer',[]);
+    app.controller('nodeProfileController',function($scope, $http){
+      $http.get("/populateTree").then(function (response){
+        $scope.node = response.data.user;
+    });
+ });
+</script>
 </body>
 </html>
