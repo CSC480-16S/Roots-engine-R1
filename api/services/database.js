@@ -124,5 +124,11 @@ module.exports = {
 		this.update(User, sqlUpdatePassword, function(response, result) {
 			next(response, result);
 		});
-	}
+	},
+  getUserInfo: function(individualId, next){
+    var sqlReadUserInfo = 'SELECT * FROM Individual INNER JOIN Name ON(Individual.id=Name.individual_id) WHERE Individual.id=\'' + individualId + '\';'
+    this.read(Individual, sqlReadUserInfo, function(response, result) {
+      next(response, result);
+    });
+  }
 };

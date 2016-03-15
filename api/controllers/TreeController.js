@@ -6,6 +6,12 @@
         var send = {};
         send.treeSearch = 'Search...';
         res.view('treeViewer', send);
+    },
+    populateTree: function(req, res) {
+      database.getUserInfo(req.session.individualId, function(getInfoResponse, getInfoResult) {
+        return res.json({ user: getInfoResult})
+      })
+
     }
   };
 
