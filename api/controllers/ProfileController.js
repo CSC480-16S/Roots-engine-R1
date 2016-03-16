@@ -39,9 +39,8 @@
                 id: req.session.individualId
             },
             send = {};
-          user.upload(res.file('image'), function(response, result){
           // perform checks for email/username in notes field
-          user.updateProfile(userData, req, res, function (response, result) {
+          user.updateProfile(userData, function (response, result) {
                 switch(response) {
                     case 'update failed':
                         send.error = 'Update failed';
@@ -62,7 +61,6 @@
                         break;
                 }
           });
-    })
     },
     /*input:null
      output:page-renders the profile page

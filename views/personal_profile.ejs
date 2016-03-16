@@ -23,7 +23,7 @@
 </header>
     <div class="form wideForm">
         <div id="Profile Info">
-            <form action="/treeViewer" method="post">
+            <form action="/updateProfile" method="post">
             <h1>Complete Your Profile</h1>
                 <div class="leftForm">
 
@@ -71,7 +71,7 @@
                 <h2>Short Personal Biography</h2>
                 <div class="field-wrap">
 
-                    <textarea id="personalbio" onkeyup="counter(this, this.maxLength)" maxlength="5000" class="textareaclass" rows="4"></textarea>
+                    <textarea name="personalbio" id="personalbio" onkeyup="counter(this, this.maxLength)" maxlength="5000" class="textareaclass" rows="4"></textarea>
                     <div align="right" id="num">5000 characters remaining</div>
                 </div>
 
