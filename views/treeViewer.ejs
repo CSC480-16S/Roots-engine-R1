@@ -1,52 +1,171 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="treeViewer">
 <head>
     <meta charset="UTF-8">
     <title>Tree Viewer</title>
     <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="../assets/css/normalize.css">
-    <link rel="stylesheet" href="../assets/css/style.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/treeStyles.css">
 </head>
 
 <body>
-    <header>
-        <a href="/" class="header-logo">
-            <em>Roots</em>
-        </a>
-        <link rel="stylesheet" href="styles/normalize.css">
-        <link rel="stylesheet" href="styles/style.css">
-        <div class="search">
-            <form>
-                <input type="search" name="treeSearch" placeholder="Search..." value="<%= treeSearch %>">
+<header>
+    <a href="/" class="header-logo">
+        <img id="logo-img" src="images/logo.png">
+    </a>
+
+    <div class="search">
+        <form>
+            <input type="search" name="treeSearch" placeholder="Search..." value={{treeSearch}}>
+        </form>
+    </div>
+
+
+    <div class="dropdown">
+        <button onclick ="myFunction()"  class="hamburger hamburger--spring">
+            <div class="hamburger-box">
+                <div class="hamburger-inner"></div>
+            </div>
+        </button>
+        <div class="dropdown-content" id="Dropdown">
+            <a href="#">Log Out</a>
+            <a href="mailto:rootsspammer@gmail.com">Contact Us</a>
+            <a href="about.html">About</a>
+        </div>
+    </div>
+
+    <script>
+        function myFunction() {
+            document.getElementById("Dropdown").classList.toggle("show");
+        }
+        window.onclick = function(e) {
+            if (!e.target.matches('.hamburger')) {
+
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var d = 0; d < dropdowns.length; d++) {
+                    var openDropdown = dropdowns[d];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
+</header>
+
+
+<div class="window">
+    <div class="sidebar">
+        <div id="Profile Info">
+
+            <figure class="profilePhoto">
+
+            </figure>
+            <form action="/updateProfile" method="post" ng-controller="nodeTreeController">
+
+
+
+                <div ng-repeat="x in node">
+                    <div>
+                        <label>
+                            Name:
+                        </label>
+                        <p> {{x.first_name}} {{x.last_name}} </p>
+                    </div>
+                    <div>
+                        <label>
+                            Gender:
+                        </label>
+                        <p> {{x.gender}} </p>
+                    </div>
+                    <div>
+                        <label>
+                            Date of Birth:
+                        </label>
+                        <p> {{x.dateOfBirth}} </p>
+                    </div>
+                    <div>
+                        <label>
+                            Place of Birth:
+                        </label>
+                        <p> {{x.birthCity}}, {{x.birthState}} </p>
+                    </div>
+
+                    <div>
+                        <label>
+                            Bio:
+                        </label>
+                        <p> {{x.bio}}</p>
+                    </div>
+
+                </div>
+
+                <script>
+                    function counter(txtarea, l){
+                        var len = $(txtarea).val().length;
+                        if (len <= l) $('#num').text((l - len) + ' characters remaining');
+                    }
+                </script>
+
+                <input class="profileButton" type="image" src="images/AddIcon.png" alt="Add">
+                <input class="profileButton" type="image" src="images/EditIcon.png" alt="Edit">
+                <input class="profileButton" type="image" src="images/DeleteIcon.png" alt="Delete">
+
+
             </form>
         </div>
+    </div>
 
-        <nav>
-            <ul>
-                <li><a href="mailto:rootsspammer@gmail.com">Contact</a></li>
-                <li><a href="/about"> About </a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <h1>Tree Goes here</h1>
-<div ng-app="treeViewer" ng-controller="nodeProfileController">
-  <p ng-include="'/populateTree'"></p>
-      <ul>
-        <li ng-repeat="x in node">
-          Here is the information:
-          {{x.first_name + ", " +  x.last_name}} and {{x.last_name}}
-        </li>
-      </ul>
+    <div class="treeWindow">
+        <!--<p>-->
+        <!--<svg ng-attr-height="{{graph.height}}" ng-attr-widgth={{graph.width}}">-->
+        <!--<g>-->
+        <!--<rect ng-repeat="rect in node"-->
+        <!--ng-attr-rx="{{rectangle.x}}"-->
+        <!--ng-attr-ry="{{rectangle.y}}">-->
+        <!--<text>{{node.firstName}} {{node.middleName}} {{node.lastName}}</text>-->
+        <!--</rect>-->
+        <!--</g>-->
+        <!--</p>-->
+    </div>
 </div>
+
+<a href=""></a>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src="js/login.js"></script>
 <script>
- var app = angular.module('treeViewer',[]);
-    app.controller('nodeProfileController',function($scope, $http){
-      $http.get("/populateTree").then(function (response){
-        $scope.node = response.data.user;
+
+    //Here is the controller that will display information of the node profile
+    // Node is assumed to be the node that is selected
+    // NODE IS A PLACEHOLDER, CHANGE TO THE VALUE NEEDED WITHIN THE MODULE FOR THE APP
+    //
+    var app = angular.module("treeViewer",[]);
+    app.controller("nodeProfileController",function($scope){
+        $scope.node = {};
+        $scope.node.firstName = "David";
+        $scope.node.middleName = "";
+        $scope.node.lastName = "Swift";
+        $scope.node.father = "";
+        $scope.node.mother = "";
+        $scope.node.dateOfBirth = "02/13/1988";
+        $scope.node.death = "";
+        $scope.node.gender = "Dude";
+        $scope.node.birthLocation = "";
+        $scope.node.birthCity = "Rochester";
+        $scope.node.birthState = "New York";
+        $scope.node.deathLocation = "";
+        $scope.node.bio = "He lived and then he died.";
+        $scope.node.children = [""];
     });
- });
+
+    app.controller('nodeTreeController',function($scope, $http){
+        $http.get("/populateTree").then(function (response){
+            $scope.node = response.data.user;
+        });
+    });
+
 </script>
+
 </body>
 </html>
