@@ -309,6 +309,7 @@ module.exports = {
               var send = {};
               send.action = '/userSignup';
               send.action2 = '/userLogin';
+              send.error = '';
               res.view('login', send);
           });
       }
