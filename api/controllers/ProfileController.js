@@ -5,6 +5,7 @@
     openProfile: function(req, res) {
       var send = {};
         send.action = '/updateProfile';
+        send.error = '';
         res.view('personal_profile', send);
     },
 
@@ -39,6 +40,7 @@
                 id: req.session.individualId
             },
             send = {};
+          send.error = '';
           // perform checks for email/username in notes field
           user.updateProfile(userData, function (response, result) {
                 switch(response) {
@@ -67,6 +69,7 @@
      */
     renderAccountInfo: function(req, res) {
       var send = {};
+      send.error = '';
       res.view('accountinfo', send);
     }
   };

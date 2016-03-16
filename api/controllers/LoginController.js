@@ -36,6 +36,7 @@ module.exports = {
             email = req.param('email');
         send.action = '/userSignup';
         send.action2 = '/userLogin';
+        send.error = '';
         user.confirmEmail (email, function (response, result) {
             switch (response) {
                 case 'Email does not exist':
@@ -65,6 +66,7 @@ module.exports = {
      */
     enterNewPassword: function(req, res) {
     	var send = {};
+      send.error = '';
     	    email = req.query.email;
     	send.email = email;
     	res.view('password_reset', send);
@@ -83,6 +85,7 @@ module.exports = {
             encryptedPassword = cipher.update(nPassword, 'utf8', 'hex') + cipher.final('hex');
         send.action = '/userSignup';
         send.action2 = '/userLogin';
+        send.error = '';
         if (nPassword !== nPassword2) {
             send.error = 'Passwords are different';
             res.view('password_reset', send);
@@ -126,6 +129,7 @@ module.exports = {
             htm = 'link: localhost:1337/enterNewPassword?email=' + email;
         send.action = '/userSignup';
         send.action2 = '/userLogin';
+        send.error = '';
         user.login(email, '', function(response, result) {
             if(response === 'incorrect password') {
                 mailer.send(email, subject, txt, htm, function(mailResponse, mailResult){
@@ -157,6 +161,7 @@ module.exports = {
             htm = 'localhost:1337/emailConfirm?email=' + email;
         send.action = '/userSignup';
         send.action2 = '/userLogin';
+        send.error = '';
         mailer.send(email, subject, txt, htm, function(response, result){
             if(response === 'success'){
                 send.error = 'Email address not yet confirmed. Another message was sent to ' + email + '. Please check the spelling of your address and your spam folder. If you did not spell your email correctly, you will have to make a new account.';
@@ -182,6 +187,7 @@ module.exports = {
             encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex');
         send.action = '/userSignup';
         send.action2 = '/userLogin';
+        send.error = '';
         user.login(email, encryptedPassword, function (response, result) {
             switch(response) {
                 case 'incorrect username':
@@ -242,6 +248,7 @@ module.exports = {
           if (password === passwordConfirm) {
               send.action = '/userSignup';
               send.action2 = '/userLogin';
+              send.error = '';
               user.signup(email, encryptedPassword, firstName, lastName, function (response, result) {
                     switch(response) {
                         case 'user exists':
