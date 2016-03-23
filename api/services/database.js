@@ -68,8 +68,11 @@ module.exports = {
         });
     },
 
-    insertLoginCredentials: function(email, password, id, next) {
-        var sqlInsertCredentials = 'INSERT INTO User (individual_id, email, password, email_confirm) VALUES (\'' + id + '\', \'' + email + '\', \'' + password + '\', \'' + 0 + '\');';
+    insertLoginCredentials: function(email, password, id, code, next) {
+        var sqlInsertCredentials = 'INSERT INTO User (individual_id, email, password, '
+	    + 'email_confirm, email_confirm_code) '
+	    + 'VALUES (\'' + id + '\', \'' + email + '\', \'' + password
+	    + '\', \'' + 0 + '\', \'' + code + '\');';
         this.insert(User, sqlInsertCredentials, function (response, result){
             next(response, result);
         });
@@ -130,5 +133,15 @@ module.exports = {
     this.read(Individual, sqlReadUserInfo, function(response, result) {
       next(response, result);
     });
-  }
+  },
+
+    getEmailFromCode: function(code, next){
+	var sqlGetEmail = 'SELECT email FROM User WHERE email_confirm_code=\'' + code + '\';';
+	this.read(User, sqlGetEmail, function(response, result) {
+	    next(response, result);
+	});
+    }
+    
 };
+
+

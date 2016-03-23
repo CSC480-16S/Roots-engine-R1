@@ -28,16 +28,18 @@ module.exports = {
     },
 
     /*inputs: email-query string from url specifying the user to confirm
-     outputs: error-message for a successful email confirmation, or unsuccessful, pages-renders login page,
-     login-flag that will be used by gui to determine which tab of their login box to use
+     outputs: error-message for a successful email confirmation, or 
+     unsuccessful, pages-renders login page,
+     login-flag that will be used by gui to determine which tab of their 
+     login box to use
       */
     confirmEmail: function(req, res) {
         var send = {},
-            email = req.param('email');
+            code = req.param('q');
         send.action = '/userSignup';
         send.action2 = '/userLogin';
         send.error = '';
-        user.confirmEmail (email, function (response, result) {
+        user.confirmEmail (code, function (response, result) {
             switch (response) {
                 case 'Email does not exist':
                     send.error = 'You have not signed up yet';
@@ -45,7 +47,8 @@ module.exports = {
                     res.view('login', send);
                     break;
                 case 'Email verification update failed':
-                    send.error = 'Unable to verify your email. Please attempt to login to receive a new verification email.';
+                send.error = 'Unable to verify your email. Please attempt '
+		    + 'to login to receive a new verification email.';
                     send.login = true;
                     res.view('login', send);
                     break;
@@ -55,7 +58,9 @@ module.exports = {
                     res.view('login', send);
                     break;
                 default:
-                    res.redirect('/error?location=LOGIN_CONTROLLER/CONFIRM_EMAIL&response=' + response + '&result=' + result);
+                res.redirect('/error?location=LOGIN_CONTROLLER/' +
+			     'CONFIRM_EMAIL&response=' + response
+			     + '&result=' + result);
                     break;
             }
         });
@@ -208,9 +213,10 @@ module.exports = {
                     send.username = email;
                     res.view('login', send);
                     break;
-                case 'email not verified':
+            case 'email not verified':
+		//TODO: Figure out how this should work now that we don't know their email
                     send.login = true;
-                    res.redirect('/emailResent?email=' + username);
+                    res.redirect('/emailResent?email=' + send.username);
                     break;
                 case 'success':
                     req.session.authenticated = true;
@@ -232,7 +238,15 @@ module.exports = {
     page-renders a page telling the user to check their inbox
      */
     userSignup: function(req, res) {
-          var params = req.params.all(),
+	/*Generates a random id code for email confirmation.
+	Is only pseudorandom but getting them from random.org
+	would require another callback and look bad.*/
+	var code = '';
+	var abc = 'abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	for(var i = 0; i < 15; i++) {
+	    code += abc.charAt(Math.floor(Math.random() * abc.length));
+	}
+	var params = req.params.all(),
               email = params.email,
               password = params.password,
               passwordConfirm = params.passwordconfirm,
@@ -243,13 +257,13 @@ module.exports = {
               encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex'),
               subject = 'Email Verification Link',
               txt = 'Link: ',
-              htm = 'localhost:1337/emailConfirm?email=' + email;
+              htm = 'localhost:1337/emailConfirm?q=' + code;
 
           if (password === passwordConfirm) {
               send.action = '/userSignup';
               send.action2 = '/userLogin';
               send.error = '';
-              user.signup(email, encryptedPassword, firstName, lastName, function (response, result) {
+              user.signup(email, encryptedPassword, firstName, lastName, code, function (response, result) {
                     switch(response) {
                         case 'user exists':
                             send.error = 'This username is already in use.';
