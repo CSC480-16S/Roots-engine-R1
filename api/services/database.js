@@ -136,8 +136,17 @@ module.exports = {
   },
 
     getEmailFromCode: function(code, next){
-	var sqlGetEmail = 'SELECT email FROM User WHERE email_confirm_code=\'' + code + '\';';
+	var sqlGetEmail = 'SELECT email FROM User WHERE email_confirm_code=\''
+	    + code + '\';';
 	this.read(User, sqlGetEmail, function(response, result) {
+	    next(response, result);
+	});
+    },
+
+    getCodeFromEmail: function(email, next){
+	var sqlGetCode = 'SELECT email_confirm_code FROM User WHERE email=\''
+	    + email + '\';';
+	this.read(User, sqlGetCode, function(response, result) {
 	    next(response, result);
 	});
     }

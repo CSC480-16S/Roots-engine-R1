@@ -167,21 +167,33 @@ module.exports = {
             email = req.param('email'),
             subject = 'Email Verification Link',
             txt = 'Link: ',
-            htm = 'localhost:1337/emailConfirm?email=' + email;
+            htm = 'localhost:1337/emailConfirm?q=';
         send.action = '/userSignup';
         send.action2 = '/userLogin';
         send.error = '';
-        mailer.send(email, subject, txt, htm, function(response, result){
-            if(response === 'success'){
-                send.error = 'Email address not yet confirmed. Another message was sent to ' + email +
-		    '. Please check the spelling of your address and your spam folder.'
-		    +' If you did not spell your email correctly, you will have to make a new account.';
-                res.view('login', send);
-            }
-            else {
-                res.redirect('/error?location=LOGIN_CONTROLLER/RESEND_EMAIL&response=' + response + '&result=' + result);
-            }
-        });
+	database.getCodeFromEmail(email, function(response, result){
+	    if(response === 'success' && result.length == 1) {
+		mailer.send(email, subject, txt,
+			    htm + result[0].email_confirm_code,
+			    function(emailResponse, emailResult){
+		    if(emailResponse === 'success'){
+			send.error = 'Email address not yet confirmed. Another'
+			    + ' message was sent to ' + email +
+			    '. Please check the spelling of your address and '
+			    + 'your spam folder. If you did not spell your email'
+			    + ' correctly, you will have to make a new account.';
+			res.view('login', send);
+		    }
+		    else {
+			res.redirect('/error?location=LOGIN_CONTROLLER/RESEND_EMAIL&response='
+				     + emailResponse + '&result=' + emailResult);
+		    }
+		});
+	    } else {
+		res.redirect('error?location=LOGIN_CONTROLLER/RESEND_EMAIL&response='
+			     + response + '&result=' + emailResult);
+	    }
+	});
     },
 
     /*inputs:username-username entered by user, password-password entered by user
