@@ -114,7 +114,8 @@ module.exports = {
                         res.view('login', send);
                         break;
                     default:
-                        res.redirect('/error?location=LOGIN_CONTROLLER/CHANGE_PASSWORD&response=' + response + '&result=' + result);
+                    res.redirect('/error?location=LOGIN_CONTROLLER/CHANGE_PASSWORD&response='
+				 + response + '&result=' + result);
                         break;
                 }
             });
@@ -143,7 +144,8 @@ module.exports = {
                         res.view('login', send);
                     }
                     else {
-                        res.redirect('/error?location=LOGIN_CONTROLLER/SEND_RESET_PASSWORD_EMAIL&response=' + mailResponse + '&result=' + mailResult);
+                        res.redirect('/error?location=LOGIN_CONTROLLER/SEND_RESET_PASSWORD_EMAIL&response='
+				     + mailResponse + '&result=' + mailResult);
                     }
                 });
             }
@@ -159,6 +161,8 @@ module.exports = {
      page-renders the login page
      */
     resendEmail: function(req, res) {
+	//TODO: get their code and email it to them,
+	//      or error out if they are where they shouldn't be.
         var send = {},
             email = req.param('email'),
             subject = 'Email Verification Link',
@@ -169,7 +173,9 @@ module.exports = {
         send.error = '';
         mailer.send(email, subject, txt, htm, function(response, result){
             if(response === 'success'){
-                send.error = 'Email address not yet confirmed. Another message was sent to ' + email + '. Please check the spelling of your address and your spam folder. If you did not spell your email correctly, you will have to make a new account.';
+                send.error = 'Email address not yet confirmed. Another message was sent to ' + email +
+		    '. Please check the spelling of your address and your spam folder.'
+		    +' If you did not spell your email correctly, you will have to make a new account.';
                 res.view('login', send);
             }
             else {
@@ -214,9 +220,8 @@ module.exports = {
                     res.view('login', send);
                     break;
             case 'email not verified':
-		//TODO: Figure out how this should work now that we don't know their email
                     send.login = true;
-                    res.redirect('/emailResent?email=' + send.username);
+                    res.redirect('/emailResent?email=' + email);
                     break;
                 case 'success':
                     req.session.authenticated = true;
@@ -225,7 +230,9 @@ module.exports = {
                     res.redirect('/treeViewer');
                     break;
                 default:
-                    res.redirect('/error?location=LOGIN_CONTROLLER/USER_LOGIN&response=' + response + '&result=' + result);
+                res.redirect('/error?location=LOGIN_CONTROLLER/'+
+			     'USER_LOGIN&response=' + response +
+			     '&result=' + result);
                     break;
             }
         });
@@ -303,7 +310,8 @@ module.exports = {
                                     res.view('login', send);
                                 }
                                 else {
-                                    res.redirect('/error?location=LOGIN_CONTROLLER/USER_SIGNUP_EMAIL&response=' + mailResponse + '&result=' + mailResult);
+                                    res.redirect('/error?location=LOGIN_CONTROLLER/USER_SIGNUP_EMAIL&response='
+						 + mailResponse + '&result=' + mailResult);
                                 }
                             });
                             break;
