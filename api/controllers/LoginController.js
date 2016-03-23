@@ -23,7 +23,7 @@ module.exports = {
    */
     renderPasswordReset: function(req, res) {
     	var send = {};
-      send.error = '';
+	send.error = '';
     	res.view('login_help', send);
     },
 
@@ -66,18 +66,17 @@ module.exports = {
         });
     },
 
-    /*inputs: email-query string from url specifying the user to confirm
-    outputs: email- users email whose password is being reset, page-renders the page to enter a new password
+    /*inputs: q-query string from url specifying the user to confirm
+    outputs: , page-renders the page to enter a new password
      */
     enterNewPassword: function(req, res) {
     	var send = {};
-      send.error = '';
-    	    email = req.query.email;
-    	send.email = email;
+	send.error = '';
+    	send.q = req.query.q;
     	res.view('password_reset', send);
     },
 
-    /*inputs: newPassword-the password the was entered by the user, email-email of user whose password is changing
+    /*inputs: newPassword-the password the was entered by the user, q-code of user whose password is changing
     outputs: error-message claiming success of failure of password reset, page-renders the login page
      */
     changePassword: function(req, res) {
@@ -85,18 +84,19 @@ module.exports = {
             params = req.params.all(),
             nPassword = params.password,
             nPassword2 = params.password2,
-            email = params.email,
+            code = params.q,
             cipher = crypto.createCipher('aes192', 'a password'),
             encryptedPassword = cipher.update(nPassword, 'utf8', 'hex') + cipher.final('hex');
         send.action = '/userSignup';
         send.action2 = '/userLogin';
         send.error = '';
+	send.q = code;
         if (nPassword !== nPassword2) {
             send.error = 'Passwords are different';
             res.view('password_reset', send);
-        }
-        else {
-            user.changePassword(email, encryptedPassword, function(response, result) {
+        
+        } else {
+            user.changePassword(code, encryptedPassword, function(response, result) {
                 switch (response) {
                     case 'Email does not exist':
                         send.error = 'You have not signed up yet';
@@ -104,10 +104,15 @@ module.exports = {
                         res.view('login', send);
                         break;
                     case 'Update password failed':
-                        send.error = 'Unable to update your password. Please use forget password again.';
+                        send.error = 'Unable to update your password due to an error on our side. Please request a new link and try again.';
                         send.login = true;
                         res.view('login', send);
                         break;
+		    case 'Invalid code':
+		        send.error = 'Your password reset link is not valid. Please request a new one and try again.'
+		        send.login = true;
+		        res.view('login', send);
+		        break;
                     case 'success':
                         send.error = 'Your password has changed, please log in.';
                         send.login = true;
@@ -128,28 +133,46 @@ module.exports = {
     page-renders the login page
      */
     sendResetPasswordEmail: function(req, res) {
+	/*Generates a random id code for password reset.
+	Is only pseudorandom but getting them from random.org
+	would require another callback and look bad.*/
+	var code = '';
+	var abc = 'abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	for(var i = 0; i < 15; i++) {
+	    code += abc.charAt(Math.floor(Math.random() * abc.length));
+	}
         var send = {},
-            email = req.param('email'),
+            email = req.param('emailReset'),
             subject = 'Roots Password Reset Link',
             txt = 'Link: ',
-            htm = 'link: localhost:1337/enterNewPassword?email=' + email;
+            htm = 'link: localhost:1337/enterNewPassword?q=' + code;
         send.action = '/userSignup';
         send.action2 = '/userLogin';
         send.error = '';
         user.login(email, '', function(response, result) {
             if(response === 'incorrect password') {
-                mailer.send(email, subject, txt, htm, function(mailResponse, mailResult){
-                    if(mailResponse === 'success'){
-                        send.error = 'Reset Password Email Sent';
-                        res.view('login', send);
-                    }
-                    else {
-                        res.redirect('/error?location=LOGIN_CONTROLLER/SEND_RESET_PASSWORD_EMAIL&response='
-				     + mailResponse + '&result=' + mailResult);
-                    }
-                });
-            }
-            else {
+		database.updatePasswordCode(email, code, function(codeResponse,
+								  codeResult) {
+		    if(codeResponse === 'success') {
+			mailer.send(email, subject, txt, htm,
+				    function(mailResponse, mailResult){
+			    if(mailResponse === 'success'){
+				send.error = 'Reset Password Email Sent';
+				res.view('login', send);
+			    } else {
+				res.redirect('/error?location=LOGIN_CONTROLLER/'+
+					     'SEND_RESET_PASSWORD_EMAIL&response='
+					     +mailResponse+'&result='+mailResult);
+			    }
+			    
+			});
+		    } else {
+			res.redirect('/error?location=LOGIN_CONTROLLER/' +
+				     'SEND_RESET_PASSWORD_EMAIL&RESPONSE='
+				     + codeResponse + '&result=' + codeResult);
+		    }
+		});			    
+            } else {
                 send.error = 'You have not signed up yet.';
                 res.view('login', send);
             }

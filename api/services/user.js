@@ -95,21 +95,33 @@ module.exports = {
 	});
     },
 
-    changePassword: function(email, encryptedPassword, next) {
-        database.getLoginCredentials(email, function(loginResponse, loginResult) {
-            if(loginResponse === 'success') {
-                database.updatePassword(email, encryptedPassword, function(updateResponse, result) {
-                    if(updateResponse === 'success') {
-                        next(updateResponse, result);
-                    }
-                    else {
-                        next('Update password failed', result);
-                    }
-                });
-            }
-            else {
-                next('Email does not exist', loginResult);
-            }
+    changePassword: function(code, encryptedPassword, next) {
+	database.getEmailFromPCode(code, function(eResponse, eResult){
+	    if(eResponse === 'success' && eResult.length == 1) {
+		var email = eResult[0].email;
+		database.getLoginCredentials(email, function(loginResponse, loginResult) {
+		    if(loginResponse === 'success') {
+			database.updatePassword(email, encryptedPassword, function(updateResponse, result) {
+			    if(updateResponse === 'success') {
+				next(updateResponse, result);
+			    }
+			    else {
+				next('Update password failed', result);
+			    }
+			});
+		    } else {
+			next('Email does not exist', loginResult);
+		    }
+		});
+		database.updateNullifyPCode(code, function(nResponse, nResult) {
+		    if(nResponse !== 'success') {
+			console.log('Unable to set ' + email + '\'s reset_password'
+				    + ' field to NULL. result: ' + nResult);
+		    }
+		});
+	    } else {
+		next('Invalid code', eResult);
+	    }
         });
     },
     upload: function(file, next) {

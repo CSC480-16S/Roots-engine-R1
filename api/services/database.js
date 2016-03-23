@@ -143,10 +143,34 @@ module.exports = {
 	});
     },
 
+    getEmailFromPCode: function(code, next){
+	var sqlGetEmail = 'SELECT email FROM User WHERE password_reset=\''
+	    + code + '\';';
+	this.read(User, sqlGetEmail, function(response, result) {
+	    next(response, result);
+	});
+    },
+
+    updateNullifyPCode: function(code, next){
+	var sqlNullifyCode = 'UPDATE User SET password_reset=NULL WHERE ' +
+	    'password_reset=\'' + code + '\';';
+	this.update(User, sqlNullifyCode, function(response, result) {
+	    next(response, result);
+	});
+    },
+
     getCodeFromEmail: function(email, next){
 	var sqlGetCode = 'SELECT email_confirm_code FROM User WHERE email=\''
 	    + email + '\';';
 	this.read(User, sqlGetCode, function(response, result) {
+	    next(response, result);
+	});
+    },
+
+    updatePasswordCode: function(email, code, next){
+	var sqlUpdateCode = 'UPDATE User SET password_reset=\'' +
+	    code +'\' WHERE email=\'' + email + '\';';
+	this.update(User, sqlUpdateCode, function(response, result) {
 	    next(response, result);
 	});
     }
