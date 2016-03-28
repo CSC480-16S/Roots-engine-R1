@@ -1,5 +1,6 @@
 
 module.exports = {
+
     // skeleton for insert
     insert: function(table, sql, next) {
         table['query'](sql, function(err, result) {
@@ -36,19 +37,21 @@ module.exports = {
 
     // skeleton for update
     update: function(table, sql, next) {
-        table['query'](sql, function(err, result) {
-              if (err) {
-                  next(err, result);
-              }
-              else {
-                  if(!result){
-                      next('update failed', result);
-                  }
-                  else {
-                      next('success', result);
-                  }
-              }
+
+        table['query'](sql, function (err, result) {
+          if (err) {
+            next(err, result);
+          }
+          else {
+            if (!result) {
+              next('update failed', result);
+            }
+            else {
+              next('success', result);
+            }
+          }
         });
+
     },
 
     // skeleton for read
@@ -69,21 +72,30 @@ module.exports = {
     },
 
     insertLoginCredentials: function(email, password, id, next) {
-        var sqlInsertCredentials = 'INSERT INTO User (individual_id, email, password, email_confirm) VALUES (\'' + id + '\', \'' + email + '\', \'' + password + '\', \'' + 0 + '\');';
-        this.insert(User, sqlInsertCredentials, function (response, result){
+      var mysql      = require('mysql');
+        var sqlInsertCredentials = 'INSERT INTO User (?,?,?,?);';
+      var inserts = [id, email, password, 0]
+      sqlInsertCredentials = mysql.format(sqlInsertCredentials, inserts);
+      this.insert(User, sqlInsertCredentials, function (response, result){
             next(response, result);
         });
     },
 
     initializeName: function(firstName, lastName, individualId, next) {
-        var sqlInitializeName = 'INSERT INTO Name (first_name, last_name, individual_id) VALUES (\'' + firstName + '\', \'' + lastName + '\', ' + individualId + ');';
-        this.insert(Name, sqlInitializeName, function (response, result){
+      var mysql      = require('mysql');
+        var sqlInitializeName = 'INSERT INTO Name (first_name, last_name, individual_id) VALUES (?,?,?);';
+      var inserts = [firstName, lastName, individualId];
+      sqlInitializeName = mysql.format(sqlInitializeName, inserts);
+      this.insert(Name, sqlInitializeName, function (response, result){
             next(response, individualId);
         });
     },
 
     getLoginCredentials: function(email, next) {
-        var sqlGetCredentials = 'SELECT * FROM User WHERE email=\'' + email + '\';';
+      var mysql      = require('mysql');
+        var sqlGetCredentials = 'SELECT * FROM User WHERE email=?;';
+        var inserts = [email];
+      sqlGetCredentials = mysql.format(sqlGetCredentials, inserts);
         this.read(User, sqlGetCredentials, function(response, result) {
             next(response, result);
         });
@@ -106,27 +118,40 @@ module.exports = {
     },
 
     updateProfile: function(userData, next) {
-        var sqlUpdateProfile = 'UPDATE Individual SET date_of_birth=\'' + userData.dateOfBirth + '\', municipality_of_birth=\'' + userData.birthCity + '\', state_of_birth=\'' + userData.birthState + '\', country_of_birth=\'' + userData.birthCountry + '\', gender=\'' + userData.gender + '\', bio=\'' + userData.bio + '\' WHERE id=\'' + userData.id + '\';';
-        this.update(Individual, sqlUpdateProfile, function(response, result) {
+      var mysql      = require('mysql');
+      var sqlUpdateProfile = "UPDATE Individual SET date_of_birth=?, municipality_of_birth=?, state_of_birth=?, country_of_birth=?, gender=?, bio=? WHERE id=?";
+      var inserts = [userData.dateOfBirth, userData.birthCity, userData.birthState, userData.birthCountry, userData.gender, userData.bio, userData.id];
+      sqlUpdateProfile = mysql.format(sqlUpdateProfile, inserts);
+      this.update(Individual, sqlUpdateProfile, function(response, result) {
             next(response, result);
         });
     },
 
 	updateEmailVerified: function(email, next) {
-		var sqlUpdateEmailVerified = 'Update User SET email_confirm=NULL WHERE email=\'' + email + '\';';
-		this.update(User, sqlUpdateEmailVerified, function(response, result) {
+    var mysql      = require('mysql');
+		var sqlUpdateEmailVerified = 'Update User SET email_confirm=NULL WHERE email=?;';
+    var inserts = [email];
+    sqlUpdateEmailVerified = mysql.format(sqlUpdateEmailVerified, inserts);
+    this.update(User, sqlUpdateEmailVerified, function(response, result) {
 			next(response, result);
 		});
 	},
 
 	updatePassword: function(email, password, next) {
-		var sqlUpdatePassword = 'UPDATE User SET password=\'' + password + '\' WHERE email=\'' + email + '\';';
-		this.update(User, sqlUpdatePassword, function(response, result) {
+    var mysql      = require('mysql');
+		var sqlUpdatePassword = 'UPDATE User SET password=? WHERE email=?;';
+    var inserts = [password, email];
+    sqlUpdatePassword = mysql.format(sqlUpdatePassword, inserts);
+    this.update(User, sqlUpdatePassword, function(response, result) {
 			next(response, result);
 		});
+
 	},
   getUserInfo: function(individualId, next){
-    var sqlReadUserInfo = 'SELECT * FROM Individual INNER JOIN Name ON(Individual.id=Name.individual_id) WHERE Individual.id=\'' + individualId + '\';'
+    var mysql      = require('mysql');
+    var sqlReadUserInfo = 'SELECT * FROM Individual INNER JOIN Name ON(Individual.id=Name.individual_id) WHERE Individual.id=?;';
+    var inserts = [individualId];
+    sqlReadUserInfo = mysql.format(sqlReadUserInfo, inserts);
     this.read(Individual, sqlReadUserInfo, function(response, result) {
       next(response, result);
     });
