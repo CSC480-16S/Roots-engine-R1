@@ -71,22 +71,19 @@ module.exports = {
         });
     },
 
-    insertLoginCredentials: function(email, password, id, next) {
-      var mysql      = require('mysql');
-        var sqlInsertCredentials = 'INSERT INTO User (?,?,?,?);';
-      var inserts = [id, email, password, 0]
-      sqlInsertCredentials = mysql.format(sqlInsertCredentials, inserts);
-      this.insert(User, sqlInsertCredentials, function (response, result){
+    insertLoginCredentials: function(email, password, id, code, next) {
+        var sqlInsertCredentials = 'INSERT INTO User (individual_id, email, password, '
+	    + 'email_confirm, email_confirm_code) '
+	    + 'VALUES (\'' + id + '\', \'' + email + '\', \'' + password
+	    + '\', \'' + 0 + '\', \'' + code + '\');';
+        this.insert(User, sqlInsertCredentials, function (response, result){
             next(response, result);
         });
     },
 
     initializeName: function(firstName, lastName, individualId, next) {
-      var mysql      = require('mysql');
-        var sqlInitializeName = 'INSERT INTO Name (first_name, last_name, individual_id) VALUES (?,?,?);';
-      var inserts = [firstName, lastName, individualId];
-      sqlInitializeName = mysql.format(sqlInitializeName, inserts);
-      this.insert(Name, sqlInitializeName, function (response, result){
+        var sqlInitializeName = 'INSERT INTO Name (first_name, last_name, individual_id) VALUES (\'' + firstName + '\', \'' + lastName + '\', ' + individualId + ');';
+        this.insert(Name, sqlInitializeName, function (response, result){
             next(response, individualId);
         });
     },
@@ -155,5 +152,48 @@ module.exports = {
     this.read(Individual, sqlReadUserInfo, function(response, result) {
       next(response, result);
     });
-  }
+  },
+
+    getEmailFromCode: function(code, next){
+	var sqlGetEmail = 'SELECT email FROM User WHERE email_confirm_code=\''
+	    + code + '\';';
+	this.read(User, sqlGetEmail, function(response, result) {
+	    next(response, result);
+	});
+    },
+
+    getEmailFromPCode: function(code, next){
+	var sqlGetEmail = 'SELECT email FROM User WHERE password_reset=\''
+	    + code + '\';';
+	this.read(User, sqlGetEmail, function(response, result) {
+	    next(response, result);
+	});
+    },
+
+    updateNullifyPCode: function(code, next){
+	var sqlNullifyCode = 'UPDATE User SET password_reset=NULL WHERE ' +
+	    'password_reset=\'' + code + '\';';
+	this.update(User, sqlNullifyCode, function(response, result) {
+	    next(response, result);
+	});
+    },
+
+    getCodeFromEmail: function(email, next){
+	var sqlGetCode = 'SELECT email_confirm_code FROM User WHERE email=\''
+	    + email + '\';';
+	this.read(User, sqlGetCode, function(response, result) {
+	    next(response, result);
+	});
+    },
+
+    updatePasswordCode: function(email, code, next){
+	var sqlUpdateCode = 'UPDATE User SET password_reset=\'' +
+	    code +'\' WHERE email=\'' + email + '\';';
+	this.update(User, sqlUpdateCode, function(response, result) {
+	    next(response, result);
+	});
+    }
+
 };
+
+
