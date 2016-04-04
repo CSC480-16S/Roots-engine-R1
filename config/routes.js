@@ -49,6 +49,7 @@ module.exports.routes = {
   // tree controller, accessible only to authenticated users
   '/treeViewer': 'TreeController.viewTree', //renders the treeViewer.ejs
   '/populateTree': 'TreeController.populateTree', //loads json for tree
+  '/getRelations': 'TreeController.getRelations',
 
   // profile controller, accessible only to authenticated users
   '/profile': 'ProfileController.openProfile', //renders the personal_profile.ejs page
