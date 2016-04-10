@@ -1,39 +1,79 @@
 
 module.exports = {
-    signup: function(email, password, firstName, lastName, code, next) {
-        // check email/password length
-        // other checks as necessary
+    signup: function(email, password, passwordConfirm, encryptedPassword, firstName, lastName, code, next) {
         var id;
-        database.getLoginCredentials(email, function (responseExistingLogin, resultExistingLogin) {
-            if (responseExistingLogin === 'empty') {
-                database.initializeProfile(function(responseId, resultId){
-                    if (responseId === 'success') {
-                        id = resultId[0].id;
-                        database.insertLoginCredentials(email, password, id, code, function(responseInsertCredentials, resultInsertCredentials){
-                            if (responseInsertCredentials === 'success') {
-                                database.initializeName(firstName, lastName, id, function(responseName, resultName) {
-                                    if (responseName === 'success'){
-                                        next('success', true);
+        user.passwordCheck(password, passwordConfirm, function (responsePassword, resultPassword) {
+            if (responsePassword === 'success') {
+                user.nameCheck(firstName, lastName, function (responseName, resultName) {
+                    if (responseName === 'success') {
+                        database.getLoginCredentials(email, function (responseExistingLogin, resultExistingLogin) {
+                            if (responseExistingLogin === 'empty') {
+                                database.initializeProfile(function (responseId, resultId){
+                                    if (responseId === 'success') {
+                                        id = resultId[0].id;
+                                        database.insertLoginCredentials(email, encryptedPassword, id, code, function (responseInsertCredentials, resultInsertCredentials){
+                                            if (responseInsertCredentials === 'success') {
+                                                database.initializeName(firstName, lastName, id, function (responseName, resultName) {
+                                                    if (responseName === 'success'){
+                                                        next('success', true);
+                                                    }
+                                                    else {
+                                                        next('name insert failed', resultName);
+                                                    }
+                                                });
+                                            }
+                                            else {
+                                                next('credentials insert failed', resultInsertCredentials);
+                                            }
+                                        });
                                     }
                                     else {
-                                        next('name insert failed', resultName);
+                                        next('get id failed', resultId);
                                     }
                                 });
                             }
                             else {
-                                next('credentials insert failed', resultInsertCredentials);
+                                next('user exists', resultExistingLogin);
                             }
                         });
                     }
                     else {
-                        next('get id failed', resultId);
+                        next(responseName, resultName);
                     }
                 });
             }
             else {
-                next('user exists', resultExistingLogin);
+                next(responsePassword, resultPassword);
             }
         });
+    },
+
+    nameCheck(firstName, lastName, next){
+        if (firstName.length > 256) {
+            next('first name', false);
+        }
+        else if (lastName.length > 256) {
+            next('last name', false);
+        }
+        else {
+            next('success', true);
+        }
+    },
+
+    passwordCheck(password, passwordConfirm, next){
+        var pwregex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+        if(password.length < 8){
+            next('password length', false);
+        }
+        else if (password !== passwordConfirm) {
+            next('password match', false);
+        }
+        else if (!password.match(pwregex)) {
+            next('password content', false);
+        }
+        else {
+            next('success', true);
+        }
     },
 
     login: function(email, password, next) {
@@ -68,64 +108,71 @@ module.exports = {
     },
 
     confirmEmail: function(code, next) {
-	database.getEmailFromCode(code, function(response, result) {
-	    if(response === 'success' && result.length == 1) {
-		e = result[0].email;
-		database.getLoginCredentials(e, function(
-		    loginResponse, loginResult) {
-		    if(loginResponse === 'success') {
-			database.updateEmailVerified(e, function(
-			    insertResponse, insertResult) {
-			    if (insertResponse === 'success') {
-				next(insertResponse, insertResult);
-			    }
-			    else {
-				next('Email verification update failed',
-				     insertResult);
-			    }
-			});
-		    }
-		    else {
-			next('Email does not exist');
-		    }
-		});
-	    } else {
-		next('Invalid code');
-	    }
-	});
+	    database.getEmailFromCode(code, function(response, result) {
+	        if(response === 'success' && result.length == 1) {
+		        e = result[0].email;
+		        database.getLoginCredentials(e, function(loginResponse, loginResult) {
+		            if(loginResponse === 'success') {
+			            database.updateEmailVerified(e, function(insertResponse, insertResult) {
+			                if (insertResponse === 'success') {
+				                next(insertResponse, insertResult);
+			                }
+			                else {
+                                next('Email verification update failed', insertResult);
+                            }
+			            });
+		            }
+                    else {
+                        next('Email does not exist');
+                    }
+		        });
+	        }
+	        else {
+                next('Invalid code');
+            }
+	    });
     },
 
-    changePassword: function(code, encryptedPassword, next) {
-	database.getEmailFromPCode(code, function(eResponse, eResult){
-	    if(eResponse === 'success' && eResult.length == 1) {
-		var email = eResult[0].email;
-		database.getLoginCredentials(email, function(loginResponse, loginResult) {
-		    if(loginResponse === 'success') {
-			database.updatePassword(email, encryptedPassword, function(updateResponse, result) {
-			    if(updateResponse === 'success') {
-				next(updateResponse, result);
-			    }
-			    else {
-				next('Update password failed', result);
-			    }
-			});
-		    } else {
-			next('Email does not exist', loginResult);
-		    }
-		});
-		database.updateNullifyPCode(code, function(nResponse, nResult) {
-		    if(nResponse !== 'success') {
-			console.log('Unable to set ' + email + '\'s reset_password'
-				    + ' field to NULL. result: ' + nResult);
-		    }
-		});
-	    } else {
-		next('Invalid code', eResult);
-	    }
+    changePassword: function(code, nPassword, nPassword2, encryptedPassword, next) {
+        user.passwordCheck(nPassword, nPassword2, function (responsePassword, resultPassword) {
+            if (responsePassword === 'success') {
+                database.getEmailFromPCode(code, function(eResponse, eResult){
+                    if(eResponse === 'success' && eResult.length == 1) {
+                        var email = eResult[0].email;
+                        database.getLoginCredentials(email, function(loginResponse, loginResult) {
+                            if(loginResponse === 'success') {
+                                database.updatePassword(email, encryptedPassword, function(updateResponse, result) {
+                                    if(updateResponse === 'success') {
+                                        next(updateResponse, result);
+                                    }
+                                    else {
+                                        next('Update password failed', result);
+                                    }
+                                });
+                            }
+                            else {
+                                next('Email does not exist', loginResult);
+                            }
+                        });
+                        database.updateNullifyPCode(code, function(nResponse, nResult) {
+                            if(nResponse !== 'success') {
+                                console.log('Unable to set ' + email + '\'s reset_password' + ' field to NULL. result: ' + nResult);
+                            }
+                        });
+                    }
+                    else {
+                        next('Invalid code', eResult);
+                    }
+                });
+            }
+            else {
+                next(responsePassword, resultPassword);
+            }
         });
     },
+
     upload: function(file, next) {
-      file.upload(next);
+        file.upload(next);
     }
 
 };

@@ -90,41 +90,52 @@ module.exports = {
         send.action = '/userSignup';
         send.action2 = '/userLogin';
         send.error = '';
-	send.q = code;
-        if (nPassword !== nPassword2) {
-            send.error = 'Passwords are different';
-            res.view('password_reset', send);
-        
-        } else {
-            user.changePassword(code, encryptedPassword, function(response, result) {
-                switch (response) {
-                    case 'Email does not exist':
-                        send.error = 'You have not signed up yet';
-                        send.login = false;
-                        res.view('login', send);
-                        break;
-                    case 'Update password failed':
-                        send.error = 'Unable to update your password due to an error on our side. Please request a new link and try again.';
-                        send.login = true;
-                        res.view('login', send);
-                        break;
-		    case 'Invalid code':
-		        send.error = 'Your password reset link is not valid. Please request a new one and try again.'
-		        send.login = true;
-		        res.view('login', send);
-		        break;
-                    case 'success':
-                        send.error = 'Your password has changed, please log in.';
-                        send.login = true;
-                        res.view('login', send);
-                        break;
-                    default:
-                    res.redirect('/error?location=LOGIN_CONTROLLER/CHANGE_PASSWORD&response='
-				 + response + '&result=' + result);
-                        break;
-                }
-            });
-        }
+	    send.q = code;
+        user.changePassword(code, nPassword, nPassword2, encryptedPassword, function(response, result) {
+            switch (response) {
+                case 'password length':
+                    send.error = 'Password must contain a minimum of 8 characters.';
+                    send.username = email;
+                    send.login = false;
+                    res.view('login', send);
+                    break;
+                case 'password match':
+                    send.error = 'Passwords do not match.';
+                    send.username = email;
+                    send.login = false;
+                    res.view('login', send);
+                    break;
+                case 'password content':
+                    send.error = 'Password must be between 8 and 128 characters, with one each of a lower and upper case character, a special character and a number.';
+                    send.username = email;
+                    send.login = false;
+                    res.view('login', send);
+                    break;
+                case 'Email does not exist':
+                    send.error = 'You have not signed up yet';
+                    send.login = false;
+                    res.view('login', send);
+                    break;
+                case 'Update password failed':
+                    send.error = 'Unable to update your password due to an error on our side. Please request a new link and try again.';
+                    send.login = true;
+                    res.view('login', send);
+                    break;
+                case 'Invalid code':
+                    send.error = 'Your password reset link is not valid. Please request a new one and try again.'
+                    send.login = true;
+                    res.view('login', send);
+                    break;
+                case 'success':
+                    send.error = 'Your password has changed, please log in.';
+                    send.login = true;
+                    res.view('login', send);
+                    break;
+                default:
+                    res.redirect('/error?location=LOGIN_CONTROLLER/CHANGE_PASSWORD&response=' + response + '&result=' + result);
+                    break;
+            }
+        });
     },
 
     /*inputs: email-query string from url specifying the user to send to
@@ -248,13 +259,7 @@ module.exports = {
                     send.username = email;
                     res.view('login', send);
                     break;
-                case 'fields too long?':
-                    send.error = 'Your username and password must be less than 32 characters?';
-                    send.login = true;
-                    send.username = email;
-                    res.view('login', send);
-                    break;
-            case 'email not verified':
+                case 'email not verified':
                     send.login = true;
                     res.redirect('/emailResent?email=' + email);
                     break;
@@ -280,102 +285,116 @@ module.exports = {
     page-renders a page telling the user to check their inbox
      */
     userSignup: function(req, res) {
-	/*Generates a random id code for email confirmation.
-	Is only pseudorandom but getting them from random.org
-	would require another callback and look bad.*/
-	var code = '';
-	var abc = 'abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	for(var i = 0; i < 15; i++) {
-	    code += abc.charAt(Math.floor(Math.random() * abc.length));
-	}
-	var params = req.params.all(),
-              email = params.email,
-              password = params.password,
-              passwordConfirm = params.passwordconfirm,
-              firstName = params.firstName,
-              lastName = params.lastName,
-              send = {},
-              cipher = crypto.createCipher('aes192', 'a password'),
-              encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex'),
-              subject = 'Email Verification Link',
-              txt = 'Link: ',
-              htm = 'localhost:1337/emailConfirm?q=' + code;
+        /*Generates a random id code for email confirmation.
+        Is only pseudorandom but getting them from random.org
+        would require another callback and look bad.*/
+	    var code = '',
+	        abc = 'abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	    for(var i = 0; i < 15; i++) {
+	        code += abc.charAt(Math.floor(Math.random() * abc.length));
+	    }
+	    var params = req.params.all(),
+            email = params.email,
+            password = params.password,
+            passwordConfirm = params.passwordconfirm,
+            firstName = params.firstName,
+            lastName = params.lastName,
+            send = {},
+            cipher = crypto.createCipher('aes192', 'a password'),
+            encryptedPassword = cipher.update(password, 'utf8', 'hex') + cipher.final('hex'),
+            subject = 'Email Verification Link',
+            txt = 'Link: ',
+            htm = 'localhost:1337/emailConfirm?q=' + code;
+            send.action = '/userSignup';
+            send.action2 = '/userLogin';
+            send.error = '';
+        user.signup(email, password, passwordConfirm, encryptedPassword, firstName, lastName, code, function (response, result) {
+            switch(response) {
+                case 'first name':
+                    send.error = 'First name is too long.';
+                    send.username = email;
+                    send.login = false;
+                    res.view('login', send);
+                    break;
+                case 'last name':
+                    send.error = 'Last name is too long.';
+                    send.username = email;
+                    send.login = false;
+                    res.view('login', send);
+                    break;
+                case 'password length':
+                    send.error = 'Password must contain a minimum of 8 characters.';
+                    send.username = email;
+                    send.login = false;
+                    res.view('login', send);
+                    break;
+                case 'password match':
+                    send.error = 'Passwords do not match.';
+                    send.username = email;
+                    send.login = false;
+                    res.view('login', send);
+                    break;
+                case 'password content':
+                    send.error = 'Password must be between 8 and 128 characters, with one each of a lower and upper case character, a special character and a number.';
+                    send.username = email;
+                    send.login = false;
+                    res.view('login', send);
+                    break;
+                case 'user exists':
+                    send.error = 'This user already exists.';
+                    send.username = email;
+                    send.login = false;
+                    res.view('login', send);
+                    break;
+                case 'name insert failed':
+                    send.error = 'Unable to insert name.';
+                    send.login = false;
+                    send.username = email;
+                    res.view('login', send);
+                    break;
+                case 'credentials insert failed':
+                    send.error = 'Unable to make credentials.';
+                    send.username = email;
+                    send.login = false;
+                    res.view('login', send);
+                    break;
+                case 'get id failed':
+                    send.error = 'Unable to get individual id.';
+                    send.username = email;
+                    send.login = false;
+                    res.view('login', send);
+                    break;
+                case 'success':
+                    send.login = false;
+                    mailer.send(email, subject, txt, htm, function(mailResponse, mailResult){
+                        if(mailResponse === 'success'){
+                            send.error = 'Please confirm your email at ' + email + ' to login.';
+                            res.view('login', send);
+                        }
+                        else {
+                            res.redirect('/error?location=LOGIN_CONTROLLER/USER_SIGNUP_EMAIL&response=' + mailResponse + '&result=' + mailResult);
+                        }
+                    });
+                    break;
+                default:
+                    res.redirect('/error?location=LOGIN_CONTROLLER/USER_SIGNUP&response=' + response + '&result=' + result);
+                    break;
+            }
+        });
+    },
 
-          if (password === passwordConfirm) {
-              send.action = '/userSignup';
-              send.action2 = '/userLogin';
-              send.error = '';
-              user.signup(email, encryptedPassword, firstName, lastName, code, function (response, result) {
-                    switch(response) {
-                        case 'user exists':
-                            send.error = 'This username is already in use.';
-                            send.username = email;
-                            send.login = false;
-                            res.view('login', send);
-                            break;
-                        case 'fields too long?':
-                            send.error = 'Your username and password must be less than 32 characters?';
-                            send.username = email;
-                            send.login = false;
-                            res.view('login', send);
-                            break;
-                        case 'name insert failed':
-                            send.error = 'Unable to insert name.';
-                            send.login = false;
-                            send.username = email;
-                            res.view('login', send);
-                            break;
-                        case 'credentials insert failed':
-                            send.error = 'Unable to make credentials.';
-                            send.username = email;
-                            send.login = false;
-                            res.view('login', send);
-                            break;
-                        case 'get id failed':
-                            send.error = 'Unable to get individual id.';
-                            send.username = email;
-                            send.login = false;
-                            res.view('login', send);
-                            break;
-                        case 'success':
-                            send.login = false;
-                            mailer.send(email, subject, txt, htm, function(mailResponse, mailResult){
-                                if(mailResponse === 'success'){
-                                    send.error = 'Please confirm your email at ' + email + ' to login.';
-                                    res.view('login', send);
-                                }
-                                else {
-                                    res.redirect('/error?location=LOGIN_CONTROLLER/USER_SIGNUP_EMAIL&response='
-						 + mailResponse + '&result=' + mailResult);
-                                }
-                            });
-                            break;
-                        default:
-                            res.redirect('/error?location=LOGIN_CONTROLLER/USER_SIGNUP&response=' + response + '&result=' + result);
-                            break;
-                    }
-              });
-          }
-          else {
-              send.error = 'Passwords do not match.';
-              send.username = email;
-              send.login = false;
-              res.view('login', send);
-          }
-      },
-
-      /*input:session-the session associated with the user's browser
-      output-session.authentication-this value should now be false so the user can no longer access restricted pages,
-      page-renders the login page
-       */
-      logout: function(req,res){
-          req.session.destroy(function(err) {
-              var send = {};
-              send.action = '/userSignup';
-              send.action2 = '/userLogin';
-              send.error = '';
-              res.view('login', send);
-          });
-      }
-  };
+    /*input:session-the session associated with the user's browser
+    output-session.authentication-this value should now be false so the user can no longer access restricted pages,
+    page-renders the login page
+    */
+    logout: function(req,res){
+        req.session.destroy(function(err) {
+            var send = {};
+            send.action = '/userSignup';
+            send.action2 = '/userLogin';
+            send.error = '';
+            res.view('login', send);
+        });
+    }
+};
 

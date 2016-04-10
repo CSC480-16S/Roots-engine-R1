@@ -191,7 +191,7 @@ module.exports = {
         var mysql = require('mysql'),
 	        sqlGetCode = 'SELECT email_confirm_code FROM User WHERE email=?;',
             inserts = [email],
-            sqlGetCode = mysql.format(sqlGetCode, inserts),
+            sqlGetCode = mysql.format(sqlGetCode, inserts);
 	    this.read(User, sqlGetCode, function(response, result) {
 	        next(response, result);
 	    });
