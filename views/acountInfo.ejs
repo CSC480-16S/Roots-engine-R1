@@ -82,34 +82,7 @@
                 <div class="field-wrap-temp">
                     <p>Bio: {{x.bio}}</p>
                 </div>
-
-                <div class="newAccountInfo">
-                    <label><span class="req"></span></label>
-                    <input name='birthCity' type="text" maxlength="64" required autocomplete="off" value="{{x.municipality_of_birth}}"
-                           placeholder="Birth City"/>
-                </div>
-                <div class="newAccountInfo">
-                    <label><span class="req"></span></label>
-                    <input name='birthCountry' type="text" maxlength="64" required autocomplete="off" value="{{x.country_of_birth}}"
-                           placeholder="Birth Country"/>
-                </div>
-                <div class="newAccountInfo">
-                    <label><span class="req"></span></label>
-                    <input name='birthCity' type="text" maxlength="64" required autocomplete="off" value="{{x.date_of_birth}}"
-                           placeholder="Birthday"/>
-                </div>
-                <div class="newAccountInfo">
-                    <textarea id="personalbio" maxlength="5000" class="textareaclass" rows="4" value="{{x.bio}}" placeholder="Bio"></textarea>
-                    <div align="right" id="num">5000 characters remaining</div>
-                </div>
-                <script>
-                    function counter(txtarea, l){
-                        var len = $(txtarea).val().length;
-                        if (len <= l) $('#num').text((l - len) + ' characters remaining');
-                    }
-                </script>
             </div>
-
         </div>
     </div>
 </div>
