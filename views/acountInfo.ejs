@@ -96,7 +96,7 @@
     // Node is assumed to be the user
     var app = angular.module("accountInfo",[]);
     app.controller('accountInfoController',function($scope, $http){
-        $http.get("/populateTree").then(function (response){
+        $http.get("/getProfileInfo").then(function (response){
             $scope.node = response.data.user;
         });
     });
