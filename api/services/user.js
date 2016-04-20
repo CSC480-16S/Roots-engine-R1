@@ -175,9 +175,35 @@ module.exports = {
       file.upload(next);
     },
   map: {},
-    getAllParents: function(id){
+    getAllParents: function(id, array, next){
+      var parents = {};
       database.getParents(id, function(getParentsResponse, getParentsResult) {
-
+          if (getParentsResult && getParentsResult[0] && getParentsResult[1]) {
+              parents[id] = getParentsResult;
+              array.push(parents);
+              user.getAllParents(getParentsResult[0].individual_id, array, function(response, result){
+                  user.getAllParents(getParentsResult[1].individual_id, result, function(response2, result2){
+                      next(response2, result2);
+                  });
+              });
+          }
+          else if (getParentsResult && getParentsResult[0]) {
+            parents[id] = getParentsResult;
+            array.push(parents);
+            user.getAllParents(getParentsResult[0].individual_id, array, function(response, result){
+                  next(response, result);
+              });
+          }
+          else if (getParentsResult && getParentsResult[1]) {
+            parents[id] = getParentsResult;
+            array.push(parents);
+            user.getAllParents(getParentsResult[1].individual_id, array, function(response, result){
+                next(response, result);
+              });
+          }
+          else {
+             next ("done", array);
+          }
       });
         /*//var i = 0;
         if(getParentsResult[0] != null){
@@ -211,14 +237,6 @@ module.exports = {
         //}
         next(getParentsResult);
       });*/
-    },
-  getAllParents2: function(id, next){
-    var i = 0;
-    getAllParents(i, id, function(response, getParentsResult) {
-
-      next(response, getParentsResult);
-
-    })
-  }
+    }
 
 };

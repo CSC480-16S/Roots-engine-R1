@@ -222,7 +222,7 @@ module.exports = {
             sqlGetParents = "SELECT * FROM Individual INNER JOIN Name ON(Individual.id=Name.individual_id) WHERE (Individual.id) IN (SELECT parent_id FROM Parent_of WHERE child_id = ?);",
             inserts = [id],
             sqlGetParents = mysql.format(sqlGetParents, inserts);
-        this.update(Individual, sqlGetParents, function(response,result){
+        this.read(Individual, sqlGetParents, function(response,result){
             next(response,result);
         });
     },

@@ -95,10 +95,9 @@
     },
     getAllParents: function(req, res){
       database.getUserInfo(req.session.individualId, function(getInfoResponse, getInfoResult) {
-        user.getAllParents(521, function(getAllParentsResult){
-          getInfoResult.push({parents: getAllParentsResult});
-          console.log(user.map);
-          return res.json({user:getInfoResult});
+        var array = [];
+        user.getAllParents(5, array, function(response, result){
+          return res.json({user:result});
         });
       });
     },
