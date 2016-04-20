@@ -95,19 +95,20 @@ module.exports = {
             switch (response) {
                 case 'password length':
                     send.error = 'Password must contain a minimum of 8 characters.';
-                    send.username = email;
+                    //send.username = email;
                     send.login = false;
                     res.view('login', send);
                     break;
                 case 'password match':
                     send.error = 'Passwords do not match.';
-                    send.username = email;
+                    //send.username = email;
                     send.login = false;
                     res.view('login', send);
                     break;
                 case 'password content':
-                    send.error = 'Password must be between 8 and 128 characters, with one each of a lower and upper case character, a special character and a number.';
-                    send.username = email;
+                send.error = 'Password must be between 8 and 128 characters, with one each of a lower and upper case character, a special character and a number.';
+		
+                    //send.username = email;
                     send.login = false;
                     res.view('login', send);
                     break;
@@ -195,8 +196,6 @@ module.exports = {
      page-renders the login page
      */
     resendEmail: function(req, res) {
-	//TODO: get their code and email it to them,
-	//      or error out if they are where they shouldn't be.
         var send = {},
             email = req.param('email'),
             subject = 'Email Verification Link',
