@@ -1,0 +1,30 @@
+[
+  {
+    "location": "United States",
+    "relatives": 5
+  },
+  {
+    "location": "Canada",
+    "relatives": 4
+  },
+  {
+    "location": "India",
+    "relatives": 3
+  },
+  {
+    "location": "Russia",
+    "relatives": 10
+  },
+  {
+    "location": "Egypt",
+    "relatives": 30
+  },
+  {
+    "location": "Mexico",
+    "relatives": 25
+  },
+  {
+    "location": "South Korea",
+    "relatives": 15
+  }
+]

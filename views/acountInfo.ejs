@@ -17,18 +17,12 @@
         <img id="logo-img" src="images/logo.png">
     </a>
 
-<!--
-    <nav>
-        <ul>
-            <li><a href="/treeViewer">Tree Viewer</a></li>
-        </ul>
-    </nav>
--->
-
     <div class="dropdown">
         <input class="hamburger" type="image" src="images/hamburger.png" onclick="myFunction()">
         <div class="dropdown-content" id="Dropdown">
-            <a href="/treeViewer">Tree Viewer</a>
+            <a href="/treeViewer">Family Tree</a>
+            <a href="map.ejs">Ancestory Distribution</a>
+            <a href="parliament.ejs">Parliament Tree</a>
             <a href="mailto:rootsspammer@gmail.com">Contact Us</a>
             <a href="/about">About</a>
             <a href="/logout">Log Out</a>
@@ -54,17 +48,14 @@
     </script>
 </header>
 
-
 <div class="aboutform" ng-controller="accountInfoController">
     <div id="Profile Info" ng-repeat="x in node">
 
-
-        <h1>{{x.first_name}} {{x.last_name}}</h1> <!-- populate with name -->
+        <h1>{{x.first_name}} {{x.last_name}}</h1>
         <div class="content">
 
             <div class="leftForm">
                 <div class="profileoptions">
-                    <!--<img ng-src="http://myroots.xyz/images/{{x.image}}" alt="Profile Image" />-->
                     <img ng-src="http://i.imgur.com/{{x.image}}" alt="Profile Image" />
                     <button> Edit Profile</button>
                 </div>

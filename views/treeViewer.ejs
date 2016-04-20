@@ -8,29 +8,39 @@
     <link rel="stylesheet" href="styles/normalize.css">
     <link rel="stylesheet" href="styles/treeStyles.css">
     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="../assets/js/lodash.min.js"></script>
-    <script src="../assets/js/dTree.min.js"></script>
+    <script src="js/lodash.min.js"></script>
+    <script src="dTree.min.js"></script>
 
     <style>
+        svg {
+            font: 10px sans-serif;
+        }
         .linage {
             fill: none;
-            stroke: black;
+            stroke: #000;
         }
-
         .marriage {
             fill: none;
             stroke: black;
         }
-
-        .node {
+        .man {
             background-color: lightblue;
             border-style: solid;
             border-width: 1px;
         }
-
-        .nodeText {
-            font: 10px sans-serif;
+        .woman {
+            background-color: pink;
+            border-style: solid;
+            border-width: 1px;
         }
+        .emphasis{
+            font-style: italic;
+        }
+        p {
+            padding:0;
+            margin:0;
+        }
+
     </style>
 
 </head>
@@ -41,28 +51,12 @@
         <img id="logo-img" src="images/logo.png">
     </a>
 
-<!--
-    <div class="search">
-        <form>
-            <input type="search" name="treeSearch" placeholder="Search..." value={{treeSearch}}>
-        </form>
-    </div>
-
-    <nav>
-        <ul>
-            <li><a href="/acountInfo">Account Info</a></li>
-        </ul>
-    </nav>
--->
-
     <div class="dropdown">
-        <button onclick ="myFunction()"  class="hamburger hamburger--spring">
-            <div class="hamburger-box">
-                <div class="hamburger-inner"></div>
-            </div>
-        </button>
+        <input class="hamburger" type="image" src="images/hamburger.png" onclick="myFunction()">
         <div class="dropdown-content" id="Dropdown">
             <a href="/acountInfo">Account Info</a>
+            <a href="map.ejs">Ancestory Distribution</a>
+            <a href="/">Parliament Tree</a>
             <a href="mailto:rootsspammer@gmail.com">Contact Us</a>
             <a href="/about">About</a>
             <a href="/logout">Log Out</a>
@@ -88,14 +82,16 @@
     </script>
 </header>
 
-<div class="window">
-    <div class="sidebar">
+<div class="window" ng-controller="nodeTreeController">
+    <div class="sidebar" ng-repeat="x in node">
         <div id="Profile Info">
 
-            <figure class="profilePhoto"></figure>
+            <figure class="profilePhoto">
+                <img ng-src="http://i.imgur.com/{{x.image}}" alt="{{x.first_name}} {{x.last_name}}">
+            </figure>
 
-            <form action="/updateProfile" method="post" ng-controller="nodeTreeController">
-                <div ng-repeat="x in node">
+            <form action="/updateProfile" method="post">
+                <div>
                     <div>
                         <label>Name: </label>
                         <p>{{x.first_name}} {{x.last_name}}</p>
@@ -108,12 +104,18 @@
                         <label>Date of Birth: </label>
                         <p>{{x.date_of_birth}}</p>
                     </div>
-
+                    <div ng-hide="x.date_of_death == null">
+                        <label>Date of Death: </label>
+                        <p>{{x.date_of_death}}</p>
+                    </div>
                     <div>
                         <label>Place of Birth: </label>
-                        <p>{{x.municipality_of_birth}}, {{x.state_of_birth}}</p>
+                        <p>{{x.municipality_of_birth}}, {{x.state_of_birth}}, {{x.country_of_birth}}</p>
                     </div>
-
+                    <div ng-hide="x.country_of_death == null">
+                        <label>Place of Death: </label>
+                        <p>{{x.municipality_of_death}}, {{x.state_of_death}}, {{x.country_of_death}}</p>
+                    </div>
                     <div>
                         <label>Bio: </label>
                         <p>{{x.bio}}</p>
@@ -123,40 +125,33 @@
                 <input class="profileButton" type="image" src="images/AddIcon.png" alt="Add">
                 <input class="profileButton" type="image" src="images/EditIcon.png" alt="Edit">
                 <input class="profileButton" type="image" src="images/DeleteIcon.png" alt="Delete">
+                <a href="addPerson.ejs">add person</a>
             </form>
         </div>
     </div>
 
-    <div class="tree_node" ng-controller="nodeProfileController">
-        <img class="" src="images/potter.jpg">
-        <p> {{node.firstName}} {{node.lastName}} </p>
-        <p> {{node.dateOfBirth}} {{node.death}} </p>
-    </div>
-
     <div id="graph"></div>
     <script>
+        //will set the width and height of the container to be 70% and 50% respectively of the viewport.
+        var viewPortWidth = (Math.max(document.documentElement.clientWidth, window.innerWidth || 0)-275)*.7;
+        var wiewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)*.5;
+
         treeJson = d3.json("data.json", function (error, treeData) {
-            dTree.init(treeData, {});
+            dTree.init(treeData, {
+                        width: viewPortWidth,
+                        height: wiewPortHeight
+                    }
+            );
         });
     </script>
 
     <div id="map_toggle">
-        <a href="/" class="">
-            <img class="map_img" src="images/AddIcon.png">
+        <a href="/map">
+            <img class="map_img" src="images/heatmapicon.png" >
         </a>
-    </div>
-
-    <div class="treeWindow">
-        <!--<p>-->
-        <!--<svg ng-attr-height="{{graph.height}}" ng-attr-widgth={{graph.width}}">-->
-        <!--<g>-->
-        <!--<rect ng-repeat="rect in node"-->
-        <!--ng-attr-rx="{{rectangle.x}}"-->
-        <!--ng-attr-ry="{{rectangle.y}}">-->
-        <!--<text>{{node.firstName}} {{node.middleName}} {{node.lastName}}</text>-->
-        <!--</rect>-->
-        <!--</g>-->
-        <!--</p>-->
+        <a href="/parliament">
+            <img class="map_img" src="images/parliamenticon.png" >
+        </a>
     </div>
 </div>
 
@@ -167,28 +162,7 @@
 <script>
 
     //Here is the controller that will display information of the node profile
-    // Node is assumed to be the node that is selected
-    // NODE IS A PLACEHOLDER, CHANGE TO THE VALUE NEEDED WITHIN THE MODULE FOR THE APP
-    //
     var app = angular.module("treeViewer",[]);
-    app.controller("nodeProfileController",function($scope){
-        $scope.node = {};
-        $scope.node.firstName = "John";
-        $scope.node.middleName = "";
-        $scope.node.lastName = "Doe";
-        $scope.node.father = "";
-        $scope.node.mother = "";
-        $scope.node.dateOfBirth = "2/1/1990";
-        $scope.node.death = "";
-        $scope.node.gender = "Male";
-        $scope.node.birthLocation = "";
-        $scope.node.birthCity = "New York";
-        $scope.node.birthState = "New York";
-        $scope.node.deathLocation = "";
-        $scope.node.bio = "He lived and then he died.";
-        $scope.node.children = [""];
-    });
-
     app.controller('nodeTreeController',function($scope, $http){
         $http.get("/populateTree").then(function (response){
             $scope.node = response.data.user;

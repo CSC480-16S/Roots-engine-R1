@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Map</title>
+    <link href='https://fonts.googleapis.com/css?family=Andada' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:500italic,300' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/treeStyles.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+<header>
+    <a href="/" class="header-logo">
+        <img id="logo-img" src="images/logo.png">
+    </a>
+
+    <div class="dropdown">
+        <input class="hamburger" type="image" src="images/hamburger.png" onclick="myFunction()">
+        <a href="/acountInfo">Account Info</a>
+        <a href="/treeViewer">Family Tree</a>
+        <a href="parliament.ejs">Parliament Tree</a>
+        <a href="mailto:rootsspammer@gmail.com">Contact Us</a>
+        <a href="/about">About</a>
+        <a href="/logout">Log Out</a>
+        </div>
+    </div>
+
+    <script>
+        function myFunction() {
+            document.getElementById("Dropdown").classList.toggle("show");
+        }
+        window.onclick = function (e) {
+            if (!e.target.matches('.hamburger')) {
+
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var d = 0; d < dropdowns.length; d++) {
+                    var openDropdown = dropdowns[d];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
+</header>
+
+
+<div class="window">
+    <div id="cmap"></div>
+</div>
+
+<div id="map_toggle">
+    <a href="login.html">
+        <img class="map_img" src="images/parliamenticon.png" >
+    </a>
+    <a href="treeViewer.html" >
+        <img class="map_img" src="images/treeicon.png">
+    </a>
+</div>
+
+<script>
+    Plotly.d3.json("package.json", function(err, rows){
+        function unpack(rows, key) {
+            return rows.map(function(row) { return row[key]; });
+        }
+        console.log(unpack(rows, 'postal'));
+        var data = [{
+            type: 'choropleth',
+            locationmode: 'country names',
+            locations: unpack(rows, 'location'),
+            z: unpack(rows, 'relatives'),
+            text: unpack(rows, 'location'),
+            autocolorscale: false,
+            colorscale: [
+                [0, 'rgb(222, 237, 224)'], [0.2, 'rgb(173, 210, 177)'],
+                [0.4, 'rgb(138, 192, 143)'], [0.6, 'rgb(89, 166, 97)'],
+                [0.8, 'rgb(71, 133, 78)'], [1, 'rgb(54, 99, 59)']
+            ],
+            colorbar:{
+                title: 'Number of Ancestors'
+            }
+
+        }];
+
+        var layout = {
+            title: 'Ancestors Location',
+            geo: {
+
+                projection: {
+                    type: 'robinson'
+                }
+            }
+        };
+        Plotly.plot(cmap, data, layout, {showLink: false});
+    });
+</script>
+
+</body>
+</html>

@@ -146,10 +146,12 @@ header {
 #map_toggle {
   position: fixed;
   bottom: 0;
-  right: 0; }
+  right: 0;
+  padding: 14px 10px;
+}
 
 .map_img {
-  width: 20%;
+  width: 41%;
   float: right;
   margin: 10px; }
 
