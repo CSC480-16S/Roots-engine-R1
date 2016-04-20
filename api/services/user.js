@@ -65,10 +65,13 @@ module.exports = {
         if(password.length < 8){
             next('password length', false);
         }
+        if(password.length > 128){
+            next('password length', false);
+        }
         else if (password !== passwordConfirm) {
             next('password match', false);
         }
-        else if (!password.match(pwregex)) {
+        else if (!pwregex.test(password)) {
             next('password content', false);
         }
         else {
