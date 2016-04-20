@@ -245,6 +245,15 @@ module.exports = {
         this.update(Individual, sqlGetSpouses, function(response, result){
             next(response,result);
         });
+    },
+    checkProfile: function(id, next){
+      var mysql = require('mysql'),
+      value = "SELECT * FROM Individual Where id = ? AND gender IS NOT NULL AND date_of_birth IS NOT NULL AND municipality_of_birth IS NOT NULL AND country_of_birth IS NOT NULL";
+      inserts = [id];
+      value = mysql.format(value, inserts);
+      this.read(Individual, value, function(response, result){
+        next(response,result);
+      })
     }
 };
 

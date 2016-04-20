@@ -70,7 +70,7 @@
     getRelations: function(req,res){
       var send = {};
       send.error = '';
-      id = 22
+      id = 22;
       database.getUserInfo(req.session.individualId, function(getInfoResponse, getInfoResult) {
         database.getSiblings(id, function(getSiblingsResponse, getSiblingsResult) {
           database.getParents(id,function(getParentsResponse, getParentsResult){
@@ -92,6 +92,53 @@
           });
         });
       });
+    },
+    getAllParents: function(req, res){
+      database.getUserInfo(req.session.individualId, function(getInfoResponse, getInfoResult) {
+        user.getAllParents(521, function(getAllParentsResult){
+          getInfoResult.push({parents: getAllParentsResult});
+          console.log(user.map);
+          return res.json({user:getInfoResult});
+        });
+      });
+    },
+    viewMap: function(req,res){
+      var send = {};
+      res.view('map', send);
+    },
+    getMapData: function(req,res){
+      res.json([{
+          "location": "United States",
+          "relatives": 5
+        },
+        {
+          "location": "Canada",
+          "relatives": 4
+        },
+        {
+          "location": "India",
+          "relatives": 3
+        },
+        {
+          "location": "Russia",
+          "relatives": 10
+        },
+        {
+          "location": "Egypt",
+          "relatives": 30
+        },
+        {
+          "location": "Mexico",
+          "relatives": 25
+        },
+        {
+          "location": "South Korea",
+          "relatives": 15
+        }]);
+    },
+    viewParliament: function(req, res){
+      var send = {};
+      res.view('parliament',send);
     }
 
   };

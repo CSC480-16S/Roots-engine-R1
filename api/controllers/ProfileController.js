@@ -70,7 +70,18 @@
     renderAccountInfo: function(req, res) {
       var send = {};
       send.error = '';
-      res.view('accountinfo', send);
+      res.view('acountinfo', send);
+    },
+    getUserProfile: function(req, res) {
+      database.getUserInfo(req.session.individualId, function(getInfoResponse, getInfoResult) {
+        var text = "";
+        var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for( var i=0; i < 5; i++ )
+          text += possible.charAt(Math.floor(Math.random() * possible.length));
+        getInfoResult[0].image = text + ".jpg";
+        res.json({user: getInfoResult});
+      });
     }
   };
 

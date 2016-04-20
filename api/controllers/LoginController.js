@@ -28,9 +28,9 @@ module.exports = {
     },
 
     /*inputs: email-query string from url specifying the user to confirm
-     outputs: error-message for a successful email confirmation, or 
+     outputs: error-message for a successful email confirmation, or
      unsuccessful, pages-renders login page,
-     login-flag that will be used by gui to determine which tab of their 
+     login-flag that will be used by gui to determine which tab of their
      login box to use
       */
     confirmEmail: function(req, res) {
@@ -175,14 +175,14 @@ module.exports = {
 					     'SEND_RESET_PASSWORD_EMAIL&response='
 					     +mailResponse+'&result='+mailResult);
 			    }
-			    
+
 			});
 		    } else {
 			res.redirect('/error?location=LOGIN_CONTROLLER/' +
 				     'SEND_RESET_PASSWORD_EMAIL&RESPONSE='
 				     + codeResponse + '&result=' + codeResult);
 		    }
-		});			    
+		});
             } else {
                 send.error = 'You have not signed up yet.';
                 res.view('login', send);
@@ -267,7 +267,14 @@ module.exports = {
                     req.session.authenticated = true;
                     req.session.email = email;
                     req.session.individualId = result;
-                    res.redirect('/treeViewer');
+                    database.checkProfile(req.session.individualId, function(checkResponse, checkResult){
+                      if(checkResult.length != 0) {
+                        res.redirect('/treeViewer');
+                      } else{
+                        res.redirect('/profile');
+                      }
+                    });
+
                     break;
                 default:
                 res.redirect('/error?location=LOGIN_CONTROLLER/'+

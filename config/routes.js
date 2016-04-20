@@ -50,12 +50,18 @@ module.exports.routes = {
   '/treeViewer': 'TreeController.viewTree', //renders the treeViewer.ejs
   '/populateTree': 'TreeController.populateTree', //loads json for tree
   '/getRelations': 'TreeController.getRelations',
+  '/getAllParents': 'TreeController.getAllParents',
+  '/map': 'TreeController.viewMap',
+  '/mapData': 'TreeController.getMapData',
+  '/parliament': 'TreeController.viewParliament',
 
   // profile controller, accessible only to authenticated users
   '/profile': 'ProfileController.openProfile', //renders the personal_profile.ejs page
   '/updateProfile': 'ProfileController.updateProfile', // calls the update profile function
   '/createNewIndividual': 'ProfileController.createNewIndividual', // TODO: Implement this function
   '/accountinfo': 'ProfileController.renderAccountInfo', //renders the accountinfo.ejs page
+  '/getProfileInfo': 'ProfileController.getUserProfile',
+
 
   //settings controller, accessible by any user
   '/about': 'SettingsController.aboutpage' //renders the about page

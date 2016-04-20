@@ -58,6 +58,7 @@ module.exports.globals = {
   * your models via sails.models.*.                                           *
   *                                                                           *
   ****************************************************************************/
-	 models: true
+	 models: true,
+  map: {}
 
 };

@@ -48,7 +48,7 @@ module.exports = {
         });
     },
 
-    nameCheck(firstName, lastName, next){
+    nameCheck: function(firstName, lastName, next){
         if (firstName.length > 256) {
             next('first name', false);
         }
@@ -60,7 +60,7 @@ module.exports = {
         }
     },
 
-    passwordCheck(password, passwordConfirm, next){
+    passwordCheck: function(password, passwordConfirm, next){
         var pwregex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
         if(password.length < 8){
             next('password length', false);
@@ -172,7 +172,53 @@ module.exports = {
     },
 
     upload: function(file, next) {
-        file.upload(next);
-    }
+      file.upload(next);
+    },
+  map: {},
+    getAllParents: function(id){
+      database.getParents(id, function(getParentsResponse, getParentsResult) {
+
+      });
+        /*//var i = 0;
+        if(getParentsResult[0] != null){
+          console.log("here");
+          console.log(id);
+          console.log(i);
+          console.log(getParentsResult[0].individual_id);
+          user.getAllParents(i++, getParentsResult[0].individual_id, function(getAllParentResult){
+
+          });
+        }
+        if (getParentsResult[1] != null){
+          console.log("here");
+          console.log(id);
+          console.log(i);
+          console.log(getParentsResult[i].individual_id);
+          user.getAllParents(i++, getParentsResult[1].individual_id, function(getAllParentResult) {
+
+          });
+        }
+        //while (getParentsResult[i] != null){
+
+          //console.log("here");
+          //console.log(id);
+          //console.log(i);
+          //console.log(getParentsResult[i].individual_id);
+          //user.getAllParents(getParentsResult[i].individual_id, function(getAllParentResult){
+          //
+          //});
+          i++;
+        //}
+        next(getParentsResult);
+      });*/
+    },
+  getAllParents2: function(id, next){
+    var i = 0;
+    getAllParents(i, id, function(response, getParentsResult) {
+
+      next(response, getParentsResult);
+
+    })
+  }
 
 };
