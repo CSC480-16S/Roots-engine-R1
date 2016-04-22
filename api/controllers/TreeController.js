@@ -94,12 +94,15 @@
       });
     },
     getAllParents: function(req, res){
-      database.getUserInfo(req.session.individualId, function(getInfoResponse, getInfoResult) {
-        var array = [];
-        user.getAllParents(5, array, function(response, result){
-          return res.json({user:result});
+        database.getUserInfo(req.session.individualId, function(getInfoResponse, getInfoResult) {
+            var array = [];
+            user.getAllParents(5, array, function(response, result){
+//                return res.json({user:result});
+                  transform['getData'](result, function(response, data){
+                      return res.json({'data': data});
+                  });
+            });
         });
-      });
     },
     viewMap: function(req,res){
       var send = {};

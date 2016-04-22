@@ -208,38 +208,6 @@ module.exports = {
              next ("done", array);
           }
       });
-        /*//var i = 0;
-        if(getParentsResult[0] != null){
-          console.log("here");
-          console.log(id);
-          console.log(i);
-          console.log(getParentsResult[0].individual_id);
-          user.getAllParents(i++, getParentsResult[0].individual_id, function(getAllParentResult){
-
-          });
-        }
-        if (getParentsResult[1] != null){
-          console.log("here");
-          console.log(id);
-          console.log(i);
-          console.log(getParentsResult[i].individual_id);
-          user.getAllParents(i++, getParentsResult[1].individual_id, function(getAllParentResult) {
-
-          });
-        }
-        //while (getParentsResult[i] != null){
-
-          //console.log("here");
-          //console.log(id);
-          //console.log(i);
-          //console.log(getParentsResult[i].individual_id);
-          //user.getAllParents(getParentsResult[i].individual_id, function(getAllParentResult){
-          //
-          //});
-          i++;
-        //}
-        next(getParentsResult);
-      });*/
     }
 
 };
