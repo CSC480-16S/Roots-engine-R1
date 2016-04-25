@@ -97,10 +97,8 @@
         database.getUserInfo(req.session.individualId, function(getInfoResponse, getInfoResult) {
             var array = [];
             user.getAllParents(5, array, function(response, result){
-//                return res.json({user:result});
-                  transform['getData'](result, function(response, data){
-                      return res.json({'data': data});
-                  });
+                  getInfoResult.push(result);
+                  return res.json({user:getInfoResult});
             });
         });
     },
@@ -109,34 +107,14 @@
       res.view('map', send);
     },
     getMapData: function(req,res){
-      res.json([{
-          "location": "United States",
-          "relatives": 5
-        },
-        {
-          "location": "Canada",
-          "relatives": 4
-        },
-        {
-          "location": "India",
-          "relatives": 3
-        },
-        {
-          "location": "Russia",
-          "relatives": 10
-        },
-        {
-          "location": "Egypt",
-          "relatives": 30
-        },
-        {
-          "location": "Mexico",
-          "relatives": 25
-        },
-        {
-          "location": "South Korea",
-          "relatives": 15
-        }]);
+      database.getUserInfo(req.session.individualId, function(getInfoResponse, getInfoResult) {
+        var array = [];
+        user.getAllParents(5, array, function(response, result){
+          transform['getData'](result, function(response, data){
+            return res.json({'data': data});
+          });
+        });
+      });
     },
     viewParliament: function(req, res){
       var send = {};
