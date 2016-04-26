@@ -111,7 +111,7 @@
         var array = [];
         user.getAllParents(5, array, function(response, result){
           transform['getData'](result, function(response, data){
-            return res.json({'data': data});
+            return res.json(data);
           });
         });
       });

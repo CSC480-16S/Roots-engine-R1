@@ -32,6 +32,6 @@ module.exports = {
             });
         }
         newData['heatMap'] = heatMap;
-        next('success', newData);
+        next('success', heatMap);
     }
 };

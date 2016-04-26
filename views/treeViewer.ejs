@@ -10,6 +10,7 @@
     <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="js/lodash.min.js"></script>
     <script src="js/dTree.min.js"></script>
+    <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 
     <style>
         svg {
@@ -136,7 +137,7 @@
         var viewPortWidth = (Math.max(document.documentElement.clientWidth, window.innerWidth || 0)-275)*.7;
         var wiewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)*.5;
 
-        treeJson = d3.json("data.json", function (error, treeData) {
+        treeJson = d3.json("/getRelations", function (error, treeData) {
             dTree.init(treeData, {
                         width: viewPortWidth,
                         height: wiewPortHeight
@@ -156,7 +157,6 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
-<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src="js/login.js"></script>
 
 <script>
