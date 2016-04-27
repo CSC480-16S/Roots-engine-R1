@@ -1,0 +1,147 @@
+<html>
+<head>
+    <title>My Family Circle</title>
+    <link href='http://fonts.googleapis.com/css?family=Titillium+Web:400,300,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="styles/normalize.css">
+    <link rel="stylesheet" href="styles/treeStyles.css">
+    <script type="text/javascript" src="http://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
+    <script type="text/javascript" src="http://static.fusioncharts.com/code/latest/themes/fusioncharts.theme.fint.js?cacheBust=56"></script>
+
+    <script type="text/javascript">
+        FusionCharts.ready(function(){
+            var fusioncharts = new FusionCharts({
+                        type: 'multilevelpie',
+                        renderAt: 'chart-container',
+                        id: "myChart",
+                        width: '600',
+                        height: '600',
+                        dataFormat: 'json',
+                        dataSource: {
+                            "chart": {
+                                "caption": "Ancestors Sunburst",
+//                                "subcaption": "A my roots feature",
+                                "showPlotBorder": "1",
+                                "piefillalpha": "60",
+                                "pieborderthickness": "2",
+                                "hoverfillcolor": "#CCCCCC",
+                                "piebordercolor": "#000000",
+                                "plottooltext": "$label",
+                                //Theme
+                                "theme": "fint"
+                            },
+                            "category": [{
+                                "label": "John Doe",
+                                "color": "#000000",
+                                "category": [{
+                                    "label": "John Doe Sr.",
+                                    "color": "#FF0000",
+                                    "tooltext": "Jan 03, 1946 - Apr 04, 2012",
+                                    "category": [{
+                                        "label": "Jack Doe",
+                                        "color": "#FF0000",
+                                        "tooltext": "Jan 03, 1946 - Apr 04, 2012",
+                                        "category": [{
+                                            "label": "Steve Doe",
+                                            "color": "#FFFFFF",
+                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
+                                        }, {
+                                            "label": "Unkown",
+                                            "color": "#00FF00"
+                                        }]
+
+                                    }, {
+                                        "label": "Jacky Doe",
+                                        "color": "#FF0000",
+                                        "tooltext": "Jan 03, 1946 - Apr 04, 2012",
+                                        "category": [{
+                                            "label": "Steve Doe",
+                                            "color": "#FFFFFF",
+                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
+                                        }, {
+                                            "label": "Janet Doe",
+                                            "color": "#FFFFFF",
+                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
+                                        }]
+
+                                    }]
+                                }, {
+                                    "label": "Jane Doe",
+                                    "color": "#FFFFFF",
+                                    "tooltext": "Jan 03, 1946 - Apr 04, 2012",
+                                    "category": [{
+                                        "label": "Steve Doe",
+                                        "color": "#FFFFFF",
+                                        "tooltext": "Jan 03, 1946 - Apr 04, 2012",
+                                        "category": [{
+                                            "label": "Steve Doe",
+                                            "color": "#FFFFFF",
+                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
+                                        }, {
+                                            "label": "Janet Doe",
+                                            "color": "#FFFFFF",
+                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
+                                        }]
+
+                                    }, {
+                                        "label": "Janet Doe",
+                                        "color": "#FFFFFF",
+                                        "tooltext": "Jan 03, 1946 - Apr 04, 2012",
+                                        "category": [{
+                                            "label": "Steve Doe",
+                                            "color": "#FFFFFF",
+                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
+                                        }, {
+                                            "label": "Janet Doe",
+                                            "color": "#FFFFFF",
+                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
+                                        }]
+
+                                    }]
+                                }]
+                            }]
+                        }
+                    }
+            );
+            fusioncharts.render();
+        });
+    </script>
+</head>
+
+<body>
+<header>
+    <a href="/" class="header-logo">
+        <img id="logo-img" src="images/logo.png">
+    </a>
+
+    <div class="dropdown">
+        <input class="hamburger" type="image" src="images/hamburger.png" onclick="myFunction()">
+        <div class="dropdown-content" id="Dropdown">
+            <a href="/map">Roots World Map</a>
+            <a href="/logout">Log Out</a>
+            <a href="mailto:rootsspammer@gmail.com">Contact Us</a>
+            <a href="/about">About</a>
+        </div>
+    </div>
+
+    <script>
+        function myFunction() {
+            document.getElementById("Dropdown").classList.toggle("show");
+        }
+        window.onclick = function (e) {
+            if (!e.target.matches('.hamburger')) {
+
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var d = 0; d < dropdowns.length; d++) {
+                    var openDropdown = dropdowns[d];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+    </script>
+</header>
+
+<div id="chart-container">Ancestor Info!</div>
+</body>
+</html>
