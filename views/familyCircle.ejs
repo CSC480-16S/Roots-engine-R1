@@ -6,103 +6,15 @@
     <link rel="stylesheet" href="styles/treeStyles.css">
     <script type="text/javascript" src="http://static.fusioncharts.com/code/latest/fusioncharts.js"></script>
     <script type="text/javascript" src="http://static.fusioncharts.com/code/latest/themes/fusioncharts.theme.fint.js?cacheBust=56"></script>
+        <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
 
     <script type="text/javascript">
         FusionCharts.ready(function(){
-            var fusioncharts = new FusionCharts({
-                        type: 'multilevelpie',
-                        renderAt: 'chart-container',
-                        id: "myChart",
-                        width: '600',
-                        height: '600',
-                        dataFormat: 'json',
-                        dataSource: {
-                            "chart": {
-                                "caption": "Ancestors Sunburst",
-//                                "subcaption": "A my roots feature",
-                                "showPlotBorder": "1",
-                                "piefillalpha": "60",
-                                "pieborderthickness": "2",
-                                "hoverfillcolor": "#CCCCCC",
-                                "piebordercolor": "#000000",
-                                "plottooltext": "$label",
-                                //Theme
-                                "theme": "fint"
-                            },
-                            "category": [{
-                                "label": "John Doe",
-                                "color": "#000000",
-                                "category": [{
-                                    "label": "John Doe Sr.",
-                                    "color": "#FF0000",
-                                    "tooltext": "Jan 03, 1946 - Apr 04, 2012",
-                                    "category": [{
-                                        "label": "Jack Doe",
-                                        "color": "#FF0000",
-                                        "tooltext": "Jan 03, 1946 - Apr 04, 2012",
-                                        "category": [{
-                                            "label": "Steve Doe",
-                                            "color": "#FFFFFF",
-                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
-                                        }, {
-                                            "label": "Unkown",
-                                            "color": "#00FF00"
-                                        }]
-
-                                    }, {
-                                        "label": "Jacky Doe",
-                                        "color": "#FF0000",
-                                        "tooltext": "Jan 03, 1946 - Apr 04, 2012",
-                                        "category": [{
-                                            "label": "Steve Doe",
-                                            "color": "#FFFFFF",
-                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
-                                        }, {
-                                            "label": "Janet Doe",
-                                            "color": "#FFFFFF",
-                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
-                                        }]
-
-                                    }]
-                                }, {
-                                    "label": "Jane Doe",
-                                    "color": "#FFFFFF",
-                                    "tooltext": "Jan 03, 1946 - Apr 04, 2012",
-                                    "category": [{
-                                        "label": "Steve Doe",
-                                        "color": "#FFFFFF",
-                                        "tooltext": "Jan 03, 1946 - Apr 04, 2012",
-                                        "category": [{
-                                            "label": "Steve Doe",
-                                            "color": "#FFFFFF",
-                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
-                                        }, {
-                                            "label": "Janet Doe",
-                                            "color": "#FFFFFF",
-                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
-                                        }]
-
-                                    }, {
-                                        "label": "Janet Doe",
-                                        "color": "#FFFFFF",
-                                        "tooltext": "Jan 03, 1946 - Apr 04, 2012",
-                                        "category": [{
-                                            "label": "Steve Doe",
-                                            "color": "#FFFFFF",
-                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
-                                        }, {
-                                            "label": "Janet Doe",
-                                            "color": "#FFFFFF",
-                                            "tooltext": "Jan 03, 1946 - Apr 04, 2012"
-                                        }]
-
-                                    }]
-                                }]
-                            }]
-                        }
-                    }
-            );
-            fusioncharts.render();
+            d3.json("/getParliamentData", function (error, treeData) {
+                var fusioncharts = new FusionCharts(treeData);
+                fusioncharts.render();
+            });
         });
     </script>
 </head>

@@ -94,7 +94,7 @@
       });
     },
     getAllParents: function(req, res){
-        database.getUserInfo(req.session.individualId, function(getInfoResponse, getInfoResult) {
+        database.getUserInfo(5, function(getInfoResponse, getInfoResult) {
             var array = [];
             user.getAllParents(5, array, function(response, result){
                   getInfoResult.push(result);
@@ -118,7 +118,20 @@
     },
     viewParliament: function(req, res){
       var send = {};
-      res.view('parliament',send);
+      res.view('familyCircle',send);
+    },
+
+    getParliamentData: function(req, res){
+      var send = {};
+      database.getUserInfo(req.session.individualId, function(getInfoResponse, getInfoResult) {
+          var array = [];
+          user.getAllParents(5, array, function(response, result){
+            transform['toParliamentChart'](result, function(response, data){
+              return res.json(data);
+            });
+          });
+        });
+
     }
 
   };

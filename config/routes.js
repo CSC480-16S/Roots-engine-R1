@@ -54,6 +54,7 @@ module.exports.routes = {
   '/map': 'TreeController.viewMap',
   '/mapData': 'TreeController.getMapData',
   '/parliament': 'TreeController.viewParliament',
+  '/getParliamentData': 'TreeController.getParliamentData',
 
   // profile controller, accessible only to authenticated users
   '/profile': 'ProfileController.openProfile', //renders the personal_profile.ejs page
