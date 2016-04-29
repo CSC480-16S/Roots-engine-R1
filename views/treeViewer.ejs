@@ -63,24 +63,6 @@
             <a href="/logout">Log Out</a>
         </div>
     </div>
-
-    <script>
-        function myFunction() {
-            document.getElementById("Dropdown").classList.toggle("show");
-        }
-        window.onclick = function(e) {
-            if (!e.target.matches('.hamburger')) {
-
-                var dropdowns = document.getElementsByClassName("dropdown-content");
-                for (var d = 0; d < dropdowns.length; d++) {
-                    var openDropdown = dropdowns[d];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
-                    }
-                }
-            }
-        }
-    </script>
 </header>
 
 <div class="window" ng-controller="nodeTreeController">
@@ -88,7 +70,7 @@
         <div id="Profile Info">
 
             <figure class="profilePhoto">
-                <img ng-src="http://i.imgur.com/{{x.image}}" alt="{{x.first_name}} {{x.last_name}}">
+                <!--<img ng-src="http://i.imgur.com/{{x.image}}" alt="{{x.first_name}} {{x.last_name}}">-->
             </figure>
 
             <form action="/updateProfile" method="post">

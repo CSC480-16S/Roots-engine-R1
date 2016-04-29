@@ -40,3 +40,20 @@ $('.tab a').on('click', function (e) {
 	$(target).fadeIn(600);
 
 });
+
+//function for activating dropdown function
+function myFunction() {
+	document.getElementById("Dropdown").classList.toggle("show");
+}
+window.onclick = function(e) {
+	if (!e.target.matches('.hamburger')) {
+
+		var dropdowns = document.getElementsByClassName("dropdown-content");
+		for (var d = 0; d < dropdowns.length; d++) {
+			var openDropdown = dropdowns[d];
+			if (openDropdown.classList.contains('show')) {
+				openDropdown.classList.remove('show');
+			}
+		}
+	}
+}
