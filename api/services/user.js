@@ -208,6 +208,56 @@ module.exports = {
              next ("done", array);
           }
       });
-    }
+    },
+    getOldestParent: function(id, next) {
+      var array = [];
+      user.getAllParents(5, array, function(response, result){
+        var oldest = Date.now();
+        var oldestId = 0;;
+        for (key in result) {
+          for (parents in result[key]) {
+            for (person in result[key][parents]) {
+              dob = new Date(result[key][parents][person]["date_of_birth"]);
+              console.log(dob);
+              if (dob < oldest) {
+                oldest = dob;
+                oldestId = result[key][parents][person]["individual_id"];
+              }
+            }
+          }
+        }
+        res  = oldestId;
+        next(response, res);
+      });
+    },
+  getDescendents: function (id, array, next){
+    var children = {};
+    database.getChildren(id, function(getChildrenResponse, getChildrenResult){
+      if(getChildrenResult && getChildrenResult[0]){
+        children[id] = getChildrenResult;
+        array.push(children);
+        user.getMoreDescendents(getChildrenResult, 0, array, function(response,result){
+          next(response,result);
+        });
+      } else {
+        next("done", array);
+      }
+    });
+  },
+  getMoreDescendents: function(stuff, index, array, next){
+    user.getDescendents(stuff[index].individual_id, array, function(response, result){
 
-};
+      if(stuff && stuff[index+1]){
+        user.getMoreDescendents(stuff, index+1, array, function(respnonse,result){
+          next(response,result);
+        });
+      } else {
+        next('done', array);
+      }
+    });
+  }
+}
+
+
+
+;

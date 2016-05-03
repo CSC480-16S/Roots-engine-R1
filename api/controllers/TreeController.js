@@ -132,7 +132,20 @@
           });
         });
 
+    },
+    getOldestId: function(req, res){
+      var send = {};
+      user.getOldestParent(5, function(response, result){
+        return res.json(result)
+      });
+    },
+    getDescendants: function(req, res){
+      user.getOldestParent(5, function(response, result){
+        var array = [];
+        user.getDescendents(result, array, function(response, data){
+          return res.json(data);
+        });
+      });
     }
-
   };
 
