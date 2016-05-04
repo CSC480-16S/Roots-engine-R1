@@ -55,6 +55,8 @@ module.exports.routes = {
   '/mapData': 'TreeController.getMapData',
   '/parliament': 'TreeController.viewParliament',
   '/getParliamentData': 'TreeController.getParliamentData',
+  '/getOldest': 'TreeController.getOldestId',
+  '/getDescendents': 'TreeController.getDescendants',
 
   // profile controller, accessible only to authenticated users
   '/profile': 'ProfileController.openProfile', //renders the personal_profile.ejs page
@@ -62,6 +64,7 @@ module.exports.routes = {
   '/createNewIndividual': 'ProfileController.createNewIndividual', // TODO: Implement this function
   '/accountinfo': 'ProfileController.renderAccountInfo', //renders the accountinfo.ejs page
   '/getProfileInfo': 'ProfileController.getUserProfile',
+
 
 
   //settings controller, accessible by any user
