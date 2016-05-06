@@ -143,7 +143,11 @@
       user.getOldestParent(5, function(response, result){
         var array = [];
         user.getDescendents(result, array, function(response, data){
-          return res.json(data);
+//          return res.json(data);
+            transform.toTree(data, function(response2, result2){
+                return res.json([result2]);
+
+            });
         });
       });
     }

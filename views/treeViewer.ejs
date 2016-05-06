@@ -118,7 +118,7 @@
         var viewPortWidth = (Math.max(document.documentElement.clientWidth, window.innerWidth || 0)-275)*.7;
         var wiewPortHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0)*.5;
 
-        treeJson = d3.json("/getRelations", function (error, treeData) {
+        treeJson = d3.json("/getDescendents", function (error, treeData) {
             dTree.init(treeData, {
                         width: viewPortWidth,
                         height: wiewPortHeight

@@ -218,7 +218,6 @@ module.exports = {
           for (parents in result[key]) {
             for (person in result[key][parents]) {
               dob = new Date(result[key][parents][person]["date_of_birth"]);
-              console.log(dob);
               if (dob < oldest) {
                 oldest = dob;
                 oldestId = result[key][parents][person]["individual_id"];
