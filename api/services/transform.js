@@ -36,52 +36,52 @@ module.exports = {
                 var kid = array.shift();
 //                console.log(array);
 //                console.log(kid);
-                person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}]});
+                person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}], "extra": {"id": kid["individual_id"]}});
                 transform.getChild(kid["individual_id"], data, function(response, result){
                     person[person.length-1]["marriages"][0]["children"] = result;
                     if (array.length>0){
                         kid = array.shift();
-                        person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}]});
+                        person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}], "extra": {"id": kid["individual_id"]}});
                         transform.getChild(kid["individual_id"], data, function(response, result){
                             person[person.length-1]["marriages"][0]["children"] = result;
                                 if (array.length>0){
                                     kid = array.shift();
-                                    person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}]});
+                                    person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}], "extra": {"id": kid["individual_id"]}});
                                     transform.getChild(kid["individual_id"], data, function(response, result){
                                         person[person.length-1]["marriages"][0]["children"] = result;
                                             if (array.length>0){
                                                 kid = array.shift();
-                                                person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}]});
+                                                person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}], "extra": {"id": kid["individual_id"]}});
                                                 transform.getChild(kid["individual_id"], data, function(response, result){
                                                     person[person.length-1]["marriages"][0]["children"] = result;
                                                         if (array.length>0){
                                                             kid = array.shift();
-                                                            person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}]});
+                                                            person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}], "extra": {"id": kid["individual_id"]}});
                                                             transform.getChild(kid["individual_id"], data, function(response, result){
                                                                 person[person.length-1]["marriages"][0]["children"] = result;
                                                                     if (array.length>0){
                                                                         kid = array.shift();
-                                                                        person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}]});
+                                                                        person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}], "extra": {"id": kid["individual_id"]}});
                                                                         transform.getChild(kid["individual_id"], data, function(response, result){
                                                                             person[person.length-1]["marriages"][0]["children"] = result;
                                                                                 if (array.length>0){
                                                                                     kid = array.shift();
-                                                                                    person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}]});
+                                                                                    person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}], "extra": {"id": kid["individual_id"]}});
                                                                                     transform.getChild(kid["individual_id"], data, function(response, result){
                                                                                         person[person.length-1]["marriages"][0]["children"] = result;
                                                                                         if (array.length>0){
                                                                                             kid = array.shift();
-                                                                                            person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}]});
+                                                                                            person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}], "extra": {"id": kid["individual_id"]}});
                                                                                             transform.getChild(kid["individual_id"], data, function(response, result){
                                                                                                 person[person.length-1]["marriages"][0]["children"] = result;
                                                                                                 if (array.length>0){
                                                                                                     kid = array.shift();
-                                                                                                    person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}]});
+                                                                                                    person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}], "extra": {"id": kid["individual_id"]}});
                                                                                                     transform.getChild(kid["individual_id"], data, function(response, result){
                                                                                                         person[person.length-1]["marriages"][0]["children"] = result;
                                                                                                         if (array.length>0){
                                                                                                             kid = array.shift();
-                                                                                                            person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}]});
+                                                                                                            person.push({"name": kid['first_name'] + kid['last_name'], "marriages": [{"spouse": {"name": "Unknown"}, "children": []}], "extra": {"id": kid["individual_id"]}});
                                                                                                             transform.getChild(kid["individual_id"], data, function(response, result){
                                                                                                                 person[person.length-1]["marriages"][0]["children"] = result;
                                                                                                                 next("success", person);
