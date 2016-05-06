@@ -36,8 +36,16 @@
     <div id="Profile Info">
         <form action="/createPerson" name="addPerson" method="post">
             <h1 id="addPersonHeader">Add Family Member</h1>
-            <div class="leftForm">
+            <div class="field-wrap">
+                <label><span class="req"></span></label>
+                <select name='relation' required>
+                    <option value="" disabled selected>Relation of person being added:</option>
+                    <option value="parent">Parent</option>
+                    <option value="child">Child</option>
+                </select>
+            </div>
 
+            <div class="leftForm">
                 <input type="hidden" value="<%= id %>" name="id"/>
                 <div class="field-wrap">
                     <label>First Name<span class="req">*</span></label>
