@@ -254,7 +254,16 @@ module.exports = {
       this.read(Individual, value, function(response, result){
         next(response,result);
       })
-    }
+    },
+  addChild: function(childId, parentId, next){
+    var mysql = require('mysql'),
+      value = "INSERT INTO Parent_of (child_id, parent_id) values (?,?);";
+    inserts = [childId, parentId];
+    value = mysql.format(value, inserts);
+    this.insert(Individual, value, function(response, result){
+      next(response,result);
+    })
+  }
 };
 
 
