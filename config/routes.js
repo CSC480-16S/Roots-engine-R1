@@ -64,6 +64,7 @@ module.exports.routes = {
   '/createNewIndividual': 'ProfileController.createNewIndividual', // TODO: Implement this function
   '/accountinfo': 'ProfileController.renderAccountInfo', //renders the accountinfo.ejs page
   '/getProfileInfo': 'ProfileController.getUserProfile',
+  '/addPerson': 'ProfileController.addPerson',
 
 
 

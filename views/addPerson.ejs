@@ -34,11 +34,11 @@
 
 <div class="form wideForm">
     <div id="Profile Info">
-        <form action="/treeViewer" name="addPerson" method="post">
+        <form action="/createPerson" name="addPerson" method="post">
             <h1 id="addPersonHeader">Add Family Member</h1>
             <div class="leftForm">
 
-
+                <input type="hidden" value="<%= id %>" name="id"/>
                 <div class="field-wrap">
                     <label>First Name<span class="req">*</span></label>
                     <input name='firstName' type="text" maxlength="64"  required autocomplete="off" />

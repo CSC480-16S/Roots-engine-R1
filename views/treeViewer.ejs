@@ -73,7 +73,7 @@
                 <!--<img ng-src="http://i.imgur.com/{{x.image}}" alt="{{x.first_name}} {{x.last_name}}">-->
             </figure>
 
-            <form action="/updateProfile" method="post">
+            <form action="/createNewIndividual" method="post">
                 <div>
                     <div>
                         <label>Name: </label>
@@ -108,6 +108,8 @@
                 <input class="profileButton" type="image" src="images/AddIcon.png" alt="Add">
                 <input class="profileButton" type="image" src="images/EditIcon.png" alt="Edit">
                 <input class="profileButton" type="image" src="images/DeleteIcon.png" alt="Delete">
+                <input id="id" type="hidden" value="" name="addPerson"/>
+                <button type="submit">Add Individual</button>
             </form>
         </div>
     </div>
@@ -120,6 +122,14 @@
 
         treeJson = d3.json("/getDescendents", function (error, treeData) {
             dTree.init(treeData, {
+                        callbacks: {
+                            nodeClick: function(name, extra, id) {
+                                alert('Hello');
+                                document.getElementById('id').value = extra['id'];
+//                                document.getElementById('name').innerHTML = extra['birthDate'];
+                            }
+                        },
+
                         width: viewPortWidth,
                         height: wiewPortHeight
                     }

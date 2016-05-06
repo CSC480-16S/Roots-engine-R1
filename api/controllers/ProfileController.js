@@ -85,8 +85,10 @@
     },
     createNewIndividual: function(req,res){
       var params = req.params.all(),
-          send = {},
-          send.id = params.addPerson;
+          send = {
+              "id":params.addPerson
+
+          };
 
       res.view("addPerson", send);
 
