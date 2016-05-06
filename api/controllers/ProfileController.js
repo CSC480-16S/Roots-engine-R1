@@ -85,24 +85,32 @@
     },
     createNewIndividual: function(req,res){
       var params = req.params.all(),
-        userData = {
-          //firstName: (params.firstName) ? params.firstName : null,
-          //middleName: (params.middleName) ? params.middleName : null,
-          //lastName: (params.lastName) ? params.lastName : null,
-          dateOfBirth: (params.dateOfBirth) ? params.dateOfBirth : null,
-          birthCity: (params.birthCity) ? params.birthCity : null,
-          birthState: (params.birthState) ? params.birthState : null,
-          birthCountry: (params.birthCountry) ? params.birthCountry : null,
-          //dateOfDeath: (params.dateOfDeath) ? params.dateOfDeath : null,
-          //placeOfDeath: (params.placeOfDeath) ? params.placeOfDeath : null,
-          gender: (params.gender) ? params.gender : null,
-          bio: (params.personalbio) ? params.personalbio : null,
-          //notes: (params.notes) ? params.notes : null,
-          id: req.session.individualId
-        },
-        send = {};
-      send.error = '';
+          send = {},
+          send.id = params.addPerson;
 
+      res.view("addPerson", send);
+
+
+      //  userData = {
+      //    //firstName: (params.firstName) ? params.firstName : null,
+      //    //middleName: (params.middleName) ? params.middleName : null,
+      //    //lastName: (params.lastName) ? params.lastName : null,
+      //    dateOfBirth: (params.dateOfBirth) ? params.dateOfBirth : null,
+      //    birthCity: (params.birthCity) ? params.birthCity : null,
+      //    birthState: (params.birthState) ? params.birthState : null,
+      //    birthCountry: (params.birthCountry) ? params.birthCountry : null,
+      //    //dateOfDeath: (params.dateOfDeath) ? params.dateOfDeath : null,
+      //    //placeOfDeath: (params.placeOfDeath) ? params.placeOfDeath : null,
+      //    gender: (params.gender) ? params.gender : null,
+      //    bio: (params.personalbio) ? params.personalbio : null,
+      //    //notes: (params.notes) ? params.notes : null,
+      //    id: req.session.individualId
+      //  },
+      //  send = {};
+      //send.error = '';
+      //database.initializeProfile(function(id, response){
+      //  database.initializeName(params.firstName, params.lastName, id,);
+      //});
     }
   };
 
