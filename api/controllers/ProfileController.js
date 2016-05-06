@@ -96,6 +96,7 @@
 
     },
     addPerson: function (req, res){
+      var params = req.params.all(),
         userData = {
           //firstName: (params.firstName) ? params.firstName : null,
           //middleName: (params.middleName) ? params.middleName : null,
@@ -113,15 +114,16 @@
         },
         send = {};
       send.error = '';
-      database.initializeProfile(function(id, response){
-        database.initializeName(params.firstName, params.lastName, id, function(nameResult,nameResponse){
+      database.initializeProfile(function(response, result){
+        console.log(result[0].id);
+        database.initializeName(params.firstName, params.lastName, result[0].id, function(nameResult,nameResponse){
           database.updateProfile(userData, function(updateResult, updateResponse){
-            if(params.relationship === "child"){
-              databse.addChild(id,params.id, function(addChuildResult, addChildResponse){
+            if(params.relation === "child"){
+              database.addChild(result[0].id,params.id, function(addChuildResult, addChildResponse){
                 res.view('treeViewer', {});
               });
             } else {
-              databse.addChild(params.id,id, function(addChuildResult, addChildResponse){
+              database.addChild(params.id,result[0].id, function(addChuildResult, addChildResponse){
                 res.view('treeViewer', {});
               });
             }
